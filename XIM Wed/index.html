@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XIM工作室 - 甜甜圈工会的灵魂继承者</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="vendor/font-awesome/all.min.css">
+    <script src="js/main.js" type="module" defer></script>
+</head>
+<body class="layout1">
+    <!-- 导航栏 -->
+    <nav id="navbar">
+        <div class="container">
+            <div class="logo">
+                <img src="资源/XIM图标.jpg" alt="XIM工作室">
+                <span>XIM工作室</span>
+            </div>
+            <div class="nav-links">
+                <a href="#home">首页</a>
+                <a href="#about">关于我们</a>
+                <a href="#docs">XIM文档</a>
+                <a href="#news">XIM New</a>
+                <a href="#projects">项目</a>
+                <a href="#departments">XIM部门</a>
+            </div>
+            <div class="layout-switcher">
+                <button class="layout-btn active" data-layout="layout1" title="分层卡片式布局">
+                    <i class="fas fa-layer-group"></i>
+                </button>
+                <button class="layout-btn" data-layout="layout2" title="不对称动态布局">
+                    <i class="fas fa-th-large"></i>
+                </button>
+                <button class="layout-btn" data-layout="layout3" title="沉浸式全屏布局">
+                    <i class="fas fa-expand"></i>
+                </button>
+            </div>
+            <div class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <div class="mobile-nav-content">
+                <a href="#home" class="mobile-nav-link">首页</a>
+                <a href="#about" class="mobile-nav-link">关于我们</a>
+                <a href="#docs" class="mobile-nav-link">XIM文档</a>
+                <a href="#news" class="mobile-nav-link">XIM New</a>
+                <a href="#projects" class="mobile-nav-link">项目</a>
+                <a href="#departments" class="mobile-nav-link">XIM部门</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 首页横幅 -->
+    <section id="home">
+        <div class="container">
+            <div class="hero-content">
+                <h1><span></span>X</span>IM工作室</h1>
+                <p>甜甜圈工会的灵魂继承者</p>
+                <a href="#about" class="btn">了解更多</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 关于我们 -->
+    <section id="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>关于我们</h2>
+                    <p>XIM 是一支把课余时间当工时用的学生小队。我们捏过壁纸、搓过整合包、也修过别人懒得修的 Bug</p>
+                    <p>创意不够睡觉来凑，技术不够咖啡来救——但交付出去的东西，一定能让屏幕另一端的你多看两眼。如果你也在找“能用、能看、还能玩”的数字小方案，欢迎来戳六个脑瓜里唯一在线的那个</p>
+                    <a href="xim-docs.html#xim-history" class="btn">了解XIM创建的历史</a>
+                </div>
+                <div class="about-image">
+                    <img src="资源/部门XIM Art.png" alt="XIM工作室">
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 文档中心 -->
+    <section id="docs" style="padding: 120px 0; background-color: var(--bg-tertiary); position: relative; overflow: hidden; background-image: url('资源/项目XIM Wallpaper.png'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: url('资源/【哲风壁纸】win11娘-Windows.png'); background-size: cover; background-position: center; z-index: 1; filter: brightness(0.4) contrast(1.2);"></div>
+        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.5); z-index: 1;"></div>
+        <div class="container" style="position: relative; z-index: 2;">
+            <h2 style="font-size: 2.5rem; text-align: center; position: relative; padding-bottom: 15px; margin-bottom: 20px;">文档中心</h2>
+            <p style="text-align: center; max-width: 700px; margin: 0 auto 50px; font-size: 1.1rem; color: var(--text-secondary); line-height: 1.8;">XIM文档中心是一个巨大的文案展示库，你可以在这里找到XIM从创建到现在的所有可公开文案</p>
+            
+            <div style="display: flex; justify-content: center;">
+                <button class="btn" onclick="window.location.href='xim-docs.html'" style="background-color: var(--accent-color); color: white; padding: 12px 30px; border-radius: 50px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; transition: var(--transition); border: none; cursor: pointer;">
+                    访问文档
+                </button>
+            </div>
+        </div>
+    </section>
+    
+    <!-- XIM New -->
+    <section id="news" style="padding: 120px 0; background-color: var(--bg-secondary); position: relative; overflow: hidden; background-image: url('资源/【哲风壁纸】二次元-动漫.png'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.5); z-index: 1;"></div>
+        <div class="container" style="position: relative; z-index: 2;">
+            <h2 style="font-size: 2.5rem; text-align: center; position: relative; padding-bottom: 15px; margin-bottom: 20px;">XIM New</h2>
+            <p style="text-align: center; max-width: 700px; margin: 0 auto 50px; font-size: 1.1rem; color: var(--text-secondary); line-height: 1.8;">来看看XIM又给我们整了个什么新活...</p>
+            
+            <div style="display: flex; justify-content: center;">
+                <button class="btn" onclick="window.location.href='xim-new.html'" style="background-color: var(--accent-color); color: white; padding: 12px 30px; border-radius: 50px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; transition: var(--transition); border: none; cursor: pointer;">
+                    查看新闻
+                </button>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 项目展示 -->
+    <section id="projects">
+        <div class="container">
+            <h2>精选项目</h2>
+            <p class="section-subtitle">用我们多次开发的项目的经验来说....</p>
+            <div class="projects-grid">
+                <div class="project-item">
+                    <div class="project-image">
+                        <img src="资源/项目MOR.png" alt="MOR 应用设计">
+                        <div class="project-overlay">
+                            <div class="project-content">
+                                <h3>[MOR]大修和重组</h3>
+                                <p>✨一个专注于集成客户端优化、美学和可用性的整合项目</p>
+                                <a href="project-mor-overhaul.html" class="btn btn-outline">查看详情</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-item">
+                    <div class="project-image">
+                        <img src="资源/项目MOR Setting.png" alt="MOR 设置界面">
+                        <div class="project-overlay">
+                            <div class="project-content">
+                                <h3>[MOR]设置</h3>
+                                <p>🛠️专注[MOR]的汉化</p>
+                                <a href="project-mor-settings.html" class="btn btn-outline">查看详情</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-item">
+                    <div class="project-image">
+                        <img src="资源/项目MOR Error.png" alt="MOR 错误界面">
+                        <div class="project-overlay">
+                            <div class="project-content">
+                                <h3>[MOR]错误</h3>
+                                <p>❌专注[MOR]中出现的错误和异常情况的解决</p>
+                                <a href="project-mor-error.html" class="btn btn-outline">查看详情</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-item">
+                    <div class="project-image">
+                        <img src="资源/项目XIM Wallpaper.png" alt="XIM 壁纸系列">
+                        <div class="project-overlay">
+                            <div class="project-content">
+                                <h3>XIM 壁纸系列</h3>
+                                <p>🚀XIM在专业开发上迈出的坚实一步</p>
+                                <a href="project-xim-wallpaper.html" class="btn btn-outline">查看详情</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 60px;">
+                <a href="all-projects.html" class="btn-highlight">
+                    查看全部项目
+                    <i class="fas fa-arrow-right" style="margin-left: 10px;"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- XIM部门 -->
+    <section id="departments">
+        <div class="container">
+            <h2>XIM部门</h2>
+            <p class="section-subtitle">了解XIM工作室的各个部门</p>
+            
+            <div class="departments-grid">
+                <div class="department-item">
+                    <div class="department-image">
+                        <img src="资源/【哲风壁纸】可爱-望着窗外.png" alt="XIM Art部门">
+                    </div>
+                    <div class="department-content">
+                        <h3>XIM Art</h3>
+                        <p>🏞️负责创意设计和视觉艺术，包括UI/UX设计、插画、动画和品牌设计</p>
+                        <a href="xim-docs.html#xim-art" class="btn btn-outline">了解更多</a>
+                    </div>
+                </div>
+                <div class="department-item">
+                    <div class="department-image">
+                        <img src="资源/1.png" alt="XIM Tech部门">
+                    </div>
+                    <div class="department-content">
+                        <h3>XIM Testing</h3>
+                        <p>🔍专注于测试和质量保证，包括功能测试、性能测试、用户测试和质量监控</p>
+                        <a href="xim-docs.html#xim-testing" class="btn btn-outline">了解更多</a>
+                    </div>
+                </div>
+                <div class="department-item">
+                    <div class="department-image">
+                        <img src="资源/【哲风壁纸】win11娘-Windows.png" alt="XIM Technology部门">
+                    </div>
+                    <div class="department-content">
+                        <h3>XIM Technology  </h3>
+                        <p>⛓️‍💥负责项目开发、技术解决方案和系统集成</p>
+                        <a href="xim-docs.html#xim-technology" class="btn btn-outline">了解更多</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2023 XIM工作室. 保留所有权利.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

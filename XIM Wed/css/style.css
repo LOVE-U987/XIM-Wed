@@ -1,0 +1,3860 @@
+/* 全局样式重置 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 图像渲染优化 */
+img, background-image {
+    image-rendering: auto;
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
+}
+
+/* 平滑滚动 */
+html {
+    scroll-behavior: smooth;
+}
+
+/* 选中文字样式 */
+::selection {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+::-moz-selection {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+/* 根元素变量定义 */
+:root {
+    --bg-primary: #121212;
+    --bg-secondary: #1e1e1e;
+    --bg-tertiary: #252525;
+    --text-primary: #ffffff;
+    --text-secondary: #b0b0b0;
+    --accent-color: #4a9eff;
+    --accent-hover: #6bb3ff;
+    --border-color: #333333;
+    --transition: all 0.3s ease;
+}
+
+/* 基础样式 */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--text-primary);
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+h2 {
+    font-size: 2.5rem;
+    text-align: center;
+    position: relative;
+    padding-bottom: 15px;
+    margin-bottom: 40px;
+}
+
+h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 3px;
+    background-color: var(--accent-color);
+}
+
+p {
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+}
+
+a {
+    color: var(--accent-color);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+a:hover {
+    color: var(--accent-hover);
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.btn {
+    display: inline-block;
+    background-color: var(--accent-color);
+    color: white;
+    padding: 12px 30px;
+    border-radius: 50px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: var(--transition);
+    border: none;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: var(--accent-hover);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(74, 158, 255, 0.15);
+}
+
+.btn:active {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 10px rgba(74, 158, 255, 0.15);
+}
+
+.btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(74, 158, 255, 0.2);
+}
+
+/* 轮廓按钮样式 */
+.btn-outline {
+    display: inline-block;
+    background-color: transparent;
+    color: var(--accent-color);
+    padding: 10px 24px;
+    border: 2px solid var(--accent-color);
+    border-radius: 50px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: var(--transition);
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.btn-outline:hover {
+    background-color: var(--accent-color);
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(74, 158, 255, 0.15);
+}
+
+.btn-outline:active {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 10px rgba(74, 158, 255, 0.15);
+}
+
+.btn-outline:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(74, 158, 255, 0.2);
+}
+
+/* 布局切换器样式 */
+.layout-switcher {
+    display: flex;
+    gap: 10px;
+    margin-left: 20px;
+}
+
+.layout-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--bg-tertiary);
+    color: var(--text-secondary);
+    border: 2px solid var(--border-color);
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+}
+
+.layout-btn:hover {
+    background-color: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(74, 158, 255, 0.3);
+}
+
+.layout-btn.active {
+    background-color: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
+}
+
+/* 导航栏样式 */
+nav {
+    background-color: rgba(18, 18, 18, 0.95);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    padding: 20px 0;
+    transition: var(--transition);
+    border-bottom: 1px solid transparent;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+nav.scrolled {
+    padding: 15px 0;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    background-color: rgba(18, 18, 18, 0.98);
+    border-bottom-color: var(--border-color);
+}
+
+nav .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    transition: var(--transition);
+}
+
+nav.scrolled .logo img {
+    width: 35px;
+    height: 35px;
+}
+
+nav.scrolled .logo span {
+    font-size: 1.3rem;
+}
+
+.logo img {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+    border-radius: 50%;
+    transition: var(--transition);
+}
+
+.logo:hover img {
+    transform: rotate(5deg);
+    box-shadow: 0 0 15px rgba(74, 158, 255, 0.5);
+}
+
+.logo span {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    transition: var(--transition);
+}
+
+.logo span::first-letter {
+    color: var(--accent-color);
+}
+
+.nav-links {
+    display: flex;
+    gap: 30px;
+}
+
+.nav-links a {
+    color: var(--text-primary);
+    font-weight: 500;
+    position: relative;
+    transition: var(--transition);
+    padding: 5px 0;
+}
+
+.nav-links a:hover {
+    color: var(--accent-color);
+    transform: translateY(-2px);
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--accent-color);
+    transition: var(--transition);
+}
+
+.nav-links a:hover::after,
+.nav-links a.active::after {
+    width: 100%;
+}
+
+.menu-toggle {
+    display: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-primary);
+    transition: var(--transition);
+    padding: 5px;
+    border-radius: 5px;
+}
+
+/* 移动导航默认隐藏 */
+.mobile-nav-content {
+    display: none;
+}
+
+/* 文档按钮样式 */
+.doc-btn {
+    background-color: var(--accent-color);
+    color: white !important;
+    padding: 8px 20px;
+    border-radius: 50px;
+    font-weight: 600;
+    transition: var(--transition);
+    margin-left: 15px;
+}
+
+.doc-btn:hover {
+    background-color: var(--accent-hover);
+    color: white !important;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(74, 158, 255, 0.2);
+}
+
+.doc-btn::after {
+    display: none;
+}
+
+.menu-toggle:hover {
+    background-color: var(--bg-tertiary);
+    color: var(--accent-color);
+}
+
+/* 首页横幅样式 */
+#home {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), 
+                var(--bg-primary) center/cover no-repeat fixed;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)),
+                     url('../资源/【哲风壁纸】梦幻船只-海上景象.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    text-align: center;
+    padding: 0 20px;
+    position: relative;
+    overflow: hidden;
+    transition: background-image 0.5s ease-in-out;
+}
+
+#home::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at center, rgba(74, 158, 255, 0.15) 0%, transparent 70%);
+    z-index: 0;
+}
+
+#home::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(74, 158, 255, 0.05) 0%, transparent 50%);
+    z-index: 0;
+}
+
+#home .container {
+    position: relative;
+    z-index: 1;
+    display: block;
+}
+
+.hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.hero-content h1 {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    animation: fadeInUp 1s ease;
+    letter-spacing: -1px;
+    text-shadow: 0 0 30px rgba(74, 158, 255, 0.2);
+}
+
+.hero-content h1 span {
+    color: var(--accent-color);
+    display: inline-block;
+    animation: pulse 2s infinite;
+}
+
+.hero-content p {
+    font-size: 1.5rem;
+    margin-bottom: 40px;
+    animation: fadeInUp 1s ease 0.2s both;
+    line-height: 1.6;
+}
+
+.hero-content .btn {
+    animation: fadeInUp 1s ease 0.4s both;
+    box-shadow: 0 5px 15px rgba(74, 158, 255, 0.3);
+}
+
+/* 新增动画 */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+/* 关于我们样式 */
+#about {
+    padding: 120px 0;
+    background-color: var(--bg-secondary);
+    position: relative;
+    overflow: hidden;
+    transition: background-image 0.5s ease-in-out;
+}
+
+#about::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('../资源/【哲风壁纸】二次元-倒影-光影.png');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.08;
+    z-index: 0;
+    filter: blur(2px);
+}
+
+/* 不对称动态布局 - 关于我们 */
+.layout2 #about {
+    background: linear-gradient(135deg, rgba(18, 18, 18, 0.85) 0%, rgba(30, 30, 30, 0.85) 100%),
+                url('../资源/【哲风壁纸】二次元-倒影-光影.png') center/cover scroll;
+}
+
+/* 确保layout2下的about区块背景图片正常显示 */
+.layout2 #about::before {
+    display: none;
+}
+
+#about .container {
+    position: relative;
+    z-index: 1;
+}
+
+.about-content {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 60px;
+}
+
+.about-image {
+    flex: 1;
+    min-width: 300px;
+    position: relative;
+    transform: translateY(0);
+    transition: transform 0.5s ease;
+}
+
+#about:hover .about-image {
+    transform: translateY(-10px);
+}
+
+.about-image::before {
+    content: '';
+    position: absolute;
+    top: -15px;
+    left: -15px;
+    right: 15px;
+    bottom: 15px;
+    background-color: var(--accent-color);
+    border-radius: 10px;
+    opacity: 0.2;
+    z-index: -1;
+    transition: all 0.3s ease;
+}
+
+.about-image:hover::before {
+    top: -10px;
+    left: -10px;
+    right: 10px;
+    bottom: 10px;
+    opacity: 0.3;
+}
+
+.about-image img {
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.about-image:hover img {
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+}
+
+.about-text {
+    flex: 1;
+    min-width: 300px;
+}
+
+.about-text h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    position: relative;
+    display: inline-block;
+    animation: fadeInUp 1s ease;
+}
+
+.about-text h2::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background-color: var(--accent-color);
+    transition: width 0.3s ease;
+}
+
+.about-text h2:hover::after {
+    width: 120px;
+}
+
+.about-text p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    animation: fadeInUp 1s ease 0.2s both;
+    margin-bottom: 20px;
+}
+
+.about-text .btn {
+    animation: fadeInUp 1s ease 0.4s both;
+}
+
+/* 服务样式 */
+#services {
+    padding: 120px 0;
+    background-color: var(--bg-primary);
+    position: relative;
+    background-image: var(--bg-primary);
+    background-image: url('../资源/【哲风壁纸】女孩-湖面.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    transition: background-image 0.5s ease-in-out;
+}
+
+#services::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 10px;
+    background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+}
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    margin-top: 50px;
+    position: relative;
+    perspective: 1000px;
+}
+
+.service-item {
+    background-color: var(--bg-secondary);
+    padding: 40px 30px;
+    border-radius: 10px;
+    text-align: center;
+    transition: var(--transition);
+    border: 1px solid var(--border-color);
+    position: relative;
+    overflow: hidden;
+    transform-style: preserve-3d;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.service-item:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.service-item:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+.service-item:nth-child(4) {
+    animation-delay: 0.6s;
+}
+
+.service-item::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    left: -50px;
+    width: 100px;
+    height: 100px;
+    background-color: var(--accent-color);
+    border-radius: 50%;
+    filter: blur(50px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.service-item:hover {
+    transform: translateY(-10px) rotateY(5deg);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    border-color: var(--accent-color);
+}
+
+.service-item:hover::before {
+    opacity: 0.2;
+}
+
+.service-item i {
+    font-size: 3rem;
+    color: var(--accent-color);
+    margin-bottom: 20px;
+    transition: transform 0.3s ease;
+    display: inline-block;
+}
+
+.service-item:hover i {
+    transform: scale(1.2) rotate(15deg);
+}
+
+.service-item h3 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    position: relative;
+    display: inline-block;
+    z-index: 1;
+}
+
+.service-item h3::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background-color: var(--accent-color);
+    transition: width 0.3s ease;
+}
+
+.service-item:hover h3::after {
+    width: 80%;
+}
+
+.service-item p {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 0;
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+}
+
+.service-item:hover p {
+    opacity: 1;
+}
+
+.service-item:hover {
+    transform: translateY(-15px) rotateX(5deg);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    border-color: var(--accent-color);
+}
+
+.service-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background-color: var(--accent-color);
+    transform-origin: left;
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.service-item:hover::before {
+    transform: scaleX(1);
+}
+
+.service-item i {
+    font-size: 2.5rem;
+    color: var(--accent-color);
+    margin-bottom: 25px;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 70px;
+    height: 70px;
+    background-color: rgba(74, 158, 255, 0.1);
+    border-radius: 50%;
+}
+
+.service-item:hover i {
+    background-color: var(--accent-color);
+    color: #fff;
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(74, 158, 255, 0.5);
+}
+
+.service-item h3 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    transition: var(--transition);
+}
+
+.service-item:hover h3 {
+    color: var(--accent-color);
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .services-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    /* 响应式壁纸调整 */
+    #home {
+        background-attachment: scroll;
+        background-position: top;
+    }
+    
+    #services {
+        background-attachment: scroll;
+        background-position: top;
+    }
+}
+
+/* 移动设备响应式调整 */
+@media (max-width: 480px) {
+    /* 优化小屏幕壁纸显示 */
+    #home {
+        background-size: cover;
+        background-position: 30% center;
+    }
+    
+    #about::before {
+        background-size: cover;
+        background-position: 30% center;
+    }
+    
+    #services {
+        background-size: cover;
+        background-position: 30% center;
+    }
+    
+    #team::before {
+        background-size: cover;
+        background-position: 30% center;
+    }
+    
+    #projects::before {
+        background-size: cover;
+        background-position: 30% center;
+    }
+    
+    /* 增加额外的遮罩以确保文字可读性 */
+    #home::before,
+    #about::before,
+    #services::before,
+    #team::before,
+    #projects::before {
+        background-color: rgba(0, 0, 0, 0.85);
+        mix-blend-mode: overlay;
+    }
+}
+
+/* 团队样式 */
+#team {
+    padding: 120px 0;
+    background-color: var(--bg-secondary);
+    position: relative;
+    overflow: hidden;
+    transition: background-image 0.5s ease-in-out;
+}
+
+#team::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('../资源/【哲风壁纸】二次元-动漫风-夜山.png');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.05;
+    z-index: 0;
+}
+
+#team .container {
+    position: relative;
+    z-index: 1;
+}
+
+.section-subtitle {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto 50px;
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    line-height: 1.8;
+}
+
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 40px;
+    perspective: 1000px;
+}
+
+.team-member {
+    background-color: var(--bg-primary);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: var(--transition);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border-color);
+    transform-style: preserve-3d;
+    position: relative;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.team-member:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.team-member:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+.team-member::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+    transform: rotateX(90deg) translateZ(-1px);
+    transform-origin: top;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.team-member:hover::before {
+    opacity: 1;
+}
+
+.team-member:hover {
+    transform: translateY(-15px) rotateX(5deg);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    border-color: var(--accent-color);
+}
+
+.member-image {
+    height: 250px;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.member-image::after {
+    content: attr(data-name);
+    position: absolute;
+    font-size: 5rem;
+    font-weight: 900;
+    opacity: 0.05;
+    color: var(--accent-color);
+    z-index: 0;
+}
+
+.image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.8));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 20px;
+}
+
+.team-member:hover .image-overlay {
+    opacity: 1;
+}
+
+.social-links {
+    display: flex;
+    gap: 10px;
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+}
+
+.team-member:hover .social-links {
+    transform: translateY(0);
+}
+
+.social-link {
+    width: 40px;
+    height: 40px;
+    background-color: var(--bg-secondary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: var(--transition);
+    border: 1px solid var(--border-color);
+}
+
+.social-link:hover {
+    background-color: var(--accent-color);
+    color: var(--text-light);
+    transform: translateY(-5px);
+    border-color: var(--accent-color);
+}
+
+.member-info {
+    padding: 25px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+.member-info h3 {
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+    position: relative;
+    display: inline-block;
+}
+
+.member-info h3::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 2px;
+    background-color: var(--accent-color);
+    transition: width 0.3s ease;
+}
+
+.team-member:hover .member-info h3::after {
+    width: 70%;
+}
+
+.member-info p {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    margin-bottom: 0;
+    transition: color 0.3s ease;
+}
+
+.team-member:hover .member-info p {
+    color: var(--accent-color);
+}
+
+/* 项目展示样式 */
+#projects {
+    padding: 120px 0;
+    background-color: transparent;
+    position: relative;
+    overflow: hidden;
+    transition: none;
+}
+
+/* 文档中心样式 */
+#docs {
+    padding: 120px 0;
+    background-color: var(--bg-secondary);
+    position: relative;
+    overflow: hidden;
+    transition: background-image 0.5s ease-in-out;
+}
+
+#docs::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('../资源/项目XIM Wallpaper.png');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.08;
+    z-index: 0;
+    filter: blur(2px);
+}
+
+#docs .container {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+}
+
+#docs h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: var(--text-primary);
+}
+
+#docs p {
+    font-size: 1.2rem;
+    margin-bottom: 40px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    color: var(--text-secondary);
+}
+
+#docs .btn {
+    background-color: var(--accent-color);
+    color: white;
+    padding: 12px 35px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+#docs .btn:hover {
+    background-color: var(--accent-hover);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+#docs .btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+#docs .btn:hover::before {
+    left: 100%;
+}
+
+/* 性能优化：使用CSS变量存储背景图路径 */
+:root {
+    --bg-home: url('../资源/【哲风壁纸】梦幻船只-海上景象.png');
+    --bg-about: url('../资源/【哲风壁纸】二次元-倒影-光影.png');
+    --bg-services: url('../资源/【哲风壁纸】女孩-湖面.png');
+    --bg-team: url('../资源/【哲风壁纸】二次元-动漫风-夜山.png');
+    --bg-projects: url('../资源/【哲风壁纸】云-动漫女孩-天空.png');
+}
+
+#projects .container {
+    position: relative;
+    z-index: 1;
+}
+
+#projects h2 {
+    margin-bottom: 20px;
+    position: relative;
+    display: inline-block;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#projects h2::after {
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-color), var(--accent-color));
+    border-radius: 2px;
+}
+
+#projects .section-subtitle {
+    text-align: center;
+    margin-bottom: 60px;
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 50px;
+}
+
+/* 为项目添加淡入动画 */
+.project-item {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+                box-shadow 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+/* 为项目添加不同的动画延迟 */
+.project-item:nth-child(1) {
+    animation: fadeInUp 0.6s ease forwards;
+    animation-delay: 0.1s;
+}
+
+.project-item:nth-child(2) {
+    animation: fadeInUp 0.6s ease forwards;
+    animation-delay: 0.2s;
+}
+
+.project-item:nth-child(3) {
+    animation: fadeInUp 0.6s ease forwards;
+    animation-delay: 0.3s;
+}
+
+.project-item:nth-child(4) {
+    animation: fadeInUp 0.6s ease forwards;
+    animation-delay: 0.4s;
+}
+
+.project-item:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3), 
+                0 0 20px rgba(74, 158, 255, 0.2);
+    border-color: var(--accent-color);
+}
+
+.project-image {
+    position: relative;
+    overflow: hidden;
+    height: 250px;
+    z-index: 1;
+    display: block;
+}
+
+.project-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 1;
+    position: relative;
+    display: block;
+    opacity: 1;
+    visibility: visible;
+}
+
+.project-item:hover .project-image img {
+    transform: scale(1.1);
+    opacity: 1;
+    visibility: visible;
+}
+
+/* 确保图片悬停时不会导致元素消失 */
+.project-image img:hover {
+    transform: scale(1.1) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    z-index: 1 !important;
+}
+
+.project-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent 50%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 30px;
+    z-index: 2;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.project-item:hover .project-overlay {
+    opacity: 1;
+}
+
+.project-content {
+     text-align: center;
+     transform: translateY(20px);
+     transition: transform 0.4s ease;
+     z-index: 3;
+     position: relative;
+     pointer-events: auto;
+  }
+  
+  .project-item:hover .project-content {
+     transform: translateY(0);
+  }
+  
+  .project-content h3 {
+     margin-bottom: 10px;
+     font-size: 1.4rem;
+     position: relative;
+     display: inline-block;
+  }
+  
+  .project-content h3::after {
+     content: '';
+     position: absolute;
+     bottom: -5px;
+     left: 0;
+     width: 100%;
+     height: 2px;
+     background-color: var(--accent-color);
+     transform: scaleX(0);
+     transform-origin: right;
+     transition: transform 0.3s ease;
+  }
+  
+  .project-item:hover .project-content h3::after {
+     transform: scaleX(1);
+     transform-origin: left;
+  }
+  
+  .project-content p {
+     font-size: 1rem;
+     margin-bottom: 15px;
+  }
+  
+  .project-content .btn {
+    display: inline-block;
+    background-color: transparent;
+    color: white;
+    border: 2px solid var(--accent-color);
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.project-info .btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(74, 158, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.project-info .btn:hover::before {
+    left: 100%;
+}
+
+.project-info .btn:hover {
+    background-color: var(--accent-color);
+    box-shadow: 0 5px 15px rgba(74, 158, 255, 0.4);
+    transform: translateY(-3px);
+}
+
+/* 响应式项目展示 */
+@media (max-width: 768px) {
+    #projects {
+        padding: 80px 0;
+    }
+    
+    .projects-grid {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+    
+    .project-overlay {
+        padding: 20px;
+    }
+    
+    .project-info h3 {
+        font-size: 1.2rem;
+    }
+    
+    /* 文档中心响应式调整 */
+    #docs {
+        padding: 80px 0;
+    }
+    
+    #docs h2 {
+        font-size: 2rem;
+        color: var(--text-primary);
+    }
+    
+    #docs p {
+        font-size: 1rem;
+        padding: 0 15px;
+        color: var(--text-secondary);
+    }
+    
+    #docs .btn {
+        padding: 10px 25px;
+        font-size: 0.9rem;
+    }
+    
+    #docs::before {
+        background-size: cover;
+        background-position: center;
+    }
+    
+    /* 文档中心响应式调整 */
+    #docs {
+        padding: 80px 0;
+        background-size: cover;
+        background-position: center;
+    }
+    
+    #docs h2 {
+        font-size: 2rem;
+        color: white;
+    }
+    
+    #docs p {
+        font-size: 1rem;
+        padding: 0 15px;
+        color: rgba(255,255,255,0.9);
+    }
+    
+    #docs .btn {
+        padding: 10px 25px;
+        font-size: 0.9rem;
+    }
+    
+    #docs::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(0,0,0,0.4));
+        z-index: 1;
+    }
+}
+
+/* 移动设备响应式调整 */
+@media (max-width: 480px) {
+    /* 文档中心移动设备调整 */
+    #docs {
+        padding: 60px 0;
+        min-height: 400px;
+        display: flex;
+        align-items: center;
+    }
+    
+    #docs::before {
+        background-size: cover;
+        background-position: 30% center;
+        opacity: 0.12;
+    }
+    
+    #docs h2 {
+        font-size: 1.8rem;
+    }
+    
+    #docs p {
+        font-size: 0.95rem;
+        padding: 0 10px;
+        line-height: 1.6;
+    }
+    
+    #docs .btn {
+        padding: 10px 20px;
+        font-size: 0.85rem;
+    }
+}
+
+/* 大屏设备背景固定效果 */
+@media (min-width: 769px) {
+    /* 文档中心不使用固定背景，保持与其他区块一致 */
+}
+
+/* XIM部门样式 */
+#departments {
+    padding: 120px 0;
+    background-color: var(--bg-secondary);
+    position: relative;
+    overflow: hidden;
+    transition: background-image 0.5s ease-in-out;
+}
+
+#departments::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('../资源/【哲风壁纸】二次元-动漫风-夜山.png');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.08;
+    z-index: 0;
+    filter: blur(2px);
+}
+
+#departments .container {
+    position: relative;
+    z-index: 1;
+}
+
+.departments-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 40px;
+    margin-top: 60px;
+    perspective: 1000px;
+}
+
+.department-item {
+    background-color: var(--bg-primary);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: var(--transition);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border-color);
+    transform-style: preserve-3d;
+    position: relative;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.department-item:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.department-item:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+.department-item:hover {
+    transform: translateY(-15px) rotateX(5deg);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    border-color: var(--accent-color);
+}
+
+.department-image {
+    height: 200px;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.department-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.department-item:hover .department-image img {
+    transform: scale(1.1);
+}
+
+.department-content {
+    padding: 30px;
+}
+
+.department-content h3 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: var(--text-primary);
+    transition: color 0.3s ease;
+}
+
+.department-item:hover .department-content h3 {
+    color: var(--accent-color);
+}
+
+.department-content p {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    color: var(--text-secondary);
+}
+
+/* 分层卡片式布局 - 关于我们 */
+.layout1 #about {
+    position: relative;
+    padding: 150px 0;
+    margin: 50px 0;
+    background: linear-gradient(135deg, rgba(18, 18, 18, 0.85) 0%, rgba(30, 30, 30, 0.85) 100%),
+                url('../资源/【哲风壁纸】二次元-倒影-光影.png') center/cover scroll;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    transition: var(--transition);
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+    z-index: 5;
+}
+
+/* 确保layout1下的about区块背景图片正常显示 */
+.layout1 #about::before {
+    display: none;
+}
+
+/* 分层卡片式布局 - XIM New */
+.layout1 #news {
+    position: relative;
+    padding: 150px 0;
+    margin: 50px 0;
+    background: linear-gradient(135deg, rgba(18, 18, 18, 0.85) 0%, rgba(30, 30, 30, 0.85) 100%),
+                url('../资源/【哲风壁纸】二次元-动漫.png') center/cover scroll;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    transition: var(--transition);
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+    z-index: 5;
+    margin-top: -100px;
+    margin-bottom: -100px;
+}
+
+.layout1 #news::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    right: -1px;
+    bottom: -1px;
+    background: linear-gradient(45deg, var(--accent-color), transparent 50%, transparent 50%, var(--accent-color));
+    border-radius: 20px;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.layout1 #news:hover::before {
+    opacity: 0.3;
+}
+
+/* 分层卡片式布局 - XIM部门 */
+.layout1 #departments {
+    position: relative;
+    padding: 150px 0;
+    margin: 50px 0;
+    background: linear-gradient(135deg, rgba(18, 18, 18, 0.85) 0%, rgba(30, 30, 30, 0.85) 100%),
+                url('../资源/【哲风壁纸】二次元-动漫风-夜山.png') center/cover scroll;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    transition: var(--transition);
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+    z-index: 5;
+    margin-top: -100px;
+    margin-bottom: 100px;
+}
+
+.layout1 #departments::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    right: -1px;
+    bottom: -1px;
+    background: linear-gradient(45deg, var(--accent-color), transparent 50%, transparent 50%, var(--accent-color));
+    border-radius: 20px;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+/* 确保layout1下的departments区块背景图片正常显示 */
+.layout1 #departments::before {
+    display: none;
+}
+
+.layout1 #departments:hover::before {
+    opacity: 0.3;
+}
+
+/* 不对称动态布局 - XIM New */
+.layout2 #news {
+    padding: 150px 0;
+    background: linear-gradient(135deg, rgba(18, 18, 18, 0.85) 0%, rgba(30, 30, 30, 0.85) 100%),
+                url('../资源/【哲风壁纸】二次元-动漫.png') center/cover scroll;
+    position: relative;
+    overflow: hidden;
+}
+
+.layout2 #news::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 10px;
+    background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+    animation: gradientShift 5s ease-in-out infinite;
+}
+
+/* 不对称动态布局 - XIM部门 */
+.layout2 #departments {
+    padding: 150px 0;
+    background: linear-gradient(135deg, rgba(18, 18, 18, 0.85) 0%, rgba(30, 30, 30, 0.85) 100%),
+                url('../资源/【哲风壁纸】二次元-动漫风-夜山.png') center/cover scroll;
+    position: relative;
+    overflow: hidden;
+}
+
+.layout2 #departments::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 10px;
+    background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+    animation: gradientShift 5s ease-in-out infinite;
+}
+
+.layout2 .departments-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 40px;
+    position: relative;
+}
+
+.layout2 .department-item {
+    background-color: var(--bg-secondary);
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-color);
+    transition: var(--transition);
+    position: relative;
+    transform: rotate(0deg) translateY(0);
+}
+
+.layout2 .department-item:nth-child(odd) {
+    transform: rotate(-2deg) translateY(20px);
+}
+
+.layout2 .department-item:nth-child(even) {
+    transform: rotate(2deg) translateY(-20px);
+}
+
+.layout2 .department-item:hover {
+    transform: rotate(0deg) translateY(-30px) scale(1.05);
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.3);
+    border-color: var(--accent-color);
+    z-index: 10;
+}
+
+/* 沉浸式全屏布局 - XIM New */
+.layout3 #news {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, rgba(18, 18, 18, 0.95) 0%, rgba(30, 30, 30, 0.9) 100%),
+                url('../资源/【哲风壁纸】二次元-动漫.png') center/cover scroll;
+    background-repeat: no-repeat;
+}
+
+.layout3 #news .container {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    width: 90%;
+    margin: 0 auto;
+}
+
+.layout3 #news .container {
+    background-color: rgba(30, 30, 30, 0.85);
+    padding: 100px 80px;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: var(--transition);
+    text-align: center;
+}
+
+.layout3 #news .container:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+    border-color: var(--accent-color);
+}
+
+/* 沉浸式全屏布局 - XIM部门 */
+.layout3 #departments {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, rgba(18, 18, 18, 0.95) 0%, rgba(30, 30, 30, 0.9) 100%),
+                url('../资源/【哲风壁纸】二次元-动漫风-夜山.png') center/cover scroll;
+    background-repeat: no-repeat;
+}
+
+.layout3 #departments .container {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    width: 90%;
+    margin: 0 auto;
+}
+
+.layout3 .departments-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 40px;
+    background-color: rgba(30, 30, 30, 0.85);
+    padding: 80px;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: var(--transition);
+}
+
+.layout3 .departments-grid:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+    border-color: var(--accent-color);
+}
+
+.layout3 .department-item {
+    background-color: rgba(18, 18, 18, 0.9);
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: var(--transition);
+    transform: translateY(0);
+}
+
+.layout3 .department-item:hover {
+    transform: translateY(-20px) scale(1.05);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
+    border-color: var(--accent-color);
+}
+
+/* 响应式设计 - XIM部门 */
+@media (max-width: 992px) {
+    .departments-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    #departments {
+        padding: 80px 0;
+    }
+    
+    .departments-grid {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+    
+    .layout1 #departments {
+        padding: 120px 0;
+        margin: 30px 0;
+        width: 95%;
+    }
+    
+    .layout2 #departments {
+        padding: 100px 0;
+    }
+    
+    .layout2 .department-item {
+        transform: rotate(0deg) translateY(0) !important;
+    }
+    
+    .layout3 .departments-grid {
+        padding: 60px;
+    }
+}
+
+@media (max-width: 576px) {
+    #departments {
+        padding: 60px 0;
+    }
+    
+    .departments-grid {
+        gap: 20px;
+    }
+    
+    .layout1 #departments {
+        padding: 80px 0;
+        margin: 20px 0;
+        border-radius: 15px;
+    }
+    
+    .layout2 #departments {
+        padding: 80px 0;
+    }
+    
+    .layout3 .departments-grid {
+        padding: 40px 30px;
+    }
+    
+    .layout3 .departments-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+    
+    /* 响应式设计 - XIM New */
+    #news {
+        padding: 60px 0;
+    }
+    
+    .layout1 #news {
+        padding: 80px 0;
+        margin: 20px 0;
+        border-radius: 15px;
+    }
+    
+    .layout2 #news {
+        padding: 80px 0;
+    }
+    
+    .layout3 #news .container {
+        padding: 40px 30px;
+    }
+    
+    /* 响应式设计 - XIM New页面 */
+    #news-header, #news-content, #updates-header, #video-section, #acknowledgments, #modrinth-link {
+        padding: 60px 0;
+    }
+    
+    .layout1 #news-header,
+    .layout1 #news-content,
+    .layout1 #updates-header,
+    .layout1 #video-section,
+    .layout1 #acknowledgments,
+    .layout1 #modrinth-link {
+        padding: 80px 0;
+        margin: 20px 0;
+        border-radius: 15px;
+    }
+    
+    .layout2 #news-header,
+    .layout2 #news-content,
+    .layout2 #updates-header,
+    .layout2 #video-section,
+    .layout2 #acknowledgments,
+    .layout2 #modrinth-link {
+        padding: 80px 0;
+    }
+    
+    .layout3 #news-header .container,
+    .layout3 #news-content .container,
+    .layout3 #updates-header .container,
+    .layout3 #video-section .container,
+    .layout3 #acknowledgments .container,
+    .layout3 #modrinth-link .container {
+        padding: 60px;
+    }
+}
+
+/* XIM New页面布局样式 */
+
+/* 基础样式 - 适用于所有布局 */
+#news-header, #news-content, #updates-header, #video-section, #acknowledgments, #modrinth-link {
+    padding: 120px 0;
+    background-color: var(--bg-secondary);
+    position: relative;
+    overflow: hidden;
+    transition: background-image 0.5s ease-in-out;
+}
+
+/* 基础背景图片 - 适用于所有布局 */
+#news-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('../资源/【哲风壁纸】云-动漫女孩-天空.png');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.08;
+    z-index: 0;
+    filter: blur(2px);
+}
+
+#news-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('../资源/【哲风壁纸】二次元-动漫.png');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.08;
+    z-index: 0;
+    filter: blur(2px);
+}
+
+#updates-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('../资源/【哲风壁纸】云海-城堡-天空.png');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.08;
+    z-index: 0;
+    filter: blur(2px);
+}
+
+#video-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('../资源/【哲风壁纸】云-动漫女孩-场地.png');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.08;
+    z-index: 0;
+    filter: blur(2px);
+}
+
+#acknowledgments::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('../资源/【哲风壁纸】城镇灯光-山湖美景.png');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.08;
+    z-index: 0;
+    filter: blur(2px);
+}
+
+#modrinth-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('../资源/【哲风壁纸】梦幻船只-海上景象.png');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.08;
+    z-index: 0;
+    filter: blur(2px);
+}
+
+/* 确保容器内容在背景之上 */
+#news-header .container,
+#news-content .container,
+#updates-header .container,
+#video-section .container,
+#acknowledgments .container,
+#modrinth-link .container {
+    position: relative;
+    z-index: 1;
+}
+
+/* 分层卡片式布局 - XIM New页面 */
+.layout1 #news-header {
+    position: relative;
+    padding: 150px 0;
+    margin: 50px 0;
+    background: linear-gradient(135deg, rgba(18, 18, 18, 0.85) 0%, rgba(30, 30, 30, 0.85) 100%),
+                url('../资源/【哲风壁纸】云-动漫女孩-天空.png') center/cover scroll;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    transition: var(--transition);
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+    z-index: 1;
+}
+
+.layout1 #news-content {
+    position: relative;
+    padding: 150px 0;
+    margin: 50px 0;
+    background: linear-gradient(135deg, rgba(30, 30, 30, 0.85) 0%, rgba(37, 37, 37, 0.85) 100%),
+                url('../资源/【哲风壁纸】二次元-动漫.png') center/cover scroll;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    transition: var(--transition);
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+    z-index: 1;
+}
+
+.layout1 #updates-header {
+    position: relative;
+    padding: 150px 0;
+    margin: 50px 0;
+    background: linear-gradient(135deg, rgba(18, 18, 18, 0.85) 0%, rgba(30, 30, 30, 0.85) 100%),
+                url('../资源/【哲风壁纸】云海-城堡-天空.png') center/cover scroll;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    transition: var(--transition);
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+    z-index: 1;
+}
+
+.layout1 #video-section {
+    position: relative;
+    padding: 150px 0;
+    margin: 50px 0;
+    background: linear-gradient(135deg, rgba(30, 30, 30, 0.85) 0%, rgba(37, 37, 37, 0.85) 100%),
+                url('../资源/【哲风壁纸】云-动漫女孩-场地.png') center/cover scroll;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    transition: var(--transition);
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+    z-index: 1;
+}
+
+.layout1 #acknowledgments {
+    position: relative;
+    padding: 150px 0;
+    margin: 50px 0;
+    background: linear-gradient(135deg, rgba(18, 18, 18, 0.85) 0%, rgba(30, 30, 30, 0.85) 100%),
+                url('../资源/【哲风壁纸】城镇灯光-山湖美景.png') center/cover scroll;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    transition: var(--transition);
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+    z-index: 1;
+}
+
+.layout1 #modrinth-link {
+    position: relative;
+    padding: 150px 0;
+    margin: 50px 0;
+    background: linear-gradient(135deg, rgba(30, 30, 30, 0.85) 0%, rgba(37, 37, 37, 0.85) 100%),
+                url('../资源/【哲风壁纸】梦幻船只-海上景象.png') center/cover scroll;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    transition: var(--transition);
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+    z-index: 1;
+}
+
+.layout1 #news-header::before,
+.layout1 #news-content::before,
+.layout1 #updates-header::before,
+.layout1 #video-section::before,
+.layout1 #acknowledgments::before,
+.layout1 #modrinth-link::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    right: -1px;
+    bottom: -1px;
+    background: linear-gradient(45deg, var(--accent-color), transparent 50%, transparent 50%, var(--accent-color));
+    border-radius: 20px;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.layout1 #news-header:hover::before,
+.layout1 #news-content:hover::before,
+.layout1 #updates-header:hover::before,
+.layout1 #video-section:hover::before,
+.layout1 #acknowledgments:hover::before,
+.layout1 #modrinth-link:hover::before {
+    opacity: 0.3;
+}
+
+/* 不对称动态布局 - XIM New页面 */
+.layout2 #news-header {
+    padding: 150px 0;
+    background: linear-gradient(135deg, rgba(18, 18, 18, 0.85) 0%, rgba(30, 30, 30, 0.85) 100%),
+                url('../资源/【哲风壁纸】云-动漫女孩-天空.png') center/cover scroll;
+    position: relative;
+    overflow: hidden;
+}
+
+.layout2 #news-content {
+    padding: 150px 0;
+    background: linear-gradient(135deg, rgba(30, 30, 30, 0.85) 0%, rgba(37, 37, 37, 0.85) 100%),
+                url('../资源/【哲风壁纸】二次元-动漫.png') center/cover scroll;
+    position: relative;
+    overflow: hidden;
+}
+
+.layout2 #updates-header {
+    padding: 150px 0;
+    background: linear-gradient(135deg, rgba(18, 18, 18, 0.85) 0%, rgba(30, 30, 30, 0.85) 100%),
+                url('../资源/【哲风壁纸】云海-城堡-天空.png') center/cover scroll;
+    position: relative;
+    overflow: hidden;
+}
+
+.layout2 #video-section {
+    padding: 150px 0;
+    background: linear-gradient(135deg, rgba(30, 30, 30, 0.85) 0%, rgba(37, 37, 37, 0.85) 100%),
+                url('../资源/【哲风壁纸】云-动漫女孩-场地.png') center/cover scroll;
+    position: relative;
+    overflow: hidden;
+}
+
+.layout2 #acknowledgments {
+    padding: 150px 0;
+    background: linear-gradient(135deg, rgba(18, 18, 18, 0.85) 0%, rgba(30, 30, 30, 0.85) 100%),
+                url('../资源/【哲风壁纸】城镇灯光-山湖美景.png') center/cover scroll;
+    position: relative;
+    overflow: hidden;
+}
+
+.layout2 #modrinth-link {
+    padding: 150px 0;
+    background: linear-gradient(135deg, rgba(30, 30, 30, 0.85) 0%, rgba(37, 37, 37, 0.85) 100%),
+                url('../资源/【哲风壁纸】梦幻船只-海上景象.png') center/cover scroll;
+    position: relative;
+    overflow: hidden;
+}
+
+.layout2 #news-header::before,
+.layout2 #news-content::before,
+.layout2 #updates-header::before,
+.layout2 #video-section::before,
+.layout2 #acknowledgments::before,
+.layout2 #modrinth-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 10px;
+    background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+    animation: gradientShift 5s ease-in-out infinite;
+}
+
+/* 沉浸式全屏布局 - XIM New页面 */
+.layout3 #news-header,
+.layout3 #news-content,
+.layout3 #updates-header,
+.layout3 #video-section,
+.layout3 #acknowledgments,
+.layout3 #modrinth-link {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    background-attachment: scroll;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.layout3 #news-header {
+    background: linear-gradient(135deg, rgba(18, 18, 18, 0.95) 0%, rgba(30, 30, 30, 0.9) 100%),
+                url('../资源/【哲风壁纸】云-动漫女孩-天空.png') center/cover scroll;
+}
+
+.layout3 #news-content {
+    background: linear-gradient(135deg, rgba(30, 30, 30, 0.95) 0%, rgba(37, 37, 37, 0.9) 100%),
+                url('../资源/【哲风壁纸】二次元-动漫.png') center/cover scroll;
+}
+
+.layout3 #updates-header {
+    background: linear-gradient(135deg, rgba(18, 18, 18, 0.95) 0%, rgba(30, 30, 30, 0.9) 100%),
+                url('../资源/【哲风壁纸】云海-城堡-天空.png') center/cover scroll;
+}
+
+.layout3 #video-section {
+    background: linear-gradient(135deg, rgba(30, 30, 30, 0.95) 0%, rgba(37, 37, 37, 0.9) 100%),
+                url('../资源/【哲风壁纸】云-动漫女孩-场地.png') center/cover scroll;
+}
+
+.layout3 #acknowledgments {
+    background: linear-gradient(135deg, rgba(18, 18, 18, 0.95) 0%, rgba(30, 30, 30, 0.9) 100%),
+                url('../资源/【哲风壁纸】城镇灯光-山湖美景.png') center/cover scroll;
+}
+
+.layout3 #modrinth-link {
+    background: linear-gradient(135deg, rgba(30, 30, 30, 0.95) 0%, rgba(37, 37, 37, 0.9) 100%),
+                url('../资源/【哲风壁纸】梦幻船只-海上景象.png') center/cover scroll;
+}
+
+.layout3 #news-header .container,
+.layout3 #news-content .container,
+.layout3 #updates-header .container,
+.layout3 #video-section .container,
+.layout3 #acknowledgments .container,
+.layout3 #modrinth-link .container {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    width: 90%;
+    margin: 0 auto;
+    background-color: rgba(30, 30, 30, 0.85);
+    padding: 80px;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: var(--transition);
+}
+
+.layout3 #news-header .container:hover,
+.layout3 #news-content .container:hover,
+.layout3 #updates-header .container:hover,
+.layout3 #video-section .container:hover,
+.layout3 #acknowledgments .container:hover,
+.layout3 #modrinth-link .container:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+    border-color: var(--accent-color);
+}
+
+/* 联系我们样式 */
+#contact {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  padding: 6rem 0;
+  position: relative;
+  overflow: hidden;
+}
+
+#contact::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 10% 20%, rgba(74, 158, 255, 0.1) 0%, transparent 20%),
+    radial-gradient(circle at 80% 80%, rgba(74, 158, 255, 0.08) 0%, transparent 20%);
+  z-index: 0;
+}
+
+.contact-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  margin-top: 50px;
+  position: relative;
+  z-index: 1;
+}
+
+.contact-info {
+  background-color: var(--bg-tertiary);
+  border-radius: 12px;
+  padding: 2.5rem;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  transition: var(--transition);
+}
+
+.contact-info:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.contact-info h3 {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  color: var(--accent-color);
+  position: relative;
+  display: inline-block;
+}
+
+.contact-info h3::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 50px;
+  height: 3px;
+  background-color: var(--accent-color);
+  border-radius: 3px;
+}
+
+.info-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.info-item i {
+  font-size: 1.5rem;
+  color: var(--accent-color);
+  margin-top: 5px;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.info-item:hover i {
+  transform: scale(1.2) rotate(10deg);
+}
+
+.info-item span {
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+.contact-form {
+  background-color: var(--bg-tertiary);
+  border-radius: 12px;
+  padding: 2.5rem;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  transition: var(--transition);
+}
+
+.contact-form:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.contact-form h3 {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  color: var(--accent-color);
+  position: relative;
+  display: inline-block;
+}
+
+.contact-form h3::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 50px;
+  height: 3px;
+  background-color: var(--accent-color);
+  border-radius: 3px;
+}
+
+.contact-form form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  position: relative;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  transition: color 0.3s ease;
+}
+
+.form-group:focus-within label {
+  color: var(--accent-color);
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 12px 15px;
+  background-color: var(--bg-primary);
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 1rem;
+  transition: var(--transition);
+  resize: none;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  background-color: rgba(18, 18, 18, 0.8);
+  box-shadow: 0 0 0 3px rgba(74, 158, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.contact-form textarea {
+  min-height: 150px;
+}
+
+.btn-primary {
+  display: inline-block;
+  padding: 12px 30px;
+  background: linear-gradient(45deg, var(--accent-color), var(--accent-hover));
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* 突出按钮样式 */
+.btn-highlight {
+  display: inline-block;
+  padding: 15px 40px;
+  background: linear-gradient(45deg, var(--accent-color), var(--accent-hover));
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  box-shadow: 0 10px 30px rgba(74, 158, 255, 0.2);
+}
+
+.btn-highlight:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 20px 40px rgba(74, 158, 255, 0.3);
+  background: linear-gradient(45deg, var(--accent-hover), var(--accent-color));
+}
+
+.btn-highlight::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.6s ease;
+  z-index: -1;
+}
+
+.btn-highlight:hover::before {
+  left: 100%;
+}
+
+.contact-form .btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background: linear-gradient(45deg, var(--accent-hover), var(--accent-color));
+  transition: width 0.3s ease;
+  z-index: -1;
+}
+
+.contact-form .btn:hover::before {
+  width: 100%;
+}
+
+.contact-form .btn:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 10px 25px rgba(74, 158, 255, 0.3);
+}
+
+/* 响应式联系我们 */
+@media (max-width: 992px) {
+  .contact-content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  .contact-info,
+  .contact-form {
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  #contact {
+    padding: 4rem 0;
+  }
+  
+  .contact-info h3,
+  .contact-form h3 {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-info,
+  .contact-form {
+    padding: 1.5rem;
+  }
+  
+  .info-item {
+    margin-bottom: 1rem;
+  }
+}
+
+/* 页脚样式 */
+footer {
+    background-color: var(--bg-tertiary);
+    padding: 50px 0 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 50px;
+    margin-bottom: 50px;
+}
+
+.footer-logo {
+    display: flex;
+    align-items: center;
+}
+
+.footer-logo img {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
+
+.footer-logo span {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.footer-links {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.footer-links a {
+    color: var(--text-secondary);
+    transition: var(--transition);
+}
+
+.footer-links a:hover {
+    color: var(--accent-color);
+    transform: translateX(5px);
+}
+
+.social-links {
+    display: flex;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.social-links a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: var(--bg-primary);
+    border-radius: 50%;
+    color: var(--text-secondary);
+    transition: var(--transition);
+}
+
+.social-links a:hover {
+    background-color: var(--accent-color);
+    color: white;
+    transform: translateY(-3px);
+}
+
+.copyright {
+    text-align: center;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+.copyright p {
+    font-size: 0.9rem;
+    margin-bottom: 0;
+}
+
+/* 动画定义 */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes rotateIn {
+    from {
+        opacity: 0;
+        transform: rotate(-10deg) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: rotate(0deg) scale(1);
+    }
+}
+
+/* 背景图片加载过渡 */
+@keyframes backgroundFadeIn {
+    from {
+        background-color: var(--bg-primary);
+    }
+    to {
+        background-color: transparent;
+    }
+}
+
+/* 微妙的背景动画 */
+@keyframes subtlePulse {
+    0%, 100% {
+        opacity: 0.8;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+}
+
+/* 悬停时的光晕效果 */
+@keyframes glow {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(74, 158, 255, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 40px rgba(74, 158, 255, 0.5);
+    }
+}
+
+/* 滚动时的元素入场动画 */
+.fade-in-up {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 0.8s ease;
+}
+
+.fade-in-left {
+    opacity: 0;
+    transform: translateX(-50px);
+    transition: all 0.8s ease;
+}
+
+.fade-in-right {
+    opacity: 0;
+    transform: translateX(50px);
+    transition: all 0.8s ease;
+}
+
+.scale-in {
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.8s ease;
+}
+
+.rotate-in {
+    opacity: 0;
+    transform: rotate(-10deg) scale(0.9);
+    transition: all 0.8s ease;
+}
+
+/* 滚动到视图中时触发动画 */
+.fade-in-up.visible,
+.fade-in-left.visible,
+.fade-in-right.visible,
+.scale-in.visible,
+.rotate-in.visible {
+    opacity: 1;
+    transform: translateY(0) translateX(0) scale(1) rotate(0deg);
+}
+
+/* 增强按钮的悬停效果 */
+.btn {
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    transition: all 0.3s ease;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+    z-index: -1;
+}
+
+.btn:hover::before {
+    left: 100%;
+}
+
+/* 增强导航栏的滚动效果 */
+nav {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+nav.scrolled {
+    padding: 15px 0;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    background-color: rgba(18, 18, 18, 0.98);
+    border-bottom-color: var(--border-color);
+    transform: translateY(0);
+}
+
+/* 移除重复的项目卡片样式，避免冲突 */
+
+/* 图片的悬停放大效果 - 仅应用于非项目卡片图片 */
+img:not(.project-image img) {
+    transition: transform 0.5s ease;
+}
+
+img:not(.project-image img):hover {
+    transform: scale(1.05);
+}
+
+/* 标题的下划线动画 */
+h2::after {
+    transition: all 0.5s ease;
+}
+
+h2:hover::after {
+    width: 100%;
+}
+
+/* 社交链接的悬停效果 */
+.social-link {
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.social-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, var(--accent-color), var(--accent-hover));
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s ease;
+    z-index: -1;
+}
+
+.social-link:hover::before {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+.social-link:hover {
+    transform: translateY(-5px) rotate(5deg);
+    color: white !important;
+}
+
+/* 输入框的焦点动画 */
+input:focus,
+textarea:focus {
+    transition: all 0.3s ease;
+    transform: translateY(-2px);
+    box-shadow: 0 0 0 3px rgba(74, 158, 255, 0.1);
+}
+
+/* 布局切换按钮的增强效果 */
+.layout-btn {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.layout-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, var(--accent-color), var(--accent-hover));
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s ease;
+    z-index: -1;
+}
+
+.layout-btn:hover::before {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+/* 微妙的背景动画 - 仅应用于非layout3的section */
+section:not(.layout3 section)::before {
+    animation: subtlePulse 4s ease-in-out infinite;
+}
+
+/* 修复layout3 section背景渲染问题 */
+.layout3 section {
+    background-attachment: scroll;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* 方案1：分层卡片式布局 */
+.layout1 #about,
+.layout1 #docs,
+.layout1 #projects,
+.layout1 #contact {
+    position: relative;
+    padding: 150px 0;
+    margin: 50px 0;
+    background-color: var(--bg-secondary);
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    transition: var(--transition);
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+    z-index: 1;
+}
+
+.layout1 #about::before,
+.layout1 #docs::before,
+.layout1 #projects::before,
+.layout1 #contact::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    right: -1px;
+    bottom: -1px;
+    background: linear-gradient(45deg, var(--accent-color), transparent 50%, transparent 50%, var(--accent-color));
+    border-radius: 20px;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.layout1 #about:hover::before,
+.layout1 #docs:hover::before,
+.layout1 #projects:hover::before,
+.layout1 #contact:hover::before {
+    opacity: 0.3;
+}
+
+.layout1 #about .container,
+.layout1 #docs .container,
+.layout1 #projects .container,
+.layout1 #contact .container {
+    position: relative;
+    z-index: 2;
+}
+
+.layout1 #about {
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+}
+
+.layout1 #docs {
+    background: linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-secondary) 100%);
+    margin-top: -100px;
+    z-index: 2;
+}
+
+.layout1 #projects {
+    background: transparent;
+    margin-top: -100px;
+    z-index: 3;
+}
+
+.layout1 #contact {
+    background: linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-secondary) 100%);
+    margin-top: -100px;
+    margin-bottom: 100px;
+    z-index: 4;
+}
+
+.layout1 .about-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+}
+
+.layout1 .about-image {
+    position: relative;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+    transform: rotate(-2deg);
+    transition: var(--transition);
+}
+
+.layout1 .about-image:hover {
+    transform: rotate(0deg) scale(1.05);
+}
+
+.layout1 .about-image img {
+    border-radius: 15px;
+    transform: scale(1.1);
+    transition: transform 0.5s ease;
+}
+
+.layout1 .about-image:hover img {
+    transform: scale(1.2);
+}
+
+.layout1 .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 40px;
+}
+
+.layout1 .project-item {
+    background-color: var(--bg-primary);
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    transition: var(--transition);
+    border: 1px solid var(--border-color);
+    transform: translateY(0);
+}
+
+.layout1 .project-item:hover {
+    transform: translateY(-20px) scale(1.02);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+    border-color: var(--accent-color);
+}
+
+.layout1 .contact-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+}
+
+.layout1 .contact-info,
+.layout1 .contact-form {
+    background-color: var(--bg-primary);
+    border-radius: 15px;
+    padding: 40px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-color);
+    transition: var(--transition);
+}
+
+.layout1 .contact-info:hover,
+.layout1 .contact-form:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+    border-color: var(--accent-color);
+}
+
+/* 方案2：不对称动态布局 */
+.layout2 {
+    background-color: var(--bg-primary);
+    overflow-x: hidden;
+}
+
+.layout2 #home {
+    height: 100vh;
+    background: linear-gradient(135deg, rgba(18, 18, 18, 0.85) 0%, rgba(30, 30, 30, 0.85) 100%),
+                url('../资源/【哲风壁纸】梦幻船只-海上景象.png') center/cover scroll;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.layout2 #home::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 800px;
+    height: 800px;
+    background: radial-gradient(circle, rgba(74, 158, 255, 0.1) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: float 20s ease-in-out infinite;
+    z-index: 0;
+}
+
+.layout2 #home::after {
+    content: '';
+    position: absolute;
+    bottom: -30%;
+    left: -10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(74, 158, 255, 0.08) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: float 15s ease-in-out infinite reverse;
+    z-index: 0;
+}
+
+.layout2 #about {
+    padding: 150px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.layout2 .about-content {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 100px;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+}
+
+.layout2 .about-text {
+    background-color: var(--bg-secondary);
+    padding: 80px 60px;
+    border-radius: 20px 0 0 20px;
+    box-shadow: -20px 0 60px rgba(0, 0, 0, 0.2);
+    transform: translateX(50px);
+    border: 1px solid var(--border-color);
+}
+
+.layout2 .about-image {
+    position: relative;
+    transform: translateX(-50px) rotate(5deg);
+    z-index: 2;
+    box-shadow: 20px 20px 60px rgba(0, 0, 0, 0.3);
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.layout2 .about-image img {
+    border-radius: 15px;
+    transform: scale(1.1);
+    transition: transform 0.5s ease;
+}
+
+.layout2 .about-image:hover img {
+    transform: scale(1.2);
+}
+
+.layout2 #docs {
+    padding: 150px 0;
+    background-color: var(--bg-secondary);
+    position: relative;
+    overflow: hidden;
+}
+
+.layout2 #docs::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 10px;
+    background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+    animation: gradientShift 5s ease-in-out infinite;
+}
+
+.layout2 #projects {
+    padding: 150px 0;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, rgba(18, 18, 18, 0.85) 0%, rgba(30, 30, 30, 0.85) 100%),
+                url('../资源/【哲风壁纸】云-动漫女孩-天空.png') center/cover scroll;
+    background-repeat: no-repeat;
+}
+
+.layout2 #projects::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(18, 18, 18, 0.7) 0%, rgba(30, 30, 30, 0.7) 100%);
+    z-index: 0;
+}
+
+.layout2 #projects .container {
+    position: relative;
+    z-index: 1;
+}
+
+.layout2 .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 40px;
+    position: relative;
+}
+
+.layout2 .project-item {
+    background-color: var(--bg-secondary);
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-color);
+    transition: var(--transition);
+    position: relative;
+    transform: rotate(0deg) translateY(0);
+}
+
+.layout2 .project-item:nth-child(odd) {
+    transform: rotate(-2deg) translateY(20px);
+}
+
+.layout2 .project-item:nth-child(even) {
+    transform: rotate(2deg) translateY(-20px);
+}
+
+.layout2 .project-item:hover {
+    transform: rotate(0deg) translateY(-30px) scale(1.05);
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.3);
+    border-color: var(--accent-color);
+    z-index: 10;
+}
+
+.layout2 #contact {
+    padding: 150px 0;
+    background-color: var(--bg-secondary);
+    position: relative;
+    overflow: hidden;
+}
+
+.layout2 .contact-wrapper {
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: 80px;
+    align-items: center;
+    position: relative;
+}
+
+.layout2 .contact-info {
+    background-color: var(--bg-primary);
+    padding: 60px 40px;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-color);
+    transform: rotate(-3deg) translateY(30px);
+    transition: var(--transition);
+}
+
+.layout2 .contact-form {
+    background-color: var(--bg-primary);
+    padding: 80px 60px;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-color);
+    transform: rotate(2deg) translateY(-30px);
+    transition: var(--transition);
+}
+
+.layout2 .contact-info:hover,
+.layout2 .contact-form:hover {
+    transform: rotate(0deg) translateY(0);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+    border-color: var(--accent-color);
+}
+
+/* 不对称布局的动画效果 */
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+    33% {
+        transform: translateY(-30px) rotate(120deg);
+    }
+    66% {
+        transform: translateY(15px) rotate(240deg);
+    }
+}
+
+@keyframes gradientShift {
+    0%, 100% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+/* 方案3：沉浸式全屏布局 */
+.layout3 {
+    background-color: var(--bg-primary);
+    overflow-x: hidden;
+}
+
+.layout3 section {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center;
+}
+
+.layout3 #home {
+    background: linear-gradient(135deg, rgba(18, 18, 18, 0.95) 0%, rgba(30, 30, 30, 0.9) 100%),
+                url('../资源/【哲风壁纸】梦幻船只-海上景象.png') center/cover scroll;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background-repeat: no-repeat;
+}
+
+.layout3 #about {
+    background: linear-gradient(135deg, rgba(18, 18, 18, 0.95) 0%, rgba(30, 30, 30, 0.9) 100%),
+                url('../资源/【哲风壁纸】二次元-倒影-光影.png') center/cover scroll;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 0;
+    box-shadow: none;
+    border: none;
+    background-repeat: no-repeat;
+}
+
+.layout3 #docs {
+    background: linear-gradient(135deg, rgba(30, 30, 30, 0.95) 0%, rgba(37, 37, 37, 0.9) 100%),
+                url('../资源/项目XIM Wallpaper.png') center/cover scroll;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 0;
+    box-shadow: none;
+    border: none;
+    background-repeat: no-repeat;
+}
+
+.layout3 #projects {
+    background: linear-gradient(135deg, rgba(18, 18, 18, 0.95) 0%, rgba(30, 30, 30, 0.9) 100%),
+                url('../资源/【哲风壁纸】云-动漫女孩-天空.png') center/cover scroll;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 0;
+    box-shadow: none;
+    border: none;
+    background-repeat: no-repeat;
+}
+
+.layout3 #contact {
+    background: linear-gradient(135deg, rgba(30, 30, 30, 0.95) 0%, rgba(37, 37, 37, 0.9) 100%),
+                url('../资源/【哲风壁纸】女孩-湖面.png') center/cover scroll;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 0;
+    box-shadow: none;
+    border: none;
+    background-repeat: no-repeat;
+}
+
+.layout3 .container {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    width: 90%;
+    margin: 0 auto;
+}
+
+.layout3 .about-content,
+.layout3 .contact-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    background-color: rgba(30, 30, 30, 0.85);
+    padding: 80px;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: var(--transition);
+}
+
+.layout3 .about-content:hover,
+.layout3 .contact-wrapper:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+    border-color: var(--accent-color);
+}
+
+.layout3 #docs .container {
+    background-color: rgba(30, 30, 30, 0.85);
+    padding: 100px 80px;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+    transition: var(--transition);
+}
+
+.layout3 #docs .container:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+    border-color: var(--accent-color);
+}
+
+.layout3 .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 40px;
+    background-color: rgba(30, 30, 30, 0.85);
+    padding: 80px;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: var(--transition);
+}
+
+.layout3 .projects-grid:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+    border-color: var(--accent-color);
+}
+
+.layout3 .project-item {
+    background-color: rgba(18, 18, 18, 0.9);
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: var(--transition);
+    transform: translateY(0);
+}
+
+.layout3 .project-item:hover {
+    transform: translateY(-20px) scale(1.05);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
+    border-color: var(--accent-color);
+}
+
+.layout3 h2 {
+    font-size: 3rem;
+    margin-bottom: 30px;
+    position: relative;
+    display: inline-block;
+}
+
+.layout3 h2::after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background-color: var(--accent-color);
+    border-radius: 2px;
+    animation: widthGrow 1s ease-out forwards;
+}
+
+@keyframes widthGrow {
+    from {
+        width: 0;
+    }
+    to {
+        width: 100%;
+    }
+}
+
+/* 沉浸式布局的滚动指示器 */
+.layout3 section::after {
+    content: '';
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 50px;
+    border: 2px solid var(--accent-color);
+    border-radius: 25px;
+    opacity: 0.7;
+    animation: scrollIndicator 2s ease-in-out infinite;
+}
+
+.layout3 section::before {
+    content: '';
+    position: absolute;
+    bottom: 55px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 15px;
+    background-color: var(--accent-color);
+    border-radius: 3px;
+    opacity: 0.7;
+    animation: scrollDot 2s ease-in-out infinite;
+}
+
+@keyframes scrollIndicator {
+    0%, 100% {
+        opacity: 0.7;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+@keyframes scrollDot {
+    0% {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(-50%) translateY(20px);
+        opacity: 0;
+    }
+}
+
+/* 响应式设计 */
+@media (max-width: 1200px) {
+    .container {
+        padding: 0 30px;
+    }
+    
+    .layout1 #about,
+    .layout1 #docs,
+    .layout1 #projects,
+    .layout1 #contact {
+        width: 95%;
+        padding: 120px 0;
+    }
+    
+    .layout2 .about-content,
+    .layout2 .contact-wrapper {
+        gap: 50px;
+    }
+    
+    .layout2 .about-text,
+    .layout2 .contact-form {
+        padding: 60px 40px;
+    }
+    
+    .layout3 .about-content,
+    .layout3 .contact-wrapper {
+        gap: 60px;
+        padding: 60px;
+    }
+    
+    .layout3 .projects-grid {
+        padding: 60px;
+    }
+}
+
+@media (max-width: 992px) {
+    /* 布局切换器在移动端的调整 */
+    .layout-switcher {
+        margin-left: 10px;
+    }
+    
+    .layout-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 0.9rem;
+    }
+    
+    /* 方案1响应式调整 */
+    .layout1 .about-content,
+    .layout1 .contact-wrapper {
+        grid-template-columns: 1fr;
+        gap: 50px;
+    }
+    
+    .layout1 .about-image {
+        order: -1;
+    }
+    
+    .layout1 .projects-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    /* 方案2响应式调整 */
+    .layout2 .about-content,
+    .layout2 .contact-wrapper {
+        grid-template-columns: 1fr;
+        gap: 60px;
+    }
+    
+    .layout2 .about-text {
+        border-radius: 20px;
+        transform: translateX(0);
+        padding: 60px 40px;
+    }
+    
+    .layout2 .about-image {
+        transform: translateX(0) rotate(0deg);
+    }
+    
+    .layout2 .contact-info,
+    .layout2 .contact-form {
+        transform: rotate(0deg) translateY(0);
+        padding: 60px 40px;
+    }
+    
+    /* 方案3响应式调整 */
+    .layout3 .about-content,
+    .layout3 .contact-wrapper {
+        grid-template-columns: 1fr;
+        gap: 50px;
+        padding: 50px;
+    }
+    
+    .layout3 .projects-grid {
+        padding: 50px;
+    }
+    
+    .layout3 h2 {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    /* 通用响应式调整 */
+    h2 {
+        font-size: 2rem;
+    }
+    
+    .hero-content h1 {
+        font-size: 3rem;
+    }
+    
+    .hero-content p {
+        font-size: 1.2rem;
+    }
+    
+    /* 布局切换器在小屏幕上的调整 */
+    .nav-links {
+        display: none;
+    }
+    
+    /* 方案1响应式调整 */
+    .layout1 #about,
+    .layout1 #docs,
+    .layout1 #projects,
+    .layout1 #contact {
+        width: 98%;
+        padding: 80px 0;
+        margin: 30px 0;
+    }
+    
+    .layout1 .projects-grid {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+    
+    /* 方案2响应式调整 */
+    .layout2 #about,
+    .layout2 #docs,
+    .layout2 #projects,
+    .layout2 #contact {
+        padding: 100px 0;
+    }
+    
+    .layout2 .about-text,
+    .layout2 .contact-form,
+    .layout2 .contact-info {
+        padding: 40px 30px;
+    }
+    
+    .layout2 .project-item {
+        transform: rotate(0deg) translateY(0) !important;
+    }
+    
+    /* 方案3响应式调整 */
+    .layout3 .about-content,
+    .layout3 .contact-wrapper {
+        padding: 40px 30px;
+        gap: 40px;
+    }
+    
+    .layout3 .projects-grid {
+        padding: 40px 30px;
+    }
+    
+    .layout3 h2 {
+        font-size: 2rem;
+    }
+    
+    /* 隐藏滚动指示器在移动端 */
+    .layout3 section::before,
+    .layout3 section::after {
+        display: none;
+    }
+}
+
+@media (max-width: 576px) {
+    /* 通用响应式调整 */
+    .container {
+        padding: 0 20px;
+    }
+    
+    h2 {
+        font-size: 1.8rem;
+    }
+    
+    .hero-content h1 {
+        font-size: 2.5rem;
+    }
+    
+    .hero-content p {
+        font-size: 1.1rem;
+    }
+    
+    .btn {
+        padding: 12px 25px;
+        font-size: 0.9rem;
+    }
+    
+    /* 布局切换器在极小屏幕上的调整 */
+    .layout-switcher {
+        margin-left: 5px;
+    }
+    
+    .layout-btn {
+        width: 30px;
+        height: 30px;
+        font-size: 0.8rem;
+    }
+    
+    /* 方案1响应式调整 */
+    .layout1 #about,
+    .layout1 #docs,
+    .layout1 #projects,
+    .layout1 #contact {
+        padding: 60px 0;
+        margin: 20px 0;
+        border-radius: 15px;
+    }
+    
+    /* 方案2响应式调整 */
+    .layout2 #about,
+    .layout2 #docs,
+    .layout2 #projects,
+    .layout2 #contact {
+        padding: 80px 0;
+    }
+    
+    .layout2 .about-text,
+    .layout2 .contact-form,
+    .layout2 .contact-info {
+        padding: 30px 20px;
+    }
+    
+    /* 方案3响应式调整 */
+    .layout3 .about-content,
+    .layout3 .contact-wrapper {
+        padding: 30px 20px;
+        gap: 30px;
+    }
+    
+    .layout3 .projects-grid {
+        padding: 30px 20px;
+    }
+    
+    .layout3 .projects-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+    
+    .layout3 h2 {
+        font-size: 1.8rem;
+    }
+}
+
+
+
+
+
