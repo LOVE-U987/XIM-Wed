@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XIM协议文档 - XIM工作室</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/docs.css">
+    <link rel="stylesheet" href="vendor/font-awesome/all.min.css">
+    <script src="js/main.js" type="module" defer></script>
+    <script src="js/modules/docs.js" type="module" defer></script>
+</head>
+<body class="docs-page">
+    <!-- 文档页面导航 -->
+    <header class="docs-header">
+        <div class="container">
+            <div class="docs-header-content">
+                <div class="logo">
+                    <span>XIM文档</span>
+                </div>
+                <div class="docs-actions">
+                    <a href="index.html" class="btn btn-outline">返回主页</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主内容区域 -->
+    <div class="docs-container">
+        <div class="container">
+            <div class="docs-layout">
+                <!-- 侧边目录导航 -->
+                <aside class="docs-sidebar">
+                    <div class="docs-sidebar-header">
+                        <h3>目录</h3>
+                        <button class="sidebar-toggle" aria-label="折叠目录">
+                            <i class="fa fa-chevron-down"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- 搜索框 -->
+                    <div class="docs-search">
+                        <div class="search-input-container">
+                            <input type="text" id="docs-search-input" placeholder="搜索文档内容...">
+                            <i class="fa fa-search"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- 目录列表 -->
+                    <nav class="docs-nav">
+                        <ul class="docs-nav-list">
+                            <li class="docs-nav-item">
+                                <a href="#xim-code-protocol" class="docs-nav-link active">1. XIM Studio 代码协议</a>
+                                <ul class="docs-nav-sublist">
+                                    <li><a href="#overview" class="docs-nav-sublink">1.1 协议目的</a></li>
+                                    <li class="docs-nav-item">
+                                        <a href="#core-concepts" class="docs-nav-sublink">1.2 代码类型与权限矩阵</a>
+                                        <ul class="docs-nav-sublist">
+                                            <li><a href="#concept-1" class="docs-nav-sublink">1.2.1 访问码</a></li>
+                                            <li><a href="#concept-2" class="docs-nav-sublink">1.2.2 信任码</a></li>
+                                            <li><a href="#concept-3" class="docs-nav-sublink">1.2.3 工作码</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="#code-format" class="docs-nav-sublink">1.3 代码格式规范</a></li>
+                                    <li><a href="#data-structures" class="docs-nav-sublink">1.4 使用周期与失效规则</a></li>
+                                    <li><a href="#api" class="docs-nav-sublink">1.5 获取与申请流程</a></li>
+                                    <li><a href="#usage" class="docs-nav-sublink">1.6 分享与合规条款</a></li>
+                                    <li><a href="#best-practices" class="docs-nav-sublink">1.7 联系渠道</a></li>
+                                    <li><a href="#security-measures" class="docs-nav-sublink">1.8 代码安全与保护措施</a></li>
+                                    <li><a href="#protocol-updates" class="docs-nav-sublink">1.9 协议更新与修订</a></li>
+                                    <li><a href="#legal-applicability" class="docs-nav-sublink">1.10 法律适用与争议解决</a></li>
+                                </ul>
+                            </li>
+                            <li class="docs-nav-item">
+                                <a href="#mor-overhaul" class="docs-nav-link">2. [MOR]Major overhaul and reorganization
+</a>
+                                <ul class="docs-nav-sublist">
+                                    <li><a href="#mor-background" class="docs-nav-sublink">2.1 项目背景</a></li>
+                                    <li><a href="#mor-objectives" class="docs-nav-sublink">2.2 项目目标</a></li>
+                                    <li><a href="#mor-features" class="docs-nav-sublink">2.3 功能特点</a></li>
+                                    <li><a href="#mor-team" class="docs-nav-sublink">2.4 团队成员</a></li>
+                                    <li><a href="#mor-tech-stack" class="docs-nav-sublink">2.5 技术栈</a></li>
+                                    <li><a href="#mor-achievements" class="docs-nav-sublink">2.6 成果展示</a></li>
+                                </ul>
+                            </li>
+                            <li class="docs-nav-item">
+                                <a href="#mor-settings" class="docs-nav-link">3.  MOR Setting</a>  
+                                <ul class="docs-nav-sublist">
+                                    <li><a href="#mor-settings-background" class="docs-nav-sublink">3.1 项目背景</a></li>
+                                    <li><a href="#mor-settings-objectives" class="docs-nav-sublink">3.2 项目目标</a></li>
+                                    <li><a href="#mor-settings-features" class="docs-nav-sublink">3.3 功能特点</a></li>
+                                    <li><a href="#mor-settings-team" class="docs-nav-sublink">3.4 团队成员</a></li>
+                                    <li><a href="#mor-settings-tech-stack" class="docs-nav-sublink">3.5 技术栈</a></li>
+                                    <li><a href="#mor-settings-achievements" class="docs-nav-sublink">3.6 成果展示</a></li>
+                                </ul>
+                            </li>
+                            <li class="docs-nav-item">
+                                <a href="#mor-error" class="docs-nav-link">4. MOR Error</a>  
+                                <ul class="docs-nav-sublist">
+                                    <li><a href="#mor-error-background" class="docs-nav-sublink">4.1 项目背景</a></li>
+                                    <li><a href="#mor-error-objectives" class="docs-nav-sublink">4.2 项目目标</a></li>
+                                    <li><a href="#mor-error-features" class="docs-nav-sublink">4.3 功能特点</a></li>
+                                    <li><a href="#mor-error-team" class="docs-nav-sublink">4.4 团队成员</a></li>
+                                    <li><a href="#mor-error-tech-stack" class="docs-nav-sublink">4.5 技术栈</a></li>
+                                    <li><a href="#mor-error-achievements" class="docs-nav-sublink">4.6 成果展示</a></li>
+                                </ul>
+                            </li>
+                            <li class="docs-nav-item">
+                                <a href="#xim-wallpaper" class="docs-nav-link">5. XIM 壁纸系列项目</a>
+                                <ul class="docs-nav-sublist">
+                                    <li><a href="#xim-wallpaper-background" class="docs-nav-sublink">5.1 项目背景</a></li>
+                                    <li><a href="#xim-wallpaper-objectives" class="docs-nav-sublink">5.2 项目目标</a></li>
+                                    <li><a href="#xim-wallpaper-features" class="docs-nav-sublink">5.3 功能特点</a></li>
+                                    <li><a href="#xim-wallpaper-team" class="docs-nav-sublink">5.4 团队成员</a></li>
+                                    <li><a href="#xim-wallpaper-tech-stack" class="docs-nav-sublink">5.5 技术栈</a></li>
+                                </ul>
+                            </li>
+                            <li class="docs-nav-item">
+                                <a href="#xim-integration" class="docs-nav-link">6. XIM 整合包项目</a>
+                                <ul class="docs-nav-sublist">
+                                    <li><a href="#xim-integration-background" class="docs-nav-sublink">6.1 项目背景</a></li>
+                                    <li><a href="#xim-integration-objectives" class="docs-nav-sublink">6.2 项目目标</a></li>
+                                    <li><a href="#xim-integration-features" class="docs-nav-sublink">6.3 功能特点</a></li>
+                                    <li><a href="#xim-integration-team" class="docs-nav-sublink">6.4 团队成员</a></li>
+                                    <li><a href="#xim-integration-tech-stack" class="docs-nav-sublink">6.5 技术栈</a></li>
+                                </ul>
+                            </li>
+                            <li class="docs-nav-item">
+                                <a href="#xim-departments" class="docs-nav-link">7. XIM 部门介绍</a>
+                                <ul class="docs-nav-sublist">
+                                    <li><a href="#xim-technology" class="docs-nav-sublink">7.1 技术部</a></li>
+                                    <li><a href="#xim-art" class="docs-nav-sublink">7.2 美工部</a></li>
+                                    <li><a href="#xim-testing" class="docs-nav-sublink">7.3 测试部</a></li>
+                                </ul>
+                            </li>
+                            <li class="docs-nav-item">
+                                <a href="#xim-history" class="docs-nav-link">8. XIM 创建历史</a>
+                                <ul class="docs-nav-sublist">
+                                    <li><a href="#xim-origins" class="docs-nav-sublink">8.1 我们是谁</a></li>
+                                </ul>
+                            </li>
+                            <li class="docs-nav-item">
+                                <a href="#xim-additional-info" class="docs-nav-link">9. 补充信息</a>
+                                <ul class="docs-nav-sublist">
+                                    <li><a href="#xim-privacy" class="docs-nav-sublink">9.1 成员隐私收集声明</a></li>
+                                    <li><a href="#xim-rules" class="docs-nav-sublink">9.2 成员基本守则</a></li>
+                                    <li><a href="#xim-name" class="docs-nav-sublink">9.3 为什么我们叫 XIM？</a></li>
+                                    <li><a href="#xim-tech-stack" class="docs-nav-sublink">9.4 项目技术栈与成员</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </nav>
+                </aside>
+                
+                <!-- 侧边栏遮罩层 -->
+                <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+                <!-- 主文档内容 -->
+                <main class="docs-content">
+                    <div class="docs-section">
+                        <h2>XIM Studio 代码协议说明文档</h2>
+                        <div class="docs-section-content">
+                            <div class="docs-meta">
+                                <span>最后更新: 2025-11-15</span>
+                                <span>版本: v1.2</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="docs-content-body">
+                        <!-- XIM Studio 代码协议 -->
+                        <section id="xim-code-protocol" class="docs-section">
+                            <h2>1. XIM Studio 代码协议</h2>
+                            <div class="docs-section-content">
+                                <p>XIM Studio 代码（XIM Studio-code）用于在本工作室生态内区分「信任用户」与「普通成员」身份，并据此授予对应资源的访问权限</p>
+                            </div>
+                        </section>
+                        
+                        <!-- 协议目的 -->
+                        <section id="overview" class="docs-section">
+                            <h2>1.1 协议目的</h2>
+                            <div class="docs-section-content">
+                                <p>XIM Studio 代码（XIM Studio-code）用于在本工作室生态内区分「信任用户」与「普通成员」身份，并据此授予对应资源的访问权限</p>
+                                <p>鉴于工作室已公开多数代码仓库，惟处于开发或待验证阶段之项目尚不成熟，故部分资源仅向持有 XIM Studio 代码之内部人员开放</p>
+                            </div>
+                        </section>
+                        
+                        <!-- 代码类型与权限矩阵 -->
+                        <section id="core-concepts" class="docs-section">
+                            <h2>1.2 代码类型与权限矩阵</h2>
+                            <div class="docs-section-content">
+                                <div class="info-box">
+                                    <h4>权限对比表</h4>
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>代码类型</th>
+                                                <th>适用人群</th>
+                                                <th>权限范围</th>
+                                                <th>可使用时长</th>
+                                                <th>备注</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>访问码</td>
+                                                <td>外部测试者</td>
+                                                <td>开发预览页、公开文件、已开放项目</td>
+                                                <td>永久有效</td>
+                                                <td>—</td>
+                                            </tr>
+                                            <tr>
+                                                <td>信任码</td>
+                                                <td>信任用户</td>
+                                                <td>内部文件、非公开分支、灰度功能</td>
+                                                <td>短期有效</td>
+                                                <td>须绑定访问码后方可申请</td>
+                                            </tr>
+                                            <tr>
+                                                <td>工作码</td>
+                                                <td>核心开发组</td>
+                                                <td>全部内部资源、生产环境、CI/CD 流水线</td>
+                                                <td>永久有效</td>
+                                                <td>禁止外泄；一经发现即刻作废并追责</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <section id="concept-1" class="docs-subsection">
+                                    <h3>1.2.1 访问码 (Access Code)</h3>
+                                    <p><strong>权限范围：</strong>开发预览页、公开文件、已开放项目</p>
+                                    <p><strong>适用人群：</strong>外部测试者</p>
+                                    <p><strong>可使用时长：</strong>永久有效</p>
+                                </section>
+                                
+                                <section id="concept-2" class="docs-subsection">
+                                    <h3>1.2.2 信任码 (Trust Code)</h3>
+                                    <p><strong>权限范围：</strong>内部文件、非公开分支、灰度功能</p>
+                                    <p><strong>适用人群：</strong>信任用户</p>
+                                    <p><strong>可使用时长：</strong>短期有效</p>
+                                    <p><strong>备注：</strong>须绑定访问码后方可申请</p>
+                                </section>
+                                
+                                <section id="concept-3" class="docs-subsection">
+                                    <h3>1.2.3 工作码 (Work Code)</h3>
+                                    <p><strong>权限范围：</strong>全部内部资源、生产环境、CI/CD 流水线</p>
+                                    <p><strong>适用人群：</strong>核心开发组</p>
+                                    <p><strong>可使用时长：</strong>永久有效</p>
+                                    <p><strong>备注：</strong>禁止外泄；一经发现，XIM Studio 有权立即停用并追究相应责任</p>
+                                </section>
+                            </div>
+                        </section>
+                        
+                        <!-- 代码格式规范 -->
+                        <section id="code-format" class="docs-section">
+                            <h2>1.3 代码格式规范</h2>
+                            <div class="docs-section-content">
+                                <ul>
+                                    <li><strong>访问码</strong>：小写英文单词 + 四位数字，示例 <code>teacher1021</code></li>
+                                    <li><strong>信任码</strong>：大写字母 + 四至五位数字，示例 <code>CGW-1077</code></li>
+                                    <li><strong>工作码</strong>：格式同信任码，惟系统内部标记为 <code>internal</code> 级别</li>
+                                </ul>
+                            </div>
+                        </section>
+                        
+                        <!-- 使用周期与失效规则 -->
+                        <section id="data-structures" class="docs-section">
+                            <h2>1.4 使用周期与失效规则</h2>
+                            <div class="docs-section-content">
+                                <ol>
+                                    <li>访问码对应之小范围测试项目结束后，项目级限制将自动解除，原代码仍保留查看权限</li>
+                                    <li>信任码与工作码于分发时，将明确告知「有效期」及「可访问仓库列表」</li>
+                                    <li>任何代码一经触发「恶意分享」检测（包括但不限于仓库日志异常、下载 IP 异常等），将被立即吊销，恕不另行通知</li>
+                                </ol>
+                            </div>
+                        </section>
+                        
+                        <!-- 获取与申请流程 -->
+                        <section id="api" class="docs-section">
+                            <h2>1.5 获取与申请流程</h2>
+                            <div class="docs-section-content">
+                                <div class="info-box">
+                                    <h4>申请条件与处理时效</h4>
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>申请对象</th>
+                                                <th>必要条件</th>
+                                                <th>平均处理时效</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>访问码</td>
+                                                <td>说明用途即可</td>
+                                                <td>1–2 工作日</td>
+                                            </tr>
+                                            <tr>
+                                                <td>信任码</td>
+                                                <td>① 已持有访问码 ② 说明具体用途</td>
+                                                <td>2–3 工作日</td>
+                                            </tr>
+                                            <tr>
+                                                <td>工作码</td>
+                                                <td>① 内部 HR 备案 ② 组长实名担保</td>
+                                                <td>3–5 工作日</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="warning-box">
+                                    <h4>申请须知</h4>
+                                    <p>若 4 个工作日未获回复，可再次提交申请或直接致信 <strong>Studio Lead</strong>：Love_U2025@outlook.com</p>
+                                </div>
+                            </div>
+                        </section>
+                        
+                        <!-- 分享与合规条款 -->
+                        <section id="usage" class="docs-section">
+                            <h2>1.6 分享与合规条款</h2>
+                            <div class="docs-section-content">
+                                <ul>
+                                    <li><strong>访问码：</strong>允许公开分享，但禁止用于刷单、爬取等非测试目的；</li>
+                                    <li><strong>信任码：</strong>仅限申请人及其直属团队使用，不得二次分发；</li>
+                                    <li><strong>工作码：</strong>绝对禁止外泄；一经发现，XIM Studio 有权立即停用并追究相应责任</li>
+                                </ul>
+                            </div>
+                        </section>
+                        
+                        <!-- 联系渠道 -->
+                        <section id="best-practices" class="docs-section">
+                            <h2>1.7 联系渠道</h2>
+                            <div class="docs-section-content">
+                                <ul>
+                                    <li><strong>邮件（推荐）：</strong>studio@shaole.me</li>
+                                    <li><strong>紧急通道：</strong>组长或项目架构师（仅对内部有效）</li>
+                                </ul>
+                            </div>
+                        </section>
+                        
+                        <!-- 代码安全与保护措施 -->
+                        <section id="security-measures" class="docs-section">
+                            <h2>1.8 代码安全与保护措施</h2>
+                            <div class="docs-section-content">
+                                <div class="info-box">
+                                    <h4>代码加密机制</h4>
+                                    <ul>
+                                        <li><strong>传输加密：</strong>所有代码传输采用SSL/TLS 1.3加密协议，确保数据在传输过程中不被窃取或篡改</li>
+                                        <li><strong>存储加密：</strong>代码在服务器端存储时采用AES-256加密算法，密钥定期轮换</li>
+                                        <li><strong>本地缓存加密：</strong>客户端本地缓存的代码片段采用设备绑定的加密密钥保护</li>
+                                    </ul>
+                                </div>
+
+                                <div class="info-box">
+                                    <h4>访问控制机制</h4>
+                                    <ul>
+                                        <li><strong>最小权限原则：</strong>仅授予用户完成任务所需的最小权限</li>
+                                        <li><strong>多因素认证：</strong>获取信任码和工作码时需启用多因素认证</li>
+                                        <li><strong>IP地址白名单：</strong>支持设置可信IP地址范围，限制代码访问来源</li>
+                                        <li><strong>会话管理：</strong>定期刷新会话令牌，超时自动登出</li>
+                                    </ul>
+                                </div>
+
+                                <div class="info-box">
+                                    <h4>安全审计与监控</h4>
+                                    <ul>
+                                        <li><strong>访问日志：</strong>记录所有代码访问行为，包括访问时间、IP地址、操作类型等</li>
+                                        <li><strong>异常检测：</strong>实时监控异常访问模式，如频繁失败尝试、异常下载量等</li>
+                                        <li><strong>定期审计：</strong>每季度进行一次全面的安全审计，评估代码访问控制有效性</li>
+                                        <li><strong>漏洞扫描：</strong>定期对代码仓库进行漏洞扫描，及时修复安全隐患</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </section>
+                        
+                        <!-- 协议更新与修订 -->
+                        <section id="protocol-updates" class="docs-section">
+                            <h2>1.9 协议更新与修订</h2>
+                            <div class="docs-section-content">
+                                <div class="info-box">
+                                    <h4>版本管理</h4>
+                                    <ul>
+                                        <li><strong>版本号格式：</strong>采用主版本号.次版本号.修订号格式（如v1.0.0）</li>
+                                        <li><strong>主版本更新：</strong>当协议内容发生重大变更，影响用户权利义务时，主版本号递增</li>
+                                        <li><strong>次版本更新：</strong>当协议内容发生非重大变更，如新增功能或优化流程时，次版本号递增</li>
+                                        <li><strong>修订号更新：</strong>当仅对协议进行文字性修正或轻微调整时，修订号递增</li>
+                                    </ul>
+                                </div>
+
+                                <div class="info-box">
+                                    <h4>更新通知</h4>
+                                    <ul>
+                                        <li><strong>通知方式：</strong>协议更新后，将通过平台公告、邮件通知、站内信等方式告知用户</li>
+                                        <li><strong>通知期限：</strong>重大更新将提前30天通知用户，非重大更新将在更新后7天内通知</li>
+                                        <li><strong>生效时间：</strong>更新后的协议自通知中指定的生效日期起生效</li>
+                                    </ul>
+                                </div>
+
+                                <div class="info-box">
+                                    <h4>修订流程</h4>
+                                    <ol>
+                                        <li>XIM Studio团队根据业务发展、法律法规变化或用户反馈，提出协议修订需求</li>
+                                        <li>对修订内容进行内部审核和法律合规性评估</li>
+                                        <li>发布修订草案，征求用户意见（重大修订）</li>
+                                        <li>根据用户反馈进行调整和完善</li>
+                                        <li>正式发布更新后的协议，并通知所有用户</li>
+                                    </ol>
+                                </div>
+
+                                <div class="warning-box">
+                                    <h4>用户权利</h4>
+                                    <p>用户有权选择是否接受更新后的协议如用户不接受，应停止使用XIM Studio平台及相关服务；如用户继续使用，则视为接受更新后的协议</p>
+                                </div>
+                            </div>
+                        </section>
+                        
+                        <!-- 法律适用与争议解决 -->
+                        <section id="legal-applicability" class="docs-section">
+                            <h2>1.10 法律适用与争议解决</h2>
+                            <div class="docs-section-content">
+                                <div class="info-box">
+                                    <h4>法律适用</h4>
+                                    <p>本协议的订立、履行、解释及争议解决均适用中华人民共和国法律（不包括香港特别行政区、澳门特别行政区和台湾地区法律）</p>
+                                </div>
+
+                                <div class="info-box">
+                                    <h4>争议解决机制</h4>
+                                    <ol>
+                                        <li><strong>协商解决：</strong>如双方发生争议，应首先通过友好协商的方式解决</li>
+                                        <li><strong>调解解决：</strong>协商不成的，可向有关调解机构申请调解</li>
+                                        <li><strong>仲裁解决：</strong>调解不成的，任何一方均有权将争议提交至上海仲裁委员会，按照该会届时有效的仲裁规则进行仲裁</li>
+                                        <li><strong>诉讼解决：</strong>如仲裁条款无效或无法执行，任何一方均有权向有管辖权的人民法院提起诉讼</li>
+                                    </ol>
+                                </div>
+
+                                <div class="info-box">
+                                    <h4>管辖法院</h4>
+                                    <p>如涉及诉讼，双方同意将争议提交至XIM Studio住所地有管辖权的人民法院管辖</p>
+                                </div>
+
+                                <div class="warning-box">
+                                    <h4>其他规定</h4>
+                                    <ul>
+                                        <li>本协议的任何条款被认定为无效或不可执行，不影响其他条款的效力</li>
+                                        <li>双方均应遵守本协议的各项约定，任何一方违反本协议约定给对方造成损失的，应承担相应的赔偿责任</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </section>
+                        
+                        <!-- 项目文档：MOR大修和重组 -->
+        <section id="mor-overhaul" class="docs-section">
+            <h2>2. [MOR]Major overhaul and reorganization</h2>
+            <div class="docs-section-content">
+                <div class="docs-meta">
+                    <span>最后更新: 2025-11-30</span>
+                    <span>版本: v1.0</span>
+                </div>
+                
+                <section id="mor-background" class="docs-subsection">
+                    <h3>2.1 项目背景</h3>
+                    <p>这是一"坨"给偏技术玩家准备的高画质客户端整合包AI 测评给了 7/10，毒舌点在于："把它当高画质启动器而非即开即玩包，就不会踩坑"</p>
+                    <p>官网已上线：https://modrinth.com/modpack/mor</p>
+                </section>
+                
+                <section id="mor-objectives" class="docs-subsection">
+                    <h3>2.2 项目目标</h3>
+                    <p>打造一个视觉效果出色的高画质客户端整合包，为偏技术玩家提供个性化的游戏体验</p>
+                </section>
+                
+                <section id="mor-features" class="docs-subsection">
+                    <h3>2.3 功能特点</h3>
+                    <div class="info-box">
+                        <h4>核心功能特点</h4>
+                        <ul>
+                            <li><strong>高画质视觉效果：</strong>视觉完成度 4/5，截图即壁纸，为玩家提供沉浸式的游戏视觉体验</li>
+                            <li><strong>性能表现：</strong>不是极端 FPS 向，是特效向1060+8G 以下别来，核显直接 30 FPS 献祭</li>
+                            <li><strong>丰富的功能键：</strong>30+ 功能键，提供丰富的操作选项，满足技术玩家的个性化需求</li>
+                            <li><strong>中文支持：</strong>提供中文汉化资源包（MOR-Setting），但必须版本完全对应，否则可能报错</li>
+                        </ul>
+                    </div>
+                </section>
+                
+                <section id="mor-team" class="docs-subsection">
+                    <h3>2.4 团队成员</h3>
+                    <div class="info-box">
+                        <h4>项目团队</h4>
+                        <ul>
+                            <li><strong>陌路Molu：</strong>负责MOR主整合包的开发，专注于客户端优化与美化核心功能</li>
+                            <li><strong>Hzl：</strong>参与MOR主整合包的开发工作</li>
+                        </ul>
+                    </div>
+                </section>
+                
+                <section id="mor-tech-stack" class="docs-subsection">
+                    <h3>2.5 技术栈</h3>
+                    <div class="info-box">
+                        <h4>技术栈详情</h4>
+                        <ul>
+                            <li><strong>编程语言：</strong>Java</li>
+                            <li><strong>核心框架：</strong>Minecraft Forge</li>
+                            <li><strong>版本：</strong>1.16.5+</li>
+                            <li><strong>工具：</strong>Gradle、Git</li>
+                            <li><strong>主要模组：</strong>OptiFine、ShaderPack、CustomMainMenu</li>
+                        </ul>
+                    </div>
+                </section>
+                
+                <section id="mor-achievements" class="docs-subsection">
+                    <h3>2.6 成果展示</h3>
+                    <div class="info-box">
+                        <h4>主要成果</h4>
+                        <ul>
+                            <li><strong>高画质整合包：</strong>打造了视觉效果出色的MOR整合包</li>
+                            <li><strong>中文支持：</strong>提供了完整的中文汉化方案</li>
+                            <li><strong>Modrinth发布：</strong>已在Modrinth平台正式上线</li>
+                            <li><strong>BBSMC镜像：</strong>在BBSMC平台提供了镜像下载</li>
+                        </ul>
+                    </div>
+                </section>
+                
+                <section id="mor-evaluation" class="docs-subsection">
+                    <h3>2.7 团队评价</h3>
+                    <div class="info-box">
+                        <h4>评价详情</h4>
+                        <ul>
+                            <li><strong>视觉完成度：</strong>4/5</li>
+                            <li><strong>性能：</strong>3/5（好看但吃配置）</li>
+                            <li><strong>上手难度：</strong>2/5（30 个按键魔鬼训练营）</li>
+                            <li><strong>整体评分：</strong>7/10，对得起"大修与重组织"这个名字</li>
+                        </ul>
+                        <p><strong>一句话总结：</strong>想开箱即用？快跑想当高画质启动器自己折腾？欢迎</p>
+                    </div>
+                </section>
+            </div>
+        </section>
+        
+        <!-- 项目文档：MOR设置 -->
+        <section id="mor-settings" class="docs-section">
+            <h2>3. [MOR]设置项目文档</h2>
+            <div class="docs-section-content">
+                <div class="docs-meta">
+                    <span>最后更新: 2025-11-30</span>
+                    <span>版本: v1.0</span>
+                </div>
+                
+                <section id="mor-settings-background" class="docs-subsection">
+                    <h3>3.1 项目背景</h3>
+                    <p>MOR应用的设置界面最初为英文版本，对于中文用户来说使用体验不佳为了扩大用户群体，提高中文用户的使用体验，我们决定对MOR应用的设置界面进行全面汉化</p>
+                    <p>该项目旨在将MOR应用的所有设置选项、提示信息和帮助文档翻译成中文，确保中文用户能够轻松理解和使用应用的各项功能</p>
+                </section>
+                
+                <section id="mor-settings-objectives" class="docs-subsection">
+                    <h3>3.2 项目目标</h3>
+                    <p>明确项目的核心目标和预期成果，包括短期和长期目标：</p>
+                    <ul>
+                        <li>目标1：将MOR应用的所有设置界面元素翻译成中文</li>
+                        <li>目标2：确保中文翻译准确、专业，符合中文用户的使用习惯</li>
+                        <li>目标3：保持应用的原有功能和用户体验不变</li>
+                        <li>目标4：提高中文用户的满意度和使用便捷性</li>
+                        <li>目标5：为后续其他语言版本的开发积累经验</li>
+                    </ul>
+                </section>
+                
+                <section id="mor-settings-features" class="docs-subsection">
+                    <h3>3.3 功能特点</h3>
+                    <div class="info-box">
+                        <h4>核心功能特点</h4>
+                        <ul>
+                            <li><strong>全面汉化：</strong>将应用的所有设置选项、提示信息和帮助文档翻译成中文，确保中文用户能够轻松理解和使用</li>
+                            <li><strong>准确专业：</strong>翻译过程中注重专业术语的准确性，确保翻译结果符合中文用户的使用习惯和专业认知</li>
+                            <li><strong>无缝集成：</strong>汉化后的界面与应用原有功能无缝集成，保持了应用的原有用户体验和操作流程</li>
+                            <li><strong>用户友好：</strong>针对中文用户的使用习惯进行了优化，使界面更加直观、易用，提高了用户满意度</li>
+                        </ul>
+                    </div>
+                </section>
+                
+                <section id="mor-settings-team" class="docs-subsection">
+                    <h3>3.4 团队成员</h3>
+                    <div class="info-box">
+                        <h4>项目团队</h4>
+                        <ul>
+                            <li><strong>陌路Molu：</strong>负责MOR应用设置界面的汉化工作，专注于提高中文用户的使用体验</li>
+                        </ul>
+                    </div>
+                </section>
+                
+                <section id="mor-settings-tech-stack" class="docs-subsection">
+                    <h3>3.5 技术栈</h3>
+                    <div class="info-box">
+                        <h4>技术栈详情</h4>
+                        <ul>
+                            <li><strong>资源类型：</strong>Minecraft资源包</li>
+                            <li><strong>主要文件：</strong>lang文件、texture文件、json配置文件</li>
+                            <li><strong>兼容版本：</strong>MOR 2.1.3+</li>
+                            <li><strong>工具：</strong>Resource Pack Studio、Notepad++</li>
+                        </ul>
+                    </div>
+                </section>
+                
+                <section id="mor-settings-achievements" class="docs-subsection">
+                    <h3>3.6 成果展示</h3>
+                    <div class="info-box">
+                        <h4>主要成果</h4>
+                        <ul>
+                            <li><strong>设置界面汉化：</strong>将MOR应用的所有设置选项翻译成中文，包括基本设置、高级设置和个性化设置等</li>
+                            <li><strong>提示信息汉化：</strong>将应用中的所有提示信息、警告信息和错误信息翻译成中文，确保用户能够理解应用的反馈</li>
+                            <li><strong>帮助文档汉化：</strong>将应用的帮助文档和使用说明翻译成中文，为中文用户提供完整的使用指南</li>
+                        </ul>
+                    </div>
+                </section>
+            </div>
+        </section>
+        
+        <!-- 项目文档：MOR错误 -->
+        <section id="mor-error" class="docs-section">
+            <h2>4. [MOR]错误项目文档</h2>
+            <div class="docs-section-content">
+                <div class="docs-meta">
+                    <span>最后更新: 2025-11-30</span>
+                    <span>版本: v1.0</span>
+                </div>
+                
+                <section id="mor-error-background" class="docs-subsection">
+                    <h3>4.1 项目背景</h3>
+                    <p>MOR应用在使用过程中出现了多种错误和异常情况，影响了用户的正常使用体验为了提高应用的稳定性和可靠性，我们决定对这些错误进行系统的分析和修复</p>
+                    <p>该项目旨在识别、分析和解决MOR应用中出现的各种错误，包括崩溃、功能异常、性能问题等，确保应用能够稳定运行，为用户提供良好的使用体验</p>
+                </section>
+                
+                <section id="mor-error-objectives" class="docs-subsection">
+                    <h3>4.2 项目目标</h3>
+                    <p>明确项目的核心目标和预期成果，包括短期和长期目标：</p>
+                    <ul>
+                        <li>目标1：识别MOR应用中出现的所有错误和异常情况</li>
+                        <li>目标2：分析错误产生的原因，制定有效的修复方案</li>
+                        <li>目标3：修复所有已识别的错误，确保应用稳定运行</li>
+                        <li>目标4：建立错误监控和报告机制，及时发现和处理新出现的错误</li>
+                        <li>目标5：提高应用的整体稳定性和可靠性</li>
+                    </ul>
+                </section>
+                
+                <section id="mor-error-features" class="docs-subsection">
+                    <h3>4.3 功能特点</h3>
+                    <div class="info-box">
+                        <h4>核心功能特点</h4>
+                        <ul>
+                            <li><strong>错误识别：</strong>通过系统的测试和监控，识别MOR应用中出现的各种错误和异常情况</li>
+                            <li><strong>原因分析：</strong>深入分析错误产生的原因，包括代码问题、逻辑错误、资源不足等，制定有效的修复方案</li>
+                            <li><strong>错误修复：</strong>根据分析结果，修复所有已识别的错误，确保应用能够稳定运行</li>
+                            <li><strong>监控机制：</strong>建立错误监控和报告机制，及时发现和处理新出现的错误，提高应用的整体稳定性</li>
+                        </ul>
+                    </div>
+                </section>
+                
+                <section id="mor-error-team" class="docs-subsection">
+                    <h3>4.4 团队成员</h3>
+                    <div class="info-box">
+                        <h4>项目团队</h4>
+                        <ul>
+                            <li><strong>陌路Molu：</strong>负责MOR应用错误处理和日志优化模块的开发，专注于提高应用的稳定性和可靠性</li>
+                        </ul>
+                    </div>
+                </section>
+                
+                <section id="mor-error-tech-stack" class="docs-subsection">
+                    <h3>4.5 技术栈</h3>
+                    <div class="info-box">
+                        <h4>技术栈详情</h4>
+                        <ul>
+                            <li><strong>编程语言：</strong>Java/JavaScript</li>
+                            <li><strong>核心框架：</strong>Minecraft Forge、Node.js</li>
+                            <li><strong>版本：</strong>1.16.5+</li>
+                            <li><strong>工具：</strong>Gradle、Git、VS Code</li>
+                            <li><strong>主要库：</strong>Log4j、Gson、FastJSON</li>
+                        </ul>
+                    </div>
+                </section>
+                
+                <section id="mor-error-achievements" class="docs-subsection">
+                    <h3>4.6 成果展示</h3>
+                    <div class="info-box">
+                        <h4>主要成果</h4>
+                        <ul>
+                            <li><strong>错误处理机制：</strong>实现了更加友好和详细的错误处理机制，当应用出现错误时，向用户提供清晰的错误信息和解决方案</li>
+                            <li><strong>崩溃修复：</strong>修复了应用在特定情况下出现的崩溃问题，提高了应用的稳定性和可靠性</li>
+                            <li><strong>性能优化：</strong>优化了应用的性能，减少了资源占用和CPU使用率，提高了应用的运行效率</li>
+                        </ul>
+                    </div>
+                </section>
+            </div>
+        </section>
+        
+        <!-- 项目文档：XIM壁纸系列 -->
+        <section id="xim-wallpaper" class="docs-section">
+            <h2>5. XIM Wallpaper</h2>
+            <div class="docs-section-content">
+                <div class="docs-meta">
+                    <span>最后更新: 2025-11-30</span>
+                    <span>版本: v1.0</span>
+                </div>
+                
+                <section id="xim-wallpaper-background" class="docs-subsection">
+                    <h3>5.1 项目背景</h3>
+                    <p>XIM WallPaper / XIM 壁纸，这是我们第一次鼓起勇气面向大众</p>
+                    <p>Windows 平台，动态静态都做——说实话，技术上还在啃书，美术上还在抠笔，进度时快时慢，取决于考试周还是假期但它能让我们的技术验证“看得见摸得着”，值了</p>
+                </section>
+                
+                <section id="xim-wallpaper-objectives" class="docs-subsection">
+                    <h3>5.2 项目目标</h3>
+                    <p>创建Windows平台的动态和静态壁纸，验证我们的技术能力，同时为用户提供精美的壁纸资源</p>
+                </section>
+                
+                <section id="xim-wallpaper-features" class="docs-subsection">
+                    <h3>5.3 功能特点</h3>
+                    <div class="info-box">
+                        <h4>核心功能特点</h4>
+                        <ul>
+                            <li><strong>Windows平台支持：</strong>专门为Windows平台开发，兼容各种Windows版本</li>
+                            <li><strong>动态静态结合：</strong>同时支持动态壁纸和静态壁纸，满足不同用户的需求</li>
+                            <li><strong>技术验证：</strong>作为我们的技术验证项目，让我们的技术能力“看得见摸得着”</li>
+                            <li><strong>精心设计：</strong>美术上精心设计，虽然还在学习阶段，但每一张壁纸都倾注了我们的心血</li>
+                        </ul>
+                    </div>
+                </section>
+                
+                <section id="xim-wallpaper-team" class="docs-subsection">
+                    <h3>5.4 团队成员</h3>
+                    <div class="info-box">
+                        <h4>项目团队</h4>
+                        <ul>
+                            <li><strong>陌路Molu：</strong>负责动态壁纸引擎的开发，专注于技术实现和性能优化</li>
+                            <li><strong>米：</strong>参与壁纸系列的设计和开发工作</li>
+                            <li><strong>熠曲封卑：</strong>参与壁纸系列的设计和开发工作</li>
+                        </ul>
+                    </div>
+                </section>
+                
+                <section id="xim-wallpaper-tech-stack" class="docs-subsection">
+                    <h3>5.5 技术栈</h3>
+                    <div class="info-box">
+                        <h4>技术栈详情</h4>
+                        <ul>
+                            <li><strong>编程语言：</strong>HTML、CSS、JavaScript</li>
+                            <li><strong>核心技术：</strong>WebGL、Canvas API</li>
+                            <li><strong>框架：</strong>无（原生JavaScript开发）</li>
+                            <li><strong>工具：</strong>VS Code、Figma、GIMP</li>
+                            <li><strong>平台：</strong>Windows 10/11</li>
+                        </ul>
+                    </div>
+                </section>
+            </div>
+        </section>
+        
+        <!-- 项目文档：XIM整合包 -->
+        <section id="xim-integration" class="docs-section">
+            <h2>6. [XIM]X的整合包</h2>
+            <div class="docs-section-content">
+                <div class="docs-meta">
+                    <span>最后更新: 2025-11-30</span>
+                    <span>版本: v1.0</span>
+                </div>
+                
+                <section id="xim-integration-background" class="docs-subsection">
+                    <h3>6.1 项目背景</h3>
+                    <p>X的整合包，我们内部玩的“同名试验田”Minecraft 1.20.X–1.21.X，群里今天想肝科技，明天可能就去养蜜蜂了，玩法跟着兴趣走</p>
+                    <p>所有新模组、新点子、新 bug 都在这里首发它不只是测试工具，更是我们这群人的共同存档</p>
+                </section>
+                
+                <section id="xim-integration-objectives" class="docs-subsection">
+                    <h3>6.2 项目目标</h3>
+                    <p>创建一个灵活的Minecraft整合包，作为我们的试验田，测试新模组、新点子，同时提供一个有趣的游戏体验</p>
+                </section>
+                
+                <section id="xim-integration-features" class="docs-subsection">
+                    <h3>6.3 功能特点</h3>
+                    <div class="info-box">
+                        <h4>核心功能特点</h4>
+                        <ul>
+                            <li><strong>多样化玩法：</strong>支持科技、魔法、生存等多种玩法，玩法跟着兴趣走，今天想肝科技，明天可能就去养蜜蜂了</li>
+                            <li><strong>试验田功能：</strong>所有新模组、新点子、新 bug 都在这里首发，作为我们的技术试验田</li>
+                            <li><strong>共同存档：</strong>不只是测试工具，更是我们这群人的共同存档，记录我们的游戏历程</li>
+                            <li><strong>多版本支持：</strong>支持Minecraft 1.20.X–1.21.X，兼容多个游戏版本，满足不同玩家的需求</li>
+                        </ul>
+                    </div>
+                </section>
+                
+                <section id="xim-integration-team" class="docs-subsection">
+                    <h3>6.4 团队成员</h3>
+                    <div class="info-box">
+                        <h4>项目团队</h4>
+                        <ul>
+                            <li><strong>陌路Molu：</strong>负责X的整合包的开发，专注于模组整合和测试</li>
+                            <li><strong>米：</strong>参与X的整合包的开发工作</li>
+                            <li><strong>HZL：</strong>参与X的整合包的开发工作</li>
+                        </ul>
+                    </div>
+                </section>
+                
+                <section id="xim-integration-tech-stack" class="docs-subsection">
+                    <h3>6.5 技术栈</h3>
+                    <div class="info-box">
+                        <h4>技术栈详情</h4>
+                        <ul>
+                            <li><strong>编程语言：</strong>Java、JavaScript</li>
+                            <li><strong>核心框架：</strong>Minecraft Forge/Fabric</li>
+                            <li><strong>版本：</strong>1.20.X–1.21.X</li>
+                            <li><strong>工具：</strong>CurseForge Launcher、Git、VS Code</li>
+                            <li><strong>主要模组：</strong>科技模组、魔法模组、生存模组等</li>
+                        </ul>
+                    </div>
+                </section>
+            </div>
+        </section>
+        
+        <!-- XIM 部门介绍 -->
+        <section id="xim-departments" class="docs-section">
+            <h2>7. XIM 部门介绍</h2>
+            <div class="docs-section-content">
+                <div class="docs-meta">
+                    <span>最后更新: 2025-11-30</span>
+                    <span>版本: v1.0</span>
+                </div>
+                
+                <section id="xim-technology" class="docs-subsection">
+                    <h3>7.1 技术部</h3>
+                    <div class="info-box">
+                        <h4>部门简介</h4>
+                        <p>从创社到现在就 1 个人，全工作室的技术活儿全包——从项目构建到发布，一条龙全走完我们用的是 Python 为主、Java 为辅的野路子，自研项目全是 Python，只有一小撮实在绕不开的才用 Java用我们自己的话说，<strong>挺狂的</strong>一个人就是一支军队，也是所有项目背后那个"踩坑、填坑、再踩坑"的终极冤种别人写 bug 他修，他写 bug……那就等用户来骂</p>
+                    </div>
+                    <h4>部门文化</h4>
+                    <p>挺狂的，但狂得方向不太对比如那次测试部找他配整合包，他自信满满说"最多 4 小时搞定"，结果直接失踪半天测试部正犹豫要不要去马桶里捞他的时候，他发来一句"我睡醒了！！"</p>
+                    <h4>职责清单</h4>
+                    <p>从项目构建到发布，一条龙全走完自研项目Python 为主、Java 为辅</p>
+                    <h4>经典语录</h4>
+                    <p>"我觉得这代码没问题"<br>↓<br>[命令行报错刷屏]<br>"不是……你**？！"</p>
+                </section>
+                
+                <section id="xim-art" class="docs-subsection">
+                    <h3>7.2 美工部</h3>
+                    <div class="info-box">
+                        <h4>部门简介</h4>
+                        <p>成立的直接原因：技术部的产出要求从"能跑就行"进化到"得能看"大部分时间泡在"养老痴呆线"——活儿不多，加上大家都是学生，时间被作业和考试切得稀碎但一旦接到需求，就会在 DDL 边缘疯狂试探，负责把项目界面和布局"美术化"，让代码能穿上好看的衣服见人</p>
+                    </div>
+                    <h4>部门文化</h4>
+                    <p>养老但关键时刻不掉链子</p>
+                    <h4>职责清单</h4>
+                    <p>负责把项目界面和布局"美术化"</p>
+                    <h4>经典语录</h4>
+                    <p>"你看看这里加这个咋样？"<br>"行是行，但你这是哪门子审美？？？"</p>
+                </section>
+                
+                <section id="xim-testing" class="docs-subsection">
+                    <h3>7.3 测试部</h3>
+                    <div class="info-box">
+                        <h4>部门简介</h4>
+                        <p>名义上负责所有项目内测，实际上？就是聚众打游戏，顺便看看有没有报错弹窗全工作室最活跃、最会整活的部门人最多，能量最足，每次测试都能搞出大动静他们经常拉技术部"一起测一下"有一次真把技术部拉来打游戏了，结果技术部全程在找 bug，测完列了 20 多个问题；回头一看，测试部全员在摸鱼，战绩一个比一个漂亮这就是他们的"测试方法论"：测试部负责玩，技术部负责测他们既是 bug 的发现者，也是工作室气氛组的唯一指定核心</p>
+                    </div>
+                    <h4>部门文化</h4>
+                    <p>全工作室最活跃、最会整活</p>
+                    <h4>职责清单</h4>
+                    <p>BUG 和极限测试——说白了就是一边玩一边把东西搞崩</p>
+                    <h4>经典语录</h4>
+                    <p>测试："欸！我有个点子！"<br>技术："哇，有完没完啊！！！"<br>注：点子通常包括但不限于："这个模组能不能和那个’诗人’模组（"蓝月亮"）兼容？" 或引入一个连续启动 20 多次都无法战胜的致命 BUG</p>
+                </section>
+            </div>
+        </section>
+        
+        <!-- XIM 创建历史 -->
+        <section id="xim-history" class="docs-section">
+            <h2>8. XIM 创建历史</h2>
+            <div class="docs-section-content">
+                <div class="docs-meta">
+                    <span>最后更新: 2025-11-30</span>
+                    <span>版本: v1.0</span>
+                </div>
+                
+                <section id="xim-origins" class="docs-subsection">
+                    <h3>8.1 我们是谁</h3>
+                    <p>这事得从"甜甜圈工会"讲起——几年前我们在别人的 MC 服务器上攒的工会，服务器一关，群也就散了但有几个刺头觉得不过瘾，拉着会长原地重组，起了个名叫 XIM开了几场会，分了技术部、美工部、测试部，挂起几个项目，后来干脆把"组织"升级成"工作室"，算是正式开张</p>
+                    <p>人不多，就六个：</p>
+                    <ul>
+                        <li>一个技术，两个美工，五个测试（身兼多职，所以总数对不上），还选了个吉祥物</li>
+                        <li>两个十七岁，两个快十八，两个还在初中</li>
+                        <li>时间？看作业和考试脸色</li>
+                        <li>进度？取决于哪周能凑齐三个人同时在线</li>
+                    </ul>
+                    <p>但我们有会长的 PPT，有吉祥物的表情包，还有六个对模组游戏死性不改的脑瓜</p>
+                </section>
+            </div>
+        </section>
+        
+        <!-- 补充信息 -->
+        <section id="xim-additional-info" class="docs-section">
+            <h2>9. 补充信息</h2>
+            <div class="docs-section-content">
+                <div class="docs-meta">
+                    <span>最后更新: 2025-11-30</span>
+                    <span>版本: v1.0</span>
+                </div>
+                
+                <!-- 成员隐私收集声明 -->
+                <section id="xim-privacy" class="docs-subsection">
+                    <h3>9.1 成员隐私收集声明</h3>
+                    <div class="info-box">
+                        <p>我们尊重每个成员的个人信息。公开的信息都经过本人同意，信息所有人有权随时要求我们撤回。已离开的成员也可以自由决定是否保留其信息。</p>
+                    </div>
+                </section>
+                
+                <!-- 成员基本守则 -->
+                <section id="xim-rules" class="docs-subsection">
+                    <h3>9.2 成员基本守则</h3>
+                    <div class="info-box">
+                        <p>守则只涉及日常社交的基本素养，外加两条特殊规定：</p>
+                        <ol>
+                            <li><strong>请假制度</strong><br>
+                            内部测试或其他活动无法参加时，向所在部部长或任一在线成员口头说明原因即可。只要我们能收到假条就行，不然会在那边傻等半天。</li>
+                            <li><strong>文案修改机制</strong><br>
+                            修改或新增 XIM 现有文案、项目，需获得成员同意。意见不统一时，投票决定。</li>
+                        </ol>
+                    </div>
+                </section>
+                
+                <!-- 为什么我们叫 XIM？ -->
+                <section id="xim-name" class="docs-subsection">
+                    <h3>9.3 为什么我们叫 XIM？</h3>
+                    <div class="info-box">
+                        <p>这三个字母成立时就没啥高深含义。（当然，如果你非要脑补 X 代表什么、I 代表什么、M 代表什么，我也无所谓，反正你知道是 XIM 就好。）</p>
+                        <p>当时会长还在用 X 开头的游戏 ID，开发整合包总得有个名字。他思前想后三四天，一拍脑门："就叫'X的整合包'吧！"（想了这么久就想出这玩意儿...）但这名字对内对外都不太像话，于是会长把它扔给翻译，鬼知道怎么翻的，英文缩写就成了 XIM（我记得好像不是这么来的？）。总之，我们就这么"名正言顺"地用上了。</p>
+                    </div>
+                </section>
+                
+                <!-- 项目技术栈与成员 -->
+                <section id="xim-tech-stack" class="docs-subsection">
+                    <h3>9.4 项目技术栈与成员</h3>
+                    <div class="info-box">
+                        <ul>
+                            <li><strong>MOR</strong> • Java • 陌路Molu、Hzl<br>
+                            主整合包，客户端优化与美化核心</li>
+                            <li><strong>MOR Setting</strong> • MC资源包 • 陌路Molu<br>
+                            配置界面汉化与个性化资源</li>
+                            <li><strong>MOR Error</strong> • Java/JavaScript • 陌路Molu<br>
+                            错误处理与日志优化模块</li>
+                            <li><strong>XIM Wallpaper</strong> • HTML/JavaScript • 陌路Molu、米、熠曲封卑<br>
+                            动态壁纸引擎</li>
+                            <li><strong>X的整合包</strong> • Java/JavaScript • 陌路Molu、米、HZL<br>
+                            内部测试与实验性模组集合</li>
+                            <li><strong>XIM Tool</strong> • Python • 陌路Molu<br>
+                            自动化构建与发布工具集</li>
+                        </ul>
+                    </div>
+                </section>
+            </div>
+        </section>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="docs-footer">
+        <div class="container">
+            <div class="docs-footer-content">
+                <p>© 2024 XIM工作室 - XIM协议文档</p>
+                <div class="docs-footer-links">
+                    <a href="index.html">返回主页</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 返回顶部按钮 -->
+    <button id="back-to-top" class="back-to-top" aria-label="返回顶部">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- 移动端目录切换按钮 -->
+    <button id="mobile-sidebar-toggle" class="mobile-sidebar-toggle" aria-label="切换目录">
+        <i class="fas fa-bars"></i>
+    </button>
+</body>
+</html>
