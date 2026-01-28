@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XIM整合包 - XIM工作室</title>
+    <title>[XIM Nightruin] XIM·夜墟 - XIM工作室</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="vendor/font-awesome/all.min.css">
     <script src="js/main.js" type="module" defer></script>
@@ -282,6 +282,52 @@
             line-height: 1.6;
         }
         
+        /* 下载按钮 */
+        .download-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+        
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 40px;
+            background: linear-gradient(45deg, var(--accent-color), var(--accent-hover));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 30px rgba(74, 158, 255, 0.2);
+        }
+        
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(74, 158, 255, 0.3);
+        }
+        
+        .download-btn i {
+            font-size: 1.2rem;
+        }
+        
+        .download-btn.secondary {
+            background: transparent;
+            border: 2px solid var(--accent-color);
+            color: var(--accent-color);
+        }
+        
+        .download-btn.secondary:hover {
+            background: var(--accent-color);
+            color: white;
+        }
+        
         /* 文档跳转按钮 */
         .docs-button-container {
             text-align: center;
@@ -346,6 +392,7 @@
                 grid-template-columns: 1fr;
             }
             
+            .download-btn,
             .docs-button {
                 padding: 12px 30px;
                 font-size: 1rem;
@@ -398,7 +445,7 @@
     <!-- 页面横幅 -->
     <header class="project-header">
         <div class="container">
-            <h1 class="project-title">XIM整合包</h1>
+            <h1 class="project-title">[XIM Nightruin] XIM·夜墟</h1>
             <p class="project-subtitle">我们内部玩的"同名试验田"</p>
             
             <div class="project-meta">
@@ -412,12 +459,19 @@
                 </div>
                 <div class="meta-item">
                     <i class="fas fa-tags"></i>
-                    <span>技术栈：Minecraft, 整合包技术</span>
+                    <span>技术栈：Minecraft Fabric</span>
                 </div>
                 <div class="meta-item">
                     <i class="fas fa-clock"></i>
                     <span>状态：进行中</span>
                 </div>
+            </div>
+            
+            <div class="download-buttons">
+                <a href="https://bbsmc.net/modpack/xim-nightruin" target="_blank" class="download-btn">
+                    <i class="fas fa-download"></i>
+                    <span>BBSMC下载</span>
+                </a>
             </div>
         </div>
     </header>
@@ -429,7 +483,7 @@
             <section class="content-section">
                 <h2 class="section-title">项目背景</h2>
                 <div class="section-content">
-                    <p>XIM整合包是我们内部使用的Minecraft整合包，作为团队的"同名试验田"，用于测试和验证各种模组、配置和优化方案。这个整合包是我们团队成员共同开发和维护的，反映了我们对Minecraft游戏的理解和偏好。</p>
+                    <p>[XIM Nightruin] XIM·夜墟是我们内部使用的Minecraft整合包，作为团队的"同名试验田"，用于测试和验证各种模组、配置和优化方案。这个整合包是我们团队成员共同开发和维护的，反映了我们对Minecraft游戏的理解和偏好。</p>
                     <p>通过这个项目，我们可以更好地了解Minecraft整合包的开发和维护过程，提高团队成员的技术水平和协作能力。</p>
                 </div>
             </section>
@@ -488,22 +542,22 @@
                 <h2 class="section-title">团队成员</h2>
                 <div class="team-grid">
                     <div class="team-member">
-                        <img src="资源/成员头像/Gelzoniansuz.jpg" alt="Gelzoniansuz" class="member-avatar">
-                        <h3 class="member-name">Gelzoniansuz</h3>
+                        <img src="资源/成员头像/陌路Molu.jpg" alt="陌路Molu" class="member-avatar">
+                        <h3 class="member-name">陌路Molu</h3>
                         <p class="member-role">项目负责人</p>
-                        <p class="member-bio">负责XIM整合包的整体规划和管理</p>
-                    </div>
-                    <div class="team-member">
-                        <img src="资源/成员头像/熠曲封卑.jpg" alt="熠曲封卑" class="member-avatar">
-                        <h3 class="member-name">熠曲封卑</h3>
-                        <p class="member-role">开发人员</p>
-                        <p class="member-bio">参与整合包的开发和维护工作</p>
+                        <p class="member-bio">负责[XIM Nightruin] XIM·夜墟的整体规划和管理</p>
                     </div>
                     <div class="team-member">
                         <img src="资源/成员头像/米.jpg" alt="米" class="member-avatar">
                         <h3 class="member-name">米</h3>
-                        <p class="member-role">测试人员</p>
-                        <p class="member-bio">负责整合包的测试和反馈工作</p>
+                        <p class="member-role">开发人员</p>
+                        <p class="member-bio">参与整合包的开发和维护工作</p>
+                    </div>
+                    <div class="team-member">
+                        <img src="资源/成员头像/Hzl.jpg" alt="Hzl" class="member-avatar">
+                        <h3 class="member-name">Hzl</h3>
+                        <p class="member-role">开发人员</p>
+                        <p class="member-bio">参与整合包的开发和测试工作</p>
                     </div>
                 </div>
             </section>
@@ -513,10 +567,10 @@
                 <h2 class="section-title">技术栈</h2>
                 <div class="section-content">
                     <ul>
-                        <li><strong>游戏版本：</strong>Minecraft 1.16.5</li>
-                        <li><strong>核心框架：</strong>Forge</li>
+                        <li><strong>游戏版本：</strong>Minecraft 1.20.1+</li>
+                        <li><strong>核心框架：</strong>Minecraft Fabric</li>
                         <li><strong>模组数量：</strong>100+</li>
-                        <li><strong>优化方案：</strong>OptiFine, Sodium等</li>
+                        <li><strong>优化方案：</strong>Sodium, Iris等</li>
                         <li><strong>配置管理：</strong>自定义配置文件</li>
                     </ul>
                 </div>
@@ -528,10 +582,10 @@
                 <div class="achievements-grid">
                     <div class="achievement-item">
                         <div class="achievement-image">
-                            <img src="资源/XIM项目.png" alt="XIM整合包">
+                            <img src="资源/XIM项目.png" alt="[XIM Nightruin] XIM·夜墟">
                         </div>
                         <div class="achievement-info">
-                            <h3 class="achievement-title">XIM整合包</h3>
+                            <h3 class="achievement-title">[XIM Nightruin] XIM·夜墟</h3>
                             <p class="achievement-description">创建了一个功能丰富、性能优化的Minecraft整合包，适合团队内部使用</p>
                         </div>
                     </div>
@@ -540,7 +594,7 @@
 
             <!-- 文档跳转按钮 -->
             <div class="docs-button-container">
-                <a href="xim-docs.html#xim-integration" class="docs-button" title="查看项目详细文档">
+                <a href="xim-docs.html" class="docs-button" title="查看项目详细文档">
                     <i class="fas fa-file-alt"></i>
                     <span>查看XIM文档</span>
                 </a>
