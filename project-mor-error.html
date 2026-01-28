@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[MOR]错误 - XIM工作室</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="vendor/font-awesome/all.min.css">
+    <script src="js/main.js" type="module" defer></script>
+    
+    <style>
+        /* 项目详情页面特定样式 */
+        .project-detail-page {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+        }
+        
+        .project-header {
+            padding: 150px 0 100px;
+            background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), 
+                        url('资源/项目MOR Error.png') center/cover no-repeat fixed;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .project-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, rgba(74, 158, 255, 0.1) 0%, transparent 70%);
+            z-index: 0;
+        }
+        
+        .project-header .container {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .project-title {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            position: relative;
+            display: inline-block;
+        }
+        
+        .project-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background-color: var(--accent-color);
+            border-radius: 2px;
+        }
+        
+        .project-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+        }
+        
+        .project-meta {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+        
+        .meta-item i {
+            color: var(--accent-color);
+            font-size: 1.2rem;
+        }
+        
+        .project-content {
+            padding: 100px 0;
+            background-color: var(--bg-secondary);
+        }
+        
+        .content-section {
+            margin-bottom: 80px;
+        }
+        
+        .content-section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            color: var(--text-primary);
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 80px;
+            height: 3px;
+            background-color: var(--accent-color);
+            border-radius: 2px;
+        }
+        
+        .section-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+        
+        .section-content p {
+            margin-bottom: 20px;
+        }
+        
+        .section-content ul,
+        .section-content ol {
+            margin-bottom: 20px;
+            padding-left: 25px;
+        }
+        
+        .section-content li {
+            margin-bottom: 10px;
+        }
+        
+        /* 功能特点卡片 */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .feature-card {
+            background-color: var(--bg-tertiary);
+            padding: 30px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-color);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--accent-color);
+            margin-bottom: 20px;
+        }
+        
+        .feature-title {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+        }
+        
+        .feature-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        /* 团队成员 */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .team-member {
+            text-align: center;
+            background-color: var(--bg-tertiary);
+            padding: 30px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+        
+        .team-member:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-color);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .member-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin-bottom: 20px;
+            object-fit: cover;
+            border: 3px solid var(--accent-color);
+        }
+        
+        .member-name {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+            color: var(--text-primary);
+        }
+        
+        .member-role {
+            color: var(--accent-color);
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+        
+        .member-bio {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        /* 成果展示 */
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .achievement-item {
+            background-color: var(--bg-tertiary);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+        
+        .achievement-item:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-color);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .achievement-image {
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .achievement-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .achievement-item:hover .achievement-image img {
+            transform: scale(1.1);
+        }
+        
+        .achievement-info {
+            padding: 25px;
+        }
+        
+        .achievement-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+        }
+        
+        .achievement-description {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        
+        /* 文档跳转按钮 */
+        .docs-button-container {
+            text-align: center;
+            margin-top: 60px;
+            padding: 40px 0;
+            background-color: var(--bg-tertiary);
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .docs-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 40px;
+            background: linear-gradient(45deg, var(--accent-color), var(--accent-hover));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 30px rgba(74, 158, 255, 0.2);
+        }
+        
+        .docs-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(74, 158, 255, 0.3);
+        }
+        
+        .docs-button i {
+            font-size: 1.2rem;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .project-title {
+                font-size: 2.2rem;
+            }
+            
+            .project-subtitle {
+                font-size: 1rem;
+            }
+            
+            .project-meta {
+                gap: 20px;
+            }
+            
+            .meta-item {
+                font-size: 0.85rem;
+            }
+            
+            .section-title {
+                font-size: 1.6rem;
+            }
+            
+            .features-grid,
+            .team-grid,
+            .achievements-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .docs-button {
+                padding: 12px 30px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body class="layout1 project-detail-page">
+    <!-- 导航栏 -->
+    <nav id="navbar">
+        <div class="container">
+            <div class="logo">
+                <img src="资源/XIM图标.jpg" alt="XIM工作室">
+                <span>XIM工作室</span>
+            </div>
+            
+            <!-- 返回主页按钮 -->
+            <a href="index.html" class="back-home-btn" title="返回主页面">
+                <i class="fas fa-home"></i>
+                <span>返回主页</span>
+            </a>
+            
+            <div class="nav-links">
+                <a href="index.html#home">首页</a>
+                <a href="index.html#about">关于我们</a>
+                <a href="all-projects.html" class="active">项目</a>
+            </div>
+            <div class="layout-switcher">
+                <button class="layout-btn active" data-layout="layout1" title="分层卡片式布局">
+                    <i class="fas fa-layer-group"></i>
+                </button>
+                <button class="layout-btn" data-layout="layout2" title="不对称动态布局">
+                    <i class="fas fa-th-large"></i>
+                </button>
+                <button class="layout-btn" data-layout="layout3" title="沉浸式全屏布局">
+                    <i class="fas fa-expand"></i>
+                </button>
+            </div>
+            <div class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <div class="mobile-nav-content">
+                <a href="index.html#home" class="mobile-nav-link">首页</a>
+                <a href="index.html#about" class="mobile-nav-link">关于我们</a>
+                <a href="all-projects.html" class="mobile-nav-link">项目</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 页面横幅 -->
+    <header class="project-header">
+        <div class="container">
+            <h1 class="project-title">[MOR]错误</h1>
+            <p class="project-subtitle">专注[MOR]中出现的错误和异常情况的解决</p>
+            
+            <div class="project-meta">
+                <div class="meta-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>启动时间：2025-03-01</span>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-users"></i>
+                    <span>团队规模：2人</span>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-tags"></i>
+                    <span>技术栈：Java, 调试技术</span>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-clock"></i>
+                    <span>状态：进行中</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 项目内容 -->
+    <main class="project-content">
+        <div class="container">
+            <!-- 项目背景 -->
+            <section class="content-section">
+                <h2 class="section-title">项目背景</h2>
+                <div class="section-content">
+                    <p>在MOR整合包的使用过程中，用户可能会遇到各种错误和异常情况。这些错误可能导致游戏崩溃、功能失效或性能问题，给用户带来不良的使用体验。为了解决这些问题，我们开发了[MOR]错误项目，专注于分析和解决MOR整合包中出现的各种错误。</p>
+                    <p>该项目旨在提高MOR整合包的稳定性和可靠性，为用户提供更好的使用体验。</p>
+                </div>
+            </section>
+
+            <!-- 项目目标 -->
+            <section class="content-section">
+                <h2 class="section-title">项目目标</h2>
+                <div class="section-content">
+                    <p>分析和解决MOR整合包中出现的各种错误和异常情况，提高整合包的稳定性和可靠性。</p>
+                    <ul>
+                        <li>收集和分析MOR整合包中出现的错误报告</li>
+                        <li>开发和实现错误修复方案</li>
+                        <li>提供详细的错误解决方案和指南</li>
+                        <li>优化MOR整合包的稳定性和性能</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- 功能特点 -->
+            <section class="content-section">
+                <h2 class="section-title">功能特点</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-bug"></i>
+                        </div>
+                        <h3 class="feature-title">错误收集与分析</h3>
+                        <p class="feature-description">系统地收集和分析MOR整合包中出现的各种错误，找出问题根源</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                        <h3 class="feature-title">错误修复方案</h3>
+                        <p class="feature-description">针对不同类型的错误，开发和实现有效的修复方案</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <h3 class="feature-title">解决方案指南</h3>
+                        <p class="feature-description">提供详细的错误解决方案和使用指南，帮助用户解决遇到的问题</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3 class="feature-title">稳定性优化</h3>
+                        <p class="feature-description">通过错误修复和优化，提高MOR整合包的整体稳定性和性能</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 团队成员 -->
+            <section class="content-section">
+                <h2 class="section-title">团队成员</h2>
+                <div class="team-grid">
+                    <div class="team-member">
+                        <img src="资源/成员头像/陌路Molu.jpg" alt="陌路Molu" class="member-avatar">
+                        <h3 class="member-name">陌路Molu</h3>
+                        <p class="member-role">项目负责人</p>
+                        <p class="member-bio">负责[MOR]错误项目的整体规划和管理</p>
+                    </div>
+                    <div class="team-member">
+                        <img src="资源/成员头像/Hzl.jpg" alt="Hzl" class="member-avatar">
+                        <h3 class="member-name">Hzl</h3>
+                        <p class="member-role">开发人员</p>
+                        <p class="member-bio">负责错误分析和修复方案的开发</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 技术栈 -->
+            <section class="content-section">
+                <h2 class="section-title">技术栈</h2>
+                <div class="section-content">
+                    <ul>
+                        <li><strong>编程语言：</strong>Java</li>
+                        <li><strong>调试工具：</strong>IDE调试器、日志分析工具</li>
+                        <li><strong>核心技术：</strong>错误分析、问题定位</li>
+                        <li><strong>版本：</strong>Minecraft 1.16.5+</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- 成果展示 -->
+            <section class="content-section">
+                <h2 class="section-title">成果展示</h2>
+                <div class="achievements-grid">
+                    <div class="achievement-item">
+                        <div class="achievement-image">
+                            <img src="资源/项目MOR Error.png" alt="MOR Error">
+                        </div>
+                        <div class="achievement-info">
+                            <h3 class="achievement-title">错误收集与分析系统</h3>
+                            <p class="achievement-description">建立了完善的错误收集与分析系统，能够快速定位和解决MOR整合包中的各种错误</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 文档跳转按钮 -->
+            <div class="docs-button-container">
+                <a href="xim-docs.html#mor-error" class="docs-button" title="查看项目详细文档">
+                    <i class="fas fa-file-alt"></i>
+                    <span>查看XIM文档</span>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2023 XIM工作室. 保留所有权利.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

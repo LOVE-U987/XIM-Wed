@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XIM整合包更新 - XIM工作室</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="js/main.js" type="module" defer></script>
+    <style>
+        /* 视频嵌入响应式样式 */
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 宽高比 */
+            height: 0;
+            overflow: hidden;
+            margin: 40px 0;
+            border-radius: 15px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+        
+        .video-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+        }
+        
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+            border-radius: 15px;
+        }
+        
+        /* 致谢清单样式 */
+        .acknowledgments {
+            background-color: var(--bg-primary);
+            padding: 40px;
+            border-radius: 15px;
+            margin: 40px 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border-color);
+        }
+        
+        .acknowledgments h3 {
+            color: var(--accent-color);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        
+        .acknowledgments ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .acknowledgments li {
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .acknowledgments li:last-child {
+            border-bottom: none;
+        }
+        
+        .acknowledgments li::before {
+            content: '✓';
+            color: var(--accent-color);
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        
+        /* 部门标题样式 */
+        .department-title {
+            color: var(--text-primary);
+            margin: 20px 0 15px;
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+        
+        /* 突出按钮样式 */
+        .modrinth-btn {
+            display: inline-block;
+            background: linear-gradient(45deg, #1E88E5, #42A5F5);
+            color: white;
+            padding: 18px 45px;
+            border-radius: 50px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            box-shadow: 0 10px 30px rgba(30, 136, 229, 0.3);
+            margin: 30px 0;
+        }
+        
+        .modrinth-btn:hover {
+            background: linear-gradient(45deg, #1976D2, #2196F3);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(30, 136, 229, 0.4);
+        }
+        
+        .modrinth-btn i {
+            margin-left: 10px;
+            font-size: 1.2rem;
+        }
+        
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .video-container {
+                margin: 30px 0;
+                border-radius: 10px;
+            }
+            
+            .acknowledgments {
+                padding: 30px 20px;
+                margin: 30px 0;
+            }
+            
+            .acknowledgments h3 {
+                font-size: 1.5rem;
+            }
+            
+            .acknowledgments li {
+                font-size: 1rem;
+                padding: 12px 0;
+            }
+            
+            .modrinth-btn {
+                padding: 15px 35px;
+                font-size: 1rem;
+                margin: 25px 0;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .video-container {
+                margin: 20px 0;
+            }
+            
+            .acknowledgments {
+                padding: 25px 15px;
+                margin: 25px 0;
+            }
+            
+            .acknowledgments h3 {
+                font-size: 1.3rem;
+            }
+            
+            .department-title {
+                font-size: 1.2rem;
+            }
+            
+            .modrinth-btn {
+                padding: 12px 30px;
+                font-size: 0.9rem;
+                margin: 20px 0;
+            }
+        }
+    </style>
+</head>
+<body class="layout1">
+    <!-- 导航栏 -->
+    <nav id="navbar">
+        <div class="container">
+            <div class="logo">
+                <img src="资源/XIM图标.jpg" alt="XIM工作室">
+                <span>XIM工作室</span>
+            </div>
+            <div class="nav-links">
+                <a href="index.html#home">首页</a>
+                <a href="index.html#about">关于我们</a>
+                <a href="index.html#docs">XIM文档</a>
+                <a href="xim-new.html" class="active">XIM New</a>
+                <a href="index.html#projects">项目</a>
+                <a href="index.html#departments">XIM部门</a>
+            </div>
+            <div class="layout-switcher">
+                <button class="layout-btn active" data-layout="layout1" title="分层卡片式布局">
+                    <i class="fas fa-layer-group"></i>
+                </button>
+                <button class="layout-btn" data-layout="layout2" title="不对称动态布局">
+                    <i class="fas fa-th-large"></i>
+                </button>
+                <button class="layout-btn" data-layout="layout3" title="沉浸式全屏布局">
+                    <i class="fas fa-expand"></i>
+                </button>
+            </div>
+            <div class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <div class="mobile-nav-content">
+                <a href="index.html#home" class="mobile-nav-link">首页</a>
+                <a href="index.html#about" class="mobile-nav-link">关于我们</a>
+                <a href="index.html#docs" class="mobile-nav-link">XIM文档</a>
+                <a href="xim-new.html" class="mobile-nav-link active">XIM New</a>
+                <a href="index.html#projects" class="mobile-nav-link">项目</a>
+                <a href="index.html#departments" class="mobile-nav-link">XIM部门</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 页面标题 -->
+    <section id="updates-header">
+        <div class="container" style="text-align: center;">
+            <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+                <img src="资源/XIM项目.png" alt="XIM 整合包" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid var(--accent-color); box-shadow: 0 5px 20px rgba(74, 158, 255, 0.3);">
+            </div>
+            <h1>XIM整合包最新更新</h1>
+            <p class="section-subtitle">探索XIM整合包的最新功能和改进</p>
+        </div>
+    </section>
+
+    <!-- 视频展示区域 -->
+    <section id="video-section">
+        <div class="container">
+            <h2>更新视频</h2>
+            <div class="video-container">
+                <iframe src="https://player.bilibili.com/player.html?bvid=BV1qyUZBEEdJ&page=1&autoplay=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" allow="autoplay"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- 致谢清单 -->
+    <section id="acknowledgments">
+        <div class="container">
+            <h2>致谢清单</h2>
+            <div class="acknowledgments">
+                <div class="department-title">技术部</div>
+                <ul>
+                    <li>负责整合包核心功能开发</li>
+                    <li>优化游戏性能和稳定性</li>
+                    <li>解决兼容性问题</li>
+                    <li>实现新特性和机制</li>
+                </ul>
+                
+                <div class="department-title">美工部</div>
+                <ul>
+                    <li>设计整合包视觉风格</li>
+                    <li>创建高质量纹理和模型</li>
+                    <li>制作UI界面设计</li>
+                    <li>优化视觉效果和动画</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modrinth链接按钮 -->
+    <section id="modrinth-link">
+        <div class="container" style="text-align: center;">
+            <h2>立即下载</h2>
+            <p style="font-size: 1.2rem; margin-bottom: 20px; color: var(--text-secondary);">访问Modrinth获取最新版本的XIM整合包</p>
+            <a href="https://modrinth.com/modpack/xim/version/1.16.3" class="modrinth-btn" target="_blank" rel="noopener noreferrer">
+                前往Modrinth下载
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2023 XIM工作室. 保留所有权利.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XIM协议文档 - XIM工作室</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/docs-new.css">
+    <link rel="stylesheet" href="vendor/font-awesome/all.min.css">
+</head>
+<body class="docs-page">
+    <!-- 顶部工具栏 -->
+    <header class="docs-header">
+        <div class="header-left">
+            <button class="sidebar-toggle" id="sidebarToggle" title="切换侧边栏">
+                <i class="fas fa-bars"></i>
+            </button>
+            <a href="index.html" class="logo">
+                <img src="资源/XIM图标.jpg" alt="XIM">
+                <span>XIM文档</span>
+            </a>
+        </div>
+        
+        <div class="header-center">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="globalSearch" placeholder="搜索文档...">
+                <kbd>Ctrl K</kbd>
+            </div>
+        </div>
+        
+        <div class="header-right">
+            <!-- 字体大小调节 -->
+            <div class="font-size-control">
+                <button class="icon-btn" id="fontDecrease" title="缩小字体">
+                    <i class="fas fa-font" style="font-size: 0.8em;"></i>
+                </button>
+                <span class="font-size-display">100%</span>
+                <button class="icon-btn" id="fontIncrease" title="放大字体">
+                    <i class="fas fa-font" style="font-size: 1.2em;"></i>
+                </button>
+            </div>
+            
+            <!-- 布局切换 -->
+            <div class="layout-control">
+                <button class="icon-btn" id="layoutToggle" title="切换布局">
+                    <i class="fas fa-columns"></i>
+                </button>
+            </div>
+            
+            <!-- 主题切换 -->
+            <button class="icon-btn" id="themeToggle" title="切换主题">
+                <i class="fas fa-moon"></i>
+            </button>
+            
+            <!-- 返回主页 -->
+            <a href="index.html" class="btn btn-outline btn-sm">
+                <i class="fas fa-home"></i>
+                <span>主页</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- 主布局容器 -->
+    <div class="docs-layout" id="docsLayout">
+        <!-- 左侧边栏 - 目录导航 -->
+        <aside class="docs-sidebar" id="docsSidebar">
+            <div class="sidebar-resize-handle" id="sidebarResizeHandle"></div>
+            
+            <div class="sidebar-header">
+                <h3>文档目录</h3>
+                <button class="icon-btn collapse-all" id="collapseAll" title="全部折叠">
+                    <i class="fas fa-compress-alt"></i>
+                </button>
+            </div>
+            
+            <!-- 快速导航 -->
+            <div class="quick-nav">
+                <a href="#xim-code-protocol" class="quick-link active">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>代码协议</span>
+                </a>
+                <a href="#mor-overhaul" class="quick-link">
+                    <i class="fas fa-cogs"></i>
+                    <span>MOR项目</span>
+                </a>
+                <a href="#xim-departments" class="quick-link">
+                    <i class="fas fa-users"></i>
+                    <span>部门介绍</span>
+                </a>
+                <a href="#xim-history" class="quick-link">
+                    <i class="fas fa-history"></i>
+                    <span>创建历史</span>
+                </a>
+            </div>
+            
+            <!-- 详细目录 -->
+            <nav class="docs-nav" id="docsNav">
+                <ul class="nav-tree">
+                    <li class="nav-item has-children expanded">
+                        <a href="#xim-code-protocol" class="nav-link">
+                            <i class="fas fa-chevron-right toggle-icon"></i>
+                            <span>1. XIM Studio 代码协议</span>
+                        </a>
+                        <ul class="nav-children">
+                            <li><a href="#overview" class="nav-link">1.1 协议目的</a></li>
+                            <li class="has-children">
+                                <a href="#core-concepts" class="nav-link">
+                                    <i class="fas fa-chevron-right toggle-icon"></i>
+                                    <span>1.2 代码类型与权限</span>
+                                </a>
+                                <ul class="nav-children">
+                                    <li><a href="#concept-1" class="nav-link">访问码</a></li>
+                                    <li><a href="#concept-2" class="nav-link">信任码</a></li>
+                                    <li><a href="#concept-3" class="nav-link">工作码</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#code-format" class="nav-link">1.3 代码格式规范</a></li>
+                            <li><a href="#data-structures" class="nav-link">1.4 使用周期与失效</a></li>
+                            <li><a href="#api" class="nav-link">1.5 获取与申请流程</a></li>
+                            <li><a href="#usage" class="nav-link">1.6 分享与合规条款</a></li>
+                            <li><a href="#best-practices" class="nav-link">1.7 联系渠道</a></li>
+                        </ul>
+                    </li>
+                    
+                    <li class="nav-item has-children">
+                        <a href="#mor-overhaul" class="nav-link">
+                            <i class="fas fa-chevron-right toggle-icon"></i>
+                            <span>2. [MOR]大修和重组</span>
+                        </a>
+                        <ul class="nav-children">
+                            <li><a href="#mor-background" class="nav-link">2.1 项目背景</a></li>
+                            <li><a href="#mor-objectives" class="nav-link">2.2 项目目标</a></li>
+                            <li><a href="#mor-features" class="nav-link">2.3 功能特点</a></li>
+                            <li><a href="#mor-team" class="nav-link">2.4 团队成员</a></li>
+                            <li><a href="#mor-tech-stack" class="nav-link">2.5 技术栈</a></li>
+                            <li><a href="#mor-achievements" class="nav-link">2.6 成果展示</a></li>
+                        </ul>
+                    </li>
+                    
+                    <li class="nav-item has-children">
+                        <a href="#xim-departments" class="nav-link">
+                            <i class="fas fa-chevron-right toggle-icon"></i>
+                            <span>3. XIM 部门介绍</span>
+                        </a>
+                        <ul class="nav-children">
+                            <li><a href="#xim-technology" class="nav-link">3.1 技术部</a></li>
+                            <li><a href="#xim-art" class="nav-link">3.2 美工部</a></li>
+                            <li><a href="#xim-testing" class="nav-link">3.3 测试部</a></li>
+                        </ul>
+                    </li>
+                    
+                    <li class="nav-item has-children">
+                        <a href="#xim-history" class="nav-link">
+                            <i class="fas fa-chevron-right toggle-icon"></i>
+                            <span>4. XIM 创建历史</span>
+                        </a>
+                        <ul class="nav-children">
+                            <li><a href="#xim-origins" class="nav-link">4.1 我们是谁</a></li>
+                        </ul>
+                    </li>
+                    
+                    <li class="nav-item has-children">
+                        <a href="#xim-additional-info" class="nav-link">
+                            <i class="fas fa-chevron-right toggle-icon"></i>
+                            <span>5. 补充信息</span>
+                        </a>
+                        <ul class="nav-children">
+                            <li><a href="#xim-privacy" class="nav-link">5.1 隐私声明</a></li>
+                            <li><a href="#xim-rules" class="nav-link">5.2 成员守则</a></li>
+                            <li><a href="#xim-name" class="nav-link">5.3 名称由来</a></li>
+                            <li><a href="#xim-tech-stack" class="nav-link">5.4 技术栈</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            
+            <!-- 侧边栏底部信息 -->
+            <div class="sidebar-footer">
+                <div class="version-info">
+                    <span>文档版本 v2.0</span>
+                    <span>最后更新 2025-11-30</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 中间内容区 -->
+        <main class="docs-content" id="docsContent">
+            <!-- 面包屑导航 -->
+            <nav class="breadcrumb" id="breadcrumb">
+                <a href="index.html">首页</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>XIM文档</span>
+            </nav>
+            
+            <!-- 页面标题 -->
+            <div class="page-header">
+                <h1>XIM Studio 协议文档</h1>
+                <p class="page-description">甜甜圈工会的灵魂继承者 - 完整的项目文档与协议说明</p>
+                <div class="page-meta">
+                    <span class="meta-item">
+                        <i class="fas fa-calendar"></i>
+                        最后更新: 2025-11-30
+                    </span>
+                    <span class="meta-item">
+                        <i class="fas fa-code-branch"></i>
+                        版本: v2.0
+                    </span>
+                    <span class="meta-item">
+                        <i class="fas fa-clock"></i>
+                        阅读时间: 约 15 分钟
+                    </span>
+                </div>
+            </div>
+            
+            <!-- 文档内容 -->
+            <div class="content-body">
+                <!-- XIM Studio 代码协议 -->
+                <section id="xim-code-protocol" class="doc-section">
+                    <div class="section-header">
+                        <span class="section-number">01</span>
+                        <h2>XIM Studio 代码协议</h2>
+                    </div>
+                    <div class="section-content">
+                        <p class="lead">XIM Studio 代码（XIM Studio-code）用于在本工作室生态内区分「信任用户」与「普通成员」身份，并据此授予对应资源的访问权限。</p>
+                        
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle"></i>
+                            <div>
+                                <strong>协议说明</strong>
+                                <p>鉴于工作室已公开多数代码仓库，惟处于开发或待验证阶段之项目尚不成熟，故部分资源仅向持有 XIM Studio 代码之内部人员开放。</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 协议目的 -->
+                <section id="overview" class="doc-section">
+                    <h3>1.1 协议目的</h3>
+                    <div class="section-content">
+                        <p>XIM Studio 代码（XIM Studio-code）用于在本工作室生态内区分「信任用户」与「普通成员」身份，并据此授予对应资源的访问权限。</p>
+                        <p>鉴于工作室已公开多数代码仓库，惟处于开发或待验证阶段之项目尚不成熟，故部分资源仅向持有 XIM Studio 代码之内部人员开放。</p>
+                    </div>
+                </section>
+
+                <!-- 代码类型与权限矩阵 -->
+                <section id="core-concepts" class="doc-section">
+                    <h3>1.2 代码类型与权限矩阵</h3>
+                    <div class="section-content">
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>代码类型</th>
+                                        <th>适用人群</th>
+                                        <th>权限范围</th>
+                                        <th>有效期</th>
+                                        <th>备注</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="badge badge-blue">访问码</span></td>
+                                        <td>外部测试者</td>
+                                        <td>开发预览页、公开文件、已开放项目</td>
+                                        <td><span class="badge badge-green">永久</span></td>
+                                        <td>—</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="badge badge-yellow">信任码</span></td>
+                                        <td>信任用户</td>
+                                        <td>内部文件、非公开分支、灰度功能</td>
+                                        <td><span class="badge badge-orange">短期</span></td>
+                                        <td>须绑定访问码</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="badge badge-red">工作码</span></td>
+                                        <td>核心开发组</td>
+                                        <td>全部内部资源、生产环境、CI/CD</td>
+                                        <td><span class="badge badge-green">永久</span></td>
+                                        <td>禁止外泄</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="cards-grid">
+                            <div class="info-card">
+                                <div class="card-icon blue">
+                                    <i class="fas fa-key"></i>
+                                </div>
+                                <h4>访问码</h4>
+                                <p><strong>格式：</strong>小写英文 + 四位数字</p>
+                                <p><strong>示例：</strong><code>teacher1021</code></p>
+                                <p><strong>权限：</strong>开发预览页、公开文件</p>
+                            </div>
+                            
+                            <div class="info-card">
+                                <div class="card-icon yellow">
+                                    <i class="fas fa-shield-alt"></i>
+                                </div>
+                                <h4>信任码</h4>
+                                <p><strong>格式：</strong>大写字母 + 四至五位数字</p>
+                                <p><strong>示例：</strong><code>CGW-1077</code></p>
+                                <p><strong>权限：</strong>内部文件、灰度功能</p>
+                            </div>
+                            
+                            <div class="info-card">
+                                <div class="card-icon red">
+                                    <i class="fas fa-lock"></i>
+                                </div>
+                                <h4>工作码</h4>
+                                <p><strong>格式：</strong>同信任码格式</p>
+                                <p><strong>级别：</strong><code>internal</code></p>
+                                <p><strong>权限：</strong>全部内部资源</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 代码格式规范 -->
+                <section id="code-format" class="doc-section">
+                    <h3>1.3 代码格式规范</h3>
+                    <div class="section-content">
+                        <ul class="feature-list">
+                            <li>
+                                <i class="fas fa-check-circle text-blue"></i>
+                                <span><strong>访问码</strong>：小写英文单词 + 四位数字，示例 <code>teacher1021</code></span>
+                            </li>
+                            <li>
+                                <i class="fas fa-check-circle text-yellow"></i>
+                                <span><strong>信任码</strong>：大写字母 + 四至五位数字，示例 <code>CGW-1077</code></span>
+                            </li>
+                            <li>
+                                <i class="fas fa-check-circle text-red"></i>
+                                <span><strong>工作码</strong>：格式同信任码，惟系统内部标记为 <code>internal</code> 级别</span>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- 使用周期与失效规则 -->
+                <section id="data-structures" class="doc-section">
+                    <h3>1.4 使用周期与失效规则</h3>
+                    <div class="section-content">
+                        <ol class="numbered-list">
+                            <li>访问码对应之小范围测试项目结束后，项目级限制将自动解除，原代码仍保留查看权限</li>
+                            <li>信任码与工作码于分发时，将明确告知「有效期」及「可访问仓库列表」</li>
+                            <li>任何代码一经触发「恶意分享」检测（包括但不限于仓库日志异常、下载 IP 异常等），将被立即吊销，恕不另行通知</li>
+                        </ol>
+                    </div>
+                </section>
+
+                <!-- 获取与申请流程 -->
+                <section id="api" class="doc-section">
+                    <h3>1.5 获取与申请流程</h3>
+                    <div class="section-content">
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>申请对象</th>
+                                        <th>必要条件</th>
+                                        <th>处理时效</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>访问码</td>
+                                        <td>说明用途即可</td>
+                                        <td>1–2 工作日</td>
+                                    </tr>
+                                    <tr>
+                                        <td>信任码</td>
+                                        <td>① 已持有访问码 ② 说明具体用途</td>
+                                        <td>2–3 工作日</td>
+                                    </tr>
+                                    <tr>
+                                        <td>工作码</td>
+                                        <td>① 内部 HR 备案 ② 组长实名担保</td>
+                                        <td>3–5 工作日</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <div>
+                                <strong>申请须知</strong>
+                                <p>若 4 个工作日未获回复，可再次提交申请或直接致信 <strong>Studio Lead</strong>：Love_U2025@outlook.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 分享与合规条款 -->
+                <section id="usage" class="doc-section">
+                    <h3>1.6 分享与合规条款</h3>
+                    <div class="section-content">
+                        <div class="cards-grid">
+                            <div class="info-card border-blue">
+                                <h4><i class="fas fa-share-alt text-blue"></i> 访问码</h4>
+                                <p>允许公开分享，但禁止用于刷单、爬取等非测试目的</p>
+                            </div>
+                            <div class="info-card border-yellow">
+                                <h4><i class="fas fa-user-shield text-yellow"></i> 信任码</h4>
+                                <p>仅限申请人及其直属团队使用，不得二次分发</p>
+                            </div>
+                            <div class="info-card border-red">
+                                <h4><i class="fas fa-lock text-red"></i> 工作码</h4>
+                                <p>绝对禁止外泄；一经发现，XIM Studio 有权立即停用并追究相应责任</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 联系渠道 -->
+                <section id="best-practices" class="doc-section">
+                    <h3>1.7 联系渠道</h3>
+                    <div class="section-content">
+                        <div class="contact-grid">
+                            <a href="mailto:studio@shaole.me" class="contact-card">
+                                <i class="fas fa-envelope"></i>
+                                <div>
+                                    <h4>邮件（推荐）</h4>
+                                    <p>studio@shaole.me</p>
+                                </div>
+                            </a>
+                            <div class="contact-card">
+                                <i class="fas fa-bolt"></i>
+                                <div>
+                                    <h4>紧急通道</h4>
+                                    <p>组长或项目架构师（仅对内部有效）</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 项目文档：MOR大修和重组 -->
+                <section id="mor-overhaul" class="doc-section project-section">
+                    <div class="section-header">
+                        <span class="section-number">02</span>
+                        <h2>[MOR] Major Overhaul and Reorganization</h2>
+                    </div>
+                    <div class="section-content">
+                        <div class="project-hero">
+                            <div class="project-stats">
+                                <div class="stat-item">
+                                    <span class="stat-value">4/5</span>
+                                    <span class="stat-label">视觉完成度</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-value">7/10</span>
+                                    <span class="stat-label">整体评分</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-value">30+</span>
+                                    <span class="stat-label">功能键</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle"></i>
+                            <div>
+                                <strong>项目简介</strong>
+                                <p>这是一"坨"给偏技术玩家准备的高画质客户端整合包。官网已上线：<a href="https://modrinth.com/modpack/mor" target="_blank">modrinth.com/modpack/mor</a></p>
+                            </div>
+                        </div>
+
+                        <h3 id="mor-background">2.1 项目背景</h3>
+                        <p>MOR（Major Overhaul and Reorganization）是一个专注于集成客户端优化、美学和可用性的整合项目。AI 测评给了 7/10，毒舌点在于："把它当高画质启动器而非即开即玩包，就不会踩坑"。</p>
+
+                        <h3 id="mor-objectives">2.2 项目目标</h3>
+                        <p>打造一个视觉效果出色的高画质客户端整合包，为偏技术玩家提供个性化的游戏体验。</p>
+
+                        <h3 id="mor-features">2.3 功能特点</h3>
+                        <div class="feature-grid">
+                            <div class="feature-item">
+                                <i class="fas fa-eye text-purple"></i>
+                                <h4>高画质视觉效果</h4>
+                                <p>视觉完成度 4/5，截图即壁纸，为玩家提供沉浸式的游戏视觉体验</p>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-tachometer-alt text-blue"></i>
+                                <h4>性能表现</h4>
+                                <p>不是极端 FPS 向，是特效向。1060+8G 以下别来，核显直接 30 FPS 献祭</p>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-keyboard text-green"></i>
+                                <h4>丰富的功能键</h4>
+                                <p>30+ 功能键，提供丰富的操作选项，满足技术玩家的个性化需求</p>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-language text-yellow"></i>
+                                <h4>中文支持</h4>
+                                <p>提供中文汉化资源包（MOR-Setting），但必须版本完全对应</p>
+                            </div>
+                        </div>
+
+                        <h3 id="mor-team">2.4 团队成员</h3>
+                        <div class="team-grid">
+                            <div class="team-member">
+                                <div class="member-avatar">
+                                    <img src="资源/成员头像/陌路Molu.jpg" alt="陌路Molu">
+                                </div>
+                                <div class="member-info">
+                                    <h4>陌路Molu</h4>
+                                    <p>项目负责人</p>
+                                    <span class="member-role">负责MOR主整合包的开发，专注于客户端优化与美化核心功能</span>
+                                </div>
+                            </div>
+                            <div class="team-member">
+                                <div class="member-avatar">
+                                    <img src="资源/成员头像/Hzl.jpg" alt="Hzl">
+                                </div>
+                                <div class="member-info">
+                                    <h4>Hzl</h4>
+                                    <p>核心开发</p>
+                                    <span class="member-role">参与MOR主整合包的开发工作</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3 id="mor-tech-stack">2.5 技术栈</h3>
+                        <div class="tech-stack">
+                            <span class="tech-tag"><i class="fab fa-java"></i> Java</span>
+                            <span class="tech-tag"><i class="fas fa-cube"></i> Minecraft Fabric</span>
+                            <span class="tech-tag">1.20.1+</span>
+                            <span class="tech-tag"><i class="fas fa-tools"></i> Gradle</span>
+                            <span class="tech-tag"><i class="fab fa-git-alt"></i> Git</span>
+                            <span class="tech-tag">ShaderPack</span>
+                        </div>
+
+                        <h3 id="mor-achievements">2.6 成果展示</h3>
+                        <ul class="achievement-list">
+                            <li><a href="https://modrinth.com/modpack/mor" target="_blank" class="achievement-link"><i class="fas fa-check-circle text-green"></i> 已在Modrinth平台正式上线 <i class="fas fa-external-link-alt" style="font-size: 0.8em; margin-left: 8px;"></i></a></li>
+                            <li><a href="https://bbsmc.net/modpack/mor" target="_blank" class="achievement-link"><i class="fas fa-check-circle text-green"></i> 在BBSMC平台提供了镜像下载 <i class="fas fa-external-link-alt" style="font-size: 0.8em; margin-left: 8px;"></i></a></li>
+                            <li><i class="fas fa-check-circle text-green"></i> 提供了完整的中文汉化方案</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- 更多项目文档... -->
+                <!-- 为简洁起见，这里省略其他项目部分，实际使用时可以展开 -->
+
+                <!-- XIM 部门介绍 -->
+                <section id="xim-departments" class="doc-section">
+                    <div class="section-header">
+                        <span class="section-number">07</span>
+                        <h2>XIM 部门介绍</h2>
+                    </div>
+                    <div class="section-content">
+                        <div class="department-cards">
+                            <div class="dept-card" id="xim-technology">
+                                <div class="dept-header">
+                                    <div class="dept-icon blue">
+                                        <i class="fas fa-code"></i>
+                                    </div>
+                                    <div class="dept-title">
+                                        <h3>技术部</h3>
+                                        <span class="dept-subtitle">Technology Department</span>
+                                    </div>
+                                </div>
+                                <div class="dept-content">
+                                    <p class="dept-desc">从创社到现在就 1 个人，全工作室的技术活儿全包——从项目构建到发布，一条龙全走完。</p>
+                                    <div class="dept-quote">
+                                        <i class="fas fa-quote-left"></i>
+                                        <p>"我觉得这代码没问题"<br>↓<br>[命令行报错刷屏]<br>"不是……你**？！"</p>
+                                    </div>
+                                    <div class="dept-stats">
+                                        <span><i class="fas fa-user"></i> 1人</span>
+                                        <span><i class="fas fa-project-diagram"></i> 全栈</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="dept-card" id="xim-art">
+                                <div class="dept-header">
+                                    <div class="dept-icon purple">
+                                        <i class="fas fa-palette"></i>
+                                    </div>
+                                    <div class="dept-title">
+                                        <h3>美工部</h3>
+                                        <span class="dept-subtitle">Art Department</span>
+                                    </div>
+                                </div>
+                                <div class="dept-content">
+                                    <p class="dept-desc">成立的直接原因：技术部的产出要求从"能跑就行"进化到"得能看"。</p>
+                                    <div class="dept-quote">
+                                        <i class="fas fa-quote-left"></i>
+                                        <p>"你看看这里加这个咋样？"<br>"行是行，但你这是哪门子审美？？？"</p>
+                                    </div>
+                                    <div class="dept-stats">
+                                        <span><i class="fas fa-user"></i> 2人</span>
+                                        <span><i class="fas fa-paint-brush"></i> UI/UX</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="dept-card" id="xim-testing">
+                                <div class="dept-header">
+                                    <div class="dept-icon orange">
+                                        <i class="fas fa-bug"></i>
+                                    </div>
+                                    <div class="dept-title">
+                                        <h3>测试部</h3>
+                                        <span class="dept-subtitle">Testing Department</span>
+                                    </div>
+                                </div>
+                                <div class="dept-content">
+                                    <p class="dept-desc">名义上负责所有项目内测，实际上？就是聚众打游戏，顺便看看有没有报错弹窗。</p>
+                                    <div class="dept-quote">
+                                        <i class="fas fa-quote-left"></i>
+                                        <p>测试："欸！我有个点子！"<br>技术："哇，有完没完啊！！！"</p>
+                                    </div>
+                                    <div class="dept-stats">
+                                        <span><i class="fas fa-user"></i> 4人</span>
+                                        <span><i class="fas fa-gamepad"></i> 整活</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- XIM 创建历史 -->
+                <section id="xim-history" class="doc-section">
+                    <div class="section-header">
+                        <span class="section-number">08</span>
+                        <h2>XIM 创建历史</h2>
+                    </div>
+                    <div class="section-content">
+                        <div class="history-timeline" id="xim-origins">
+                            <div class="timeline-header">
+                                <h3>我们是谁</h3>
+                                <p class="timeline-subtitle">从"甜甜圈工会"到XIM工作室</p>
+                            </div>
+                            
+                            <div class="timeline-story">
+                                <p class="lead">这事得从"甜甜圈工会"讲起——几年前我们在别人的 MC 服务器上攒的工会，服务器一关，群也就散了。但有几个刺头觉得不过瘾，拉着会长原地重组，起了个名叫 XIM。</p>
+                                
+                                <div class="team-overview">
+                                    <h4>团队构成</h4>
+                                    <div class="team-stats-grid">
+                                        <div class="team-stat">
+                                            <span class="stat-number">5</span>
+                                            <span class="stat-desc">总人数</span>
+                                        </div>
+                                        <div class="team-stat">
+                                            <span class="stat-number">3</span>
+                                            <span class="stat-desc">部门</span>
+                                        </div>
+                                        <div class="team-stat">
+                                            <span class="stat-number">2</span>
+                                            <span class="stat-desc">17岁</span>
+                                        </div>
+                                        <div class="team-stat">
+                                            <span class="stat-number">1</span>
+                                            <span class="stat-desc">吉祥物</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="highlight-box">
+                                    <i class="fas fa-lightbulb"></i>
+                                    <p>我们有会长的 PPT，有吉祥物的表情包，还有六个对模组游戏死性不改的脑瓜。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 补充信息 -->
+                <section id="xim-additional-info" class="doc-section">
+                    <div class="section-header">
+                        <span class="section-number">09</span>
+                        <h2>补充信息</h2>
+                    </div>
+                    <div class="section-content">
+                        <div class="info-tabs">
+                            <div class="tab-buttons">
+                                <button class="tab-btn active" data-tab="privacy">隐私声明</button>
+                                <button class="tab-btn" data-tab="rules">成员守则</button>
+                                <button class="tab-btn" data-tab="naming">名称由来</button>
+                                <button class="tab-btn" data-tab="tech">技术栈</button>
+                            </div>
+                            
+                            <div class="tab-content">
+                                <div class="tab-panel active" id="privacy">
+                                    <h4 id="xim-privacy">成员隐私收集声明</h4>
+                                    <p>我们尊重每个成员的个人信息。公开的信息都经过本人同意，信息所有人有权随时要求我们撤回。已离开的成员也可以自由决定是否保留其信息。</p>
+                                </div>
+                                
+                                <div class="tab-panel" id="rules">
+                                    <h4 id="xim-rules">成员基本守则</h4>
+                                    <ol>
+                                        <li><strong>请假制度：</strong>内部测试或其他活动无法参加时，向所在部部长或任一在线成员口头说明原因即可。</li>
+                                        <li><strong>文案修改机制：</strong>修改或新增 XIM 现有文案、项目，需获得成员同意。意见不统一时，投票决定。</li>
+                                    </ol>
+                                </div>
+                                
+                                <div class="tab-panel" id="naming">
+                                    <h4 id="xim-name">为什么我们叫 XIM？</h4>
+                                    <p>这三个字母成立时就没啥高深含义。当时会长还在用 X 开头的游戏 ID，开发整合包总得有个名字。他思前想后三四天，一拍脑门："就叫'X的整合包'吧！"</p>
+                                    <p>但这名字对内对外都不太像话，于是会长把它扔给翻译，鬼知道怎么翻的，英文缩写就成了 XIM。总之，我们就这么"名正言顺"地用上了。</p>
+                                </div>
+                                
+                                <div class="tab-panel" id="tech">
+                                    <h4 id="xim-tech-stack">项目技术栈与成员</h4>
+                                    <div class="project-list">
+                                        <div class="project-item-compact">
+                                            <span class="project-name">MOR</span>
+                                            <span class="project-tech">Java</span>
+                                            <span class="project-members">陌路Molu、Hzl</span>
+                                        </div>
+                                        <div class="project-item-compact">
+                                            <span class="project-name">MOR Setting</span>
+                                            <span class="project-tech">MC资源包</span>
+                                            <span class="project-members">陌路Molu</span>
+                                        </div>
+                                        <div class="project-item-compact">
+                                            <span class="project-name">MOR Error</span>
+                                            <span class="project-tech">Java/JavaScript</span>
+                                            <span class="project-members">陌路Molu</span>
+                                        </div>
+                                        <div class="project-item-compact">
+                                            <span class="project-name">XIM Wallpaper</span>
+                                            <span class="project-tech">HTML/JavaScript</span>
+                                            <span class="project-members">陌路Molu、米、熠曲封卑</span>
+                                        </div>
+                                        <div class="project-item-compact">
+                                            <span class="project-name">[XIM Nightruin] XIM·夜墟</span>
+                                            <span class="project-tech">Java/JavaScript</span>
+                                            <span class="project-members">陌路Molu、米、HZL</span>
+                                        </div>
+                                        <div class="project-item-compact">
+                                            <span class="project-name">XIM Tool</span>
+                                            <span class="project-tech">Python</span>
+                                            <span class="project-members">陌路Molu</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            
+            <!-- 页面底部导航 -->
+            <div class="page-nav">
+                <a href="index.html" class="page-nav-prev">
+                    <i class="fas fa-arrow-left"></i>
+                    <div>
+                        <span>上一页</span>
+                        <strong>返回主页</strong>
+                    </div>
+                </a>
+                <a href="#xim-code-protocol" class="page-nav-next">
+                    <div>
+                        <span>下一页</span>
+                        <strong>代码协议</strong>
+                    </div>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </main>
+
+        <!-- 右侧目录大纲 - 仅在大屏幕显示 -->
+        <aside class="docs-outline" id="docsOutline">
+            <h4>本页目录</h4>
+            <nav class="outline-nav" id="outlineNav">
+                <!-- 动态生成 -->
+            </nav>
+        </aside>
+    </div>
+
+    <!-- 遮罩层 -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- 返回顶部按钮 -->
+    <button class="back-to-top" id="backToTop" title="返回顶部">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- 阅读进度条 -->
+    <div class="reading-progress" id="readingProgress"></div>
+
+    <!-- 脚本 -->
+    <script src="js/docs-new.js"></script>
+</body>
+</html>
