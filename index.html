@@ -1,0 +1,3275 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XIM 创意布局 Demo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Anime.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #ec4899;
+            --dark: #0f0f0f;
+            --darker: #0a0a0a;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            overflow-x: hidden;
+        }
+
+        /* 滚动容器 */
+        .scroll-container {
+            position: relative;
+        }
+
+        /* 英雄区域 */
+        .hero-section {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(ellipse at 20% 50%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 50%, rgba(236, 72, 153, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 100%, rgba(99, 102, 241, 0.1) 0%, transparent 50%);
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 1;
+            padding: 2rem;
+        }
+
+        /* Drawable 文字容器 */
+        .hero-title-container {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 1.5rem;
+            min-height: 1.2em;
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 700;
+            line-height: 1.1;
+            color: #fff;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-title .typing-text {
+            background: linear-gradient(135deg, #fff 0%, #a5b4fc 50%, #f9a8d4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* SVG 绘制层 */
+        .drawable-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: visible;
+        }
+
+        .drawable-path {
+            fill: none;
+            stroke: url(#gradient-stroke);
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            opacity: 0;
+        }
+
+        .drawable-path.animated {
+            opacity: 1;
+        }
+
+        /* 文字描边效果 */
+        .hero-title-stroke {
+            position: absolute;
+            top: 0;
+            left: 0;
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 700;
+            line-height: 1.1;
+            -webkit-text-stroke: 3px rgba(99, 102, 241, 0.5);
+            color: transparent;
+            opacity: 0;
+            z-index: 1;
+            white-space: nowrap;
+        }
+
+        .hero-title-stroke.animated {
+            opacity: 1;
+            animation: strokeDraw 2s ease-out forwards;
+        }
+
+        @keyframes strokeDraw {
+            0% {
+                clip-path: inset(0 100% 0 0);
+            }
+            100% {
+                clip-path: inset(0 0 0 0);
+            }
+        }
+
+        /* 字符绘制动画 */
+        .char-drawable {
+            display: inline-block;
+            position: relative;
+        }
+
+        .char-drawable::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.3s ease;
+        }
+
+        .char-drawable.drawn::after {
+            width: 100%;
+        }
+
+        /* 光标闪烁效果（已禁用） */
+        .typing-cursor {
+            display: none;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            line-height: 1.6;
+            position: relative;
+            min-height: 3em;
+        }
+
+        /* 副标题逐词显示 */
+        .hero-subtitle .word {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .hero-subtitle .word.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 墨水扩散效果 */
+        .ink-splash {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.3) 0%, transparent 70%);
+            pointer-events: none;
+            transform: scale(0);
+            opacity: 0;
+        }
+
+        .ink-splash.active {
+            animation: inkSpread 1s ease-out forwards;
+        }
+
+        @keyframes inkSpread {
+            0% {
+                transform: scale(0);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gray);
+            font-size: 0.875rem;
+        }
+
+        .scroll-arrow {
+            width: 24px;
+            height: 24px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        /* 项目展示区域 */
+        .projects-showcase {
+            position: relative;
+            padding: 4rem 0;
+        }
+
+        .section-header {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-desc {
+            color: var(--gray);
+            font-size: 1.125rem;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* 3D 卡片轨道容器 */
+        .orbit-container {
+            position: relative;
+            height: 600px;
+            perspective: 1500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 4rem 0;
+        }
+
+        .orbit-track {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+        }
+
+        /* 3D 项目卡片 */
+        .project-card-3d {
+            position: absolute;
+            width: 320px;
+            height: 420px;
+            left: 50%;
+            top: 50%;
+            margin-left: -160px;
+            margin-top: -210px;
+            transform-style: preserve-3d;
+            cursor: pointer;
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border-radius: 24px;
+            overflow: hidden;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+            transform-style: preserve-3d;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .project-card-3d:hover .card-inner {
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: 
+                0 25px 50px -12px rgba(0, 0, 0, 0.5),
+                0 0 30px rgba(99, 102, 241, 0.1);
+        }
+
+        .card-image {
+            position: relative;
+            height: 60%;
+            overflow: hidden;
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .project-card-3d:hover .card-image img {
+            transform: scale(1.1);
+        }
+
+        .card-glow {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transition: opacity 0.3s;
+            background: linear-gradient(
+                135deg,
+                rgba(99, 102, 241, 0.2) 0%,
+                transparent 50%,
+                rgba(236, 72, 153, 0.2) 100%
+            );
+        }
+
+        .project-card-3d:hover .card-glow {
+            opacity: 1;
+        }
+
+        .card-content {
+            padding: 1.5rem;
+            height: 40%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card-tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+            width: fit-content;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+
+        .card-desc {
+            font-size: 0.875rem;
+            color: var(--gray);
+            line-height: 1.5;
+        }
+
+        .card-arrow {
+            position: absolute;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .project-card-3d:hover .card-arrow {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* 水平滚动区域 - 无障碍优化 */
+        .horizontal-scroll-section {
+            position: relative;
+            height: 400vh;
+        }
+
+        .horizontal-scroll-container {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+        }
+
+        /* 轮播控制按钮 */
+        .carousel-control {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            color: #fff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .carousel-control:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .carousel-control:focus-visible {
+            outline: 3px solid var(--primary);
+            outline-offset: 3px;
+        }
+
+        .carousel-control:active {
+            transform: translateY(-50%) scale(0.95);
+        }
+
+        .carousel-prev {
+            left: 2rem;
+        }
+
+        .carousel-next {
+            right: 2rem;
+        }
+
+        /* 轮播指示器 */
+        .carousel-indicators {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 0.75rem;
+            z-index: 10;
+        }
+
+        .indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--border);
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .indicator:hover {
+            background: var(--primary);
+            transform: scale(1.2);
+        }
+
+        .indicator:focus-visible {
+            outline: 3px solid var(--primary);
+            outline-offset: 3px;
+        }
+
+        .indicator.active {
+            background: var(--primary);
+            border-color: #fff;
+            transform: scale(1.3);
+        }
+
+        .horizontal-track {
+            display: flex;
+            gap: 4rem;
+            padding: 0 10vw;
+            will-change: transform;
+        }
+
+        .horizontal-card {
+            flex-shrink: 0;
+            width: 70vw;
+            max-width: 900px;
+            height: 70vh;
+            max-height: 600px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            opacity: 0;
+            transform: translateX(100px);
+            outline: none;
+        }
+
+        .horizontal-card:focus-visible {
+            outline: 3px solid var(--primary);
+            outline-offset: 5px;
+            border-radius: 8px;
+        }
+
+        .horizontal-card-image {
+            position: relative;
+            height: 100%;
+            border-radius: 24px;
+            overflow: hidden;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+        }
+
+        .horizontal-card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .horizontal-card-content {
+            padding: 2rem;
+        }
+
+        .horizontal-card-number {
+            font-size: 6rem;
+            font-weight: 700;
+            color: transparent;
+            -webkit-text-stroke: 2px rgba(99, 102, 241, 0.3);
+            line-height: 1;
+            margin-bottom: 1rem;
+        }
+
+        .horizontal-card-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .horizontal-card-desc {
+            color: var(--gray);
+            font-size: 1.125rem;
+            line-height: 1.7;
+            margin-bottom: 2rem;
+        }
+
+        .horizontal-card-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            background: var(--primary);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .horizontal-card-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+        }
+
+        /* XIM 部门区域 */
+        .departments-section {
+            padding: 6rem 2rem;
+            background: linear-gradient(180deg, var(--darker) 0%, rgba(99, 102, 241, 0.02) 50%, var(--darker) 100%);
+        }
+
+        .departments-showcase {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .dept-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .dept-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, transparent 50%, rgba(236, 72, 153, 0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .dept-card:hover::before {
+            opacity: 1;
+        }
+
+        .dept-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .dept-visual {
+            position: relative;
+            height: 180px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .dept-icon {
+            font-size: 4rem;
+            z-index: 1;
+            transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .dept-card:hover .dept-icon {
+            transform: scale(1.2) rotate(-10deg);
+        }
+
+        .dept-particles {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        .dept-particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .dept-info {
+            padding: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .dept-info h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.75rem;
+        }
+
+        .dept-info p {
+            color: var(--gray);
+            font-size: 0.9375rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .dept-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .tag {
+            padding: 0.25rem 0.75rem;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: var(--primary);
+        }
+
+        .dept-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9375rem;
+            transition: all 0.3s;
+        }
+
+        .dept-link:hover {
+            gap: 0.75rem;
+            color: var(--secondary);
+        }
+
+        .dept-link svg {
+            transition: transform 0.3s;
+        }
+
+        .dept-link:hover svg {
+            transform: translateX(4px);
+        }
+
+        /* 网格变形区域 - 包含交互实验 */
+        .morphing-grid-section {
+            padding: 6rem 2rem;
+        }
+
+        /* 交互实验容器 */
+        .experiments-container {
+            max-width: 1400px;
+            margin: 0 auto 4rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .experiment-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 2rem;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .experiment-card:hover {
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .experiment-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .experiment-icon {
+            font-size: 2rem;
+        }
+
+        .experiment-header h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .experiment-desc {
+            color: var(--gray);
+            font-size: 0.9375rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* 单元素拖拽容器 */
+        .single-drag-container {
+            position: relative;
+            height: 250px;
+            background: rgba(99, 102, 241, 0.03);
+            border-radius: 16px;
+            border: 2px dashed var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .single-drag-box {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: grab;
+            user-select: none;
+            touch-action: none;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+            transition: transform 0.1s;
+        }
+
+        .single-drag-box:active {
+            cursor: grabbing;
+        }
+
+        .single-drag-box .drag-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .single-drag-box .drag-text {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        /* 色彩实验室区域 */
+        .color-playground-area {
+            height: 250px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
+            position: relative;
+            cursor: crosshair;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            pointer-events: auto;
+            touch-action: none;
+            user-select: none;
+        }
+
+        .color-display {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            font-family: 'Courier New', monospace;
+            letter-spacing: 2px;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .color-saved-list {
+            position: absolute;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 0.75rem 1rem;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+        }
+
+        .saved-title {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.75rem;
+            white-space: nowrap;
+        }
+
+        .saved-color-dot {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .saved-color-dot:hover {
+            transform: scale(1.2);
+            border-color: #fff;
+        }
+
+        .morphing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .grid-line {
+            position: absolute;
+            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.2), transparent);
+            height: 1px;
+            width: 100%;
+            transform-origin: left;
+        }
+
+        .morph-card {
+            position: relative;
+            padding: 2rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            cursor: pointer;
+        }
+
+        .morph-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, transparent 50%, rgba(236, 72, 153, 0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .morph-card:hover::before {
+            opacity: 1;
+        }
+
+        .morph-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .morph-card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s;
+        }
+
+        .morph-card:hover .morph-card-icon {
+            transform: scale(1.1) rotate(-5deg);
+        }
+
+        .morph-card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: #fff;
+        }
+
+        .morph-card-desc {
+            color: var(--gray);
+            font-size: 0.9375rem;
+            line-height: 1.6;
+        }
+
+        /* 浮动粒子 */
+        .particles {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 50%;
+            opacity: 0.3;
+        }
+
+        /* 数据计数器区域 */
+        .stats-section {
+            padding: 6rem 2rem;
+            background: linear-gradient(180deg, var(--darker) 0%, rgba(99, 102, 241, 0.05) 50%, var(--darker) 100%);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .stat-card {
+            position: relative;
+            padding: 2.5rem 2rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            text-align: center;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .stat-card:hover::before {
+            opacity: 1;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 0.9375rem;
+        }
+
+        .stat-suffix {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.25rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* 可拖拽卡片区域 */
+        .draggable-section {
+            padding: 6rem 2rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .draggable-container {
+            position: relative;
+            flex: 1;
+            min-height: 500px;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(236, 72, 153, 0.03) 0%, transparent 50%);
+            border-radius: 32px;
+            border: 2px dashed var(--border);
+            margin: 2rem auto;
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        .draggable-card {
+            position: absolute;
+            width: 280px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            cursor: grab;
+            user-select: none;
+            touch-action: none;
+            transition: box-shadow 0.3s, transform 0.1s;
+            backdrop-filter: blur(10px);
+        }
+
+        .draggable-card:active {
+            cursor: grabbing;
+        }
+
+        .draggable-card.dragging {
+            z-index: 1000;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .draggable-card:nth-child(1) { top: 10%; left: 10%; }
+        .draggable-card:nth-child(2) { top: 10%; right: 10%; }
+        .draggable-card:nth-child(3) { bottom: 10%; left: 10%; }
+        .draggable-card:nth-child(4) { bottom: 10%; right: 10%; }
+
+        .drag-handle {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            color: var(--gray);
+            font-size: 1.25rem;
+            letter-spacing: 2px;
+            cursor: grab;
+        }
+
+        .drag-content h4 {
+            font-size: 1.125rem;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+
+        .drag-content p {
+            font-size: 0.875rem;
+            color: var(--gray);
+            line-height: 1.5;
+        }
+
+        /* 时间轴区域 */
+        .timeline-section {
+            padding: 6rem 2rem;
+        }
+
+        .timeline-container {
+            max-width: 1000px;
+            margin: 4rem auto;
+            position: relative;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--border);
+            transform: translateX(-50%);
+        }
+
+        .timeline-progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(180deg, var(--primary) 0%, var(--secondary) 100%);
+            height: 0%;
+            transition: height 0.5s ease;
+        }
+
+        .timeline-items {
+            position: relative;
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 4rem;
+            cursor: pointer;
+            opacity: 0.5;
+            transition: all 0.5s ease;
+        }
+
+        .timeline-item:nth-child(odd) {
+            flex-direction: row-reverse;
+            text-align: right;
+        }
+
+        .timeline-item.active {
+            opacity: 1;
+        }
+
+        .timeline-item.active .timeline-dot {
+            background: var(--primary);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+            transform: scale(1.3);
+        }
+
+        .timeline-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--border);
+            border: 3px solid var(--darker);
+            margin: 0 2rem;
+            transition: all 0.3s ease;
+            z-index: 1;
+        }
+
+        .timeline-content {
+            flex: 1;
+            padding: 1.5rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            max-width: 400px;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-item:hover .timeline-content {
+            border-color: rgba(99, 102, 241, 0.3);
+            transform: translateX(10px);
+        }
+
+        .timeline-item:nth-child(odd):hover .timeline-content {
+            transform: translateX(-10px);
+        }
+
+        .timeline-year {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 20px;
+            font-size: 0.875rem;
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+        }
+
+        .timeline-content h4 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+
+        .timeline-content p {
+            font-size: 0.9375rem;
+            color: var(--gray);
+            line-height: 1.6;
+        }
+
+        /* 色彩实验室 */
+        .color-playground {
+            padding: 6rem 2rem;
+        }
+
+        .color-canvas {
+            position: relative;
+            height: 400px;
+            border-radius: 32px;
+            background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
+            cursor: crosshair;
+            overflow: hidden;
+            transition: background 0.1s ease;
+        }
+
+        .color-info {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            pointer-events: none;
+        }
+
+        .color-value {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #fff;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            font-family: 'Courier New', monospace;
+            letter-spacing: 2px;
+        }
+
+        .color-hint {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 0.5rem;
+        }
+
+        .saved-colors {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+        }
+
+        .saved-label {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.875rem;
+        }
+
+        .saved-color {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .saved-color:hover {
+            transform: scale(1.2);
+            border-color: #fff;
+        }
+
+        /* 文档中心区域 */
+        .docs-section {
+            padding: 6rem 2rem;
+            background: linear-gradient(180deg, var(--darker) 0%, rgba(99, 102, 241, 0.03) 50%, var(--darker) 100%);
+        }
+
+        .docs-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .docs-main-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 32px;
+            padding: 3rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .docs-main-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, transparent 50%, rgba(236, 72, 153, 0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .docs-main-card:hover::before {
+            opacity: 1;
+        }
+
+        .docs-main-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .docs-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .docs-main-card:hover .docs-icon {
+            transform: scale(1.1) rotate(-5deg);
+        }
+
+        .docs-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+
+        .docs-desc {
+            color: var(--gray);
+            font-size: 1rem;
+            line-height: 1.7;
+            margin-bottom: 2rem;
+        }
+
+        .docs-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .docs-stat {
+            text-align: center;
+        }
+
+        .docs-stat .stat-num {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .docs-stat .stat-label {
+            display: block;
+            color: var(--gray);
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        .docs-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            background: var(--primary);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
+            z-index: 1;
+        }
+
+        .docs-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+        }
+
+        .docs-features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .docs-feature-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .docs-feature-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .docs-feature-card:hover::before,
+        .docs-feature-card:focus::before {
+            opacity: 1;
+        }
+
+        .docs-feature-card:hover,
+        .docs-feature-card:focus {
+            transform: translateY(-5px) scale(1.02);
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .docs-feature-card:focus-visible {
+            outline: 3px solid var(--primary);
+            outline-offset: 3px;
+        }
+
+        .docs-feature-card .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .docs-feature-card h4 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+
+        .docs-feature-card p {
+            font-size: 0.875rem;
+            color: var(--gray);
+            line-height: 1.5;
+        }
+
+        /* XIM New 区域 */
+        .news-section {
+            padding: 6rem 2rem;
+        }
+
+        .news-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .news-category {
+            position: relative;
+        }
+
+        .category-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .category-icon {
+            font-size: 1.75rem;
+        }
+
+        .news-timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .news-timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--primary) 0%, var(--secondary) 100%);
+        }
+
+        .history-timeline::before {
+            background: linear-gradient(180deg, var(--secondary) 0%, var(--primary) 100%);
+        }
+
+        .news-item {
+            position: relative;
+            padding: 1.5rem 0 1.5rem 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .news-item::before {
+            content: '';
+            position: absolute;
+            left: -2rem;
+            top: 2rem;
+            width: 12px;
+            height: 12px;
+            background: var(--primary);
+            border-radius: 50%;
+            border: 3px solid var(--darker);
+            transform: translateX(-5px);
+            transition: all 0.3s ease;
+        }
+
+        .news-item:hover::before {
+            transform: translateX(-5px) scale(1.3);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+        }
+
+        .news-item:hover {
+            transform: translateX(10px);
+        }
+
+        .news-date {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 0.5rem;
+        }
+
+        .news-date .month {
+            font-size: 0.875rem;
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        .news-date .year {
+            font-size: 0.75rem;
+            color: var(--gray);
+        }
+
+        .news-content {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.25rem;
+            transition: all 0.3s ease;
+        }
+
+        .news-item:hover .news-content {
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .news-content h4 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+
+        .news-content p {
+            font-size: 0.9375rem;
+            color: var(--gray);
+            line-height: 1.5;
+        }
+
+        .news-cta {
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .news-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .news-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .orbit-container {
+                height: 500px;
+            }
+
+            .project-card-3d {
+                width: 280px;
+                height: 380px;
+                margin-left: -140px;
+                margin-top: -190px;
+            }
+
+            .horizontal-card {
+                grid-template-columns: 1fr;
+                width: 85vw;
+                height: auto;
+            }
+
+            .horizontal-card-image {
+                height: 200px;
+            }
+
+            .horizontal-card-number {
+                font-size: 4rem;
+            }
+
+            .horizontal-card-title {
+                font-size: 1.75rem;
+            }
+
+            .draggable-card {
+                width: 240px;
+            }
+
+            .timeline-line {
+                left: 20px;
+            }
+
+            .timeline-item,
+            .timeline-item:nth-child(odd) {
+                flex-direction: row;
+                text-align: left;
+                padding-left: 50px;
+            }
+
+            .timeline-dot {
+                margin: 0;
+                position: absolute;
+                left: 11px;
+            }
+
+            .timeline-content {
+                max-width: none;
+            }
+
+            .color-value {
+                font-size: 2rem;
+            }
+
+            .news-container {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .experiments-container {
+                grid-template-columns: 1fr;
+            }
+
+            .draggable-container.compact {
+                min-height: 400px;
+            }
+
+            .draggable-container.compact .draggable-card {
+                width: 160px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 浮动粒子背景 -->
+    <div class="particles" id="particles"></div>
+
+    <div class="scroll-container">
+        <!-- 英雄区域 -->
+        <section class="hero-section">
+            <div class="hero-bg"></div>
+            <div class="hero-content">
+                <div class="hero-title-container">
+                    <!-- SVG 渐变定义 -->
+                    <svg width="0" height="0" style="position: absolute;">
+                        <defs>
+                            <linearGradient id="gradient-stroke" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#ec4899;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <!-- 描边层 -->
+                    <div class="hero-title-stroke" id="titleStroke">XIM Studio</div>
+                    <!-- 主标题 -->
+                    <h1 class="hero-title" id="heroTitle">
+                        <span class="typing-text"></span><span class="typing-cursor"></span>
+                    </h1>
+                    <!-- 墨水效果容器 -->
+                    <div class="ink-container" id="inkContainer"></div>
+                </div>
+                <p class="hero-subtitle" id="heroSubtitle">一群来自各地的杂鱼，感谢它们的帮助</p>
+            </div>
+            <div class="scroll-hint">
+                <span>向下滚动探索</span>
+                <svg class="scroll-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 5v14M19 12l-7 7-7-7"/>
+                </svg>
+            </div>
+        </section>
+
+        <!-- 精选项目 - 水平滚动展示 -->
+        <section class="horizontal-scroll-section" id="horizontalSection">
+            <div class="section-header">
+                <h2 class="section-title">精选项目</h2>
+                <p class="section-desc">滚动查看我们的代表作品</p>
+            </div>
+            
+            <div class="horizontal-scroll-container" role="region" aria-roledescription="轮播" aria-label="项目卡片轮播">
+                <!-- 轮播控制按钮 -->
+                <button class="carousel-control carousel-prev" aria-label="上一个项目" tabindex="0">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                </button>
+                <button class="carousel-control carousel-next" aria-label="下一个项目" tabindex="0">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </button>
+                
+                <!-- 轮播指示器 -->
+                <div class="carousel-indicators" role="tablist" aria-label="项目导航">
+                    <button class="indicator active" role="tab" aria-label="项目 1" aria-selected="true" data-index="0"></button>
+                    <button class="indicator" role="tab" aria-label="项目 2" aria-selected="false" data-index="1"></button>
+                    <button class="indicator" role="tab" aria-label="项目 3" aria-selected="false" data-index="2"></button>
+                    <button class="indicator" role="tab" aria-label="项目 4" aria-selected="false" data-index="3"></button>
+                </div>
+                
+                <div class="horizontal-track" id="horizontalTrack" role="list">
+                    <!-- 水平卡片 1 -->
+                    <article class="horizontal-card" role="listitem" aria-label="项目 1: 大修和重组" tabindex="0">
+                        <div class="horizontal-card-image">
+                            <img src="资源/项目MOR.png" alt="[MOR]大修和重组项目预览图" loading="lazy">
+                        </div>
+                        <div class="horizontal-card-content">
+                            <div class="horizontal-card-number" aria-hidden="true">01</div>
+                            <h3 class="horizontal-card-title" id="project-title-1">大修和重组</h3>
+                            <p class="horizontal-card-desc" id="project-desc-1">一个专注于集成客户端优化、美学和可用性的整合项目。通过精心设计的模组组合，为玩家带来流畅、美观且易用的游戏体验。</p>
+                            <a href="project-mor-overhaul.html" class="horizontal-card-btn" aria-labelledby="project-title-1">
+                                查看详情
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </article>
+
+                    <!-- 水平卡片 2 -->
+                    <article class="horizontal-card" role="listitem" aria-label="项目 2: 设置与汉化" tabindex="0">
+                        <div class="horizontal-card-image">
+                            <img src="资源/项目MOR Setting.png" alt="[MOR]设置项目预览图" loading="lazy">
+                        </div>
+                        <div class="horizontal-card-content">
+                            <div class="horizontal-card-number" aria-hidden="true">02</div>
+                            <h3 class="horizontal-card-title" id="project-title-2">设置与汉化</h3>
+                            <p class="horizontal-card-desc" id="project-desc-2">专注[MOR]的汉化工作，让更多中文用户能够轻松理解和使用。同时提供详细的配置指南，帮助用户快速上手。</p>
+                            <a href="project-mor-settings.html" class="horizontal-card-btn" aria-labelledby="project-title-2">
+                                查看详情
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </article>
+
+                    <!-- 水平卡片 3 -->
+                    <article class="horizontal-card" role="listitem" aria-label="项目 3: 错误解决方案" tabindex="0">
+                        <div class="horizontal-card-image">
+                            <img src="资源/项目MOR Error.png" alt="[MOR]错误解决方案项目预览图" loading="lazy">
+                        </div>
+                        <div class="horizontal-card-content">
+                            <div class="horizontal-card-number" aria-hidden="true">03</div>
+                            <h3 class="horizontal-card-title" id="project-title-3">错误解决方案</h3>
+                            <p class="horizontal-card-desc" id="project-desc-3">专注[MOR]中出现的错误和异常情况的解决方案。提供详细的错误排查指南和常见问题解答，确保用户获得顺畅的体验。</p>
+                            <a href="project-mor-error.html" class="horizontal-card-btn" aria-labelledby="project-title-3">
+                                查看详情
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </article>
+
+                    <!-- 水平卡片 4 -->
+                    <article class="horizontal-card" role="listitem" aria-label="项目 4: 壁纸系列" tabindex="0">
+                        <div class="horizontal-card-image">
+                            <img src="资源/项目XIM Wallpaper.png" alt="XIM壁纸系列项目预览图" loading="lazy">
+                        </div>
+                        <div class="horizontal-card-content">
+                            <div class="horizontal-card-number" aria-hidden="true">04</div>
+                            <h3 class="horizontal-card-title" id="project-title-4">壁纸系列</h3>
+                            <p class="horizontal-card-desc" id="project-desc-4">XIM在专业开发上迈出的坚实一步。高品质壁纸设计，融合游戏元素与艺术美学，为您的设备带来独特的视觉体验。</p>
+                            <a href="project-xim-wallpaper.html" class="horizontal-card-btn" aria-labelledby="project-title-4">
+                                查看详情
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- 文档中心 - 交互式卡片 -->
+        <section class="docs-section" id="docsSection">
+            <div class="section-header">
+                <h2 class="section-title">文档中心</h2>
+                <p class="section-desc">探索 XIM 的知识宝库</p>
+            </div>
+            
+            <div class="docs-container">
+                <div class="docs-main-card" id="docsMainCard">
+                    <div class="docs-icon">
+                        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                            <line x1="8" y1="7" x2="16" y2="7"/>
+                            <line x1="8" y1="11" x2="16" y2="11"/>
+                            <line x1="8" y1="15" x2="12" y2="15"/>
+                        </svg>
+                    </div>
+                    <h3 class="docs-title">XIM 文档中心</h3>
+                    <p class="docs-desc">一个巨大的文案展示库，你可以在这里找到 XIM 从创建到现在的所有可公开文案。历史、技术、设计文档一应俱全。</p>
+                    <div class="docs-stats">
+                        <div class="docs-stat">
+                            <span class="stat-num" data-count="27">0</span>
+                            <span class="stat-label">+ 文档</span>
+                        </div>
+                        <div class="docs-stat">
+                            <span class="stat-num" data-count="4">0</span>
+                            <span class="stat-label">年历史</span>
+                        </div>
+                    </div>
+                    <a href="xim-docs.html" class="docs-btn">
+                        <span>访问文档</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                </div>
+                
+                <div class="docs-features">
+                    <div class="docs-feature-card" tabindex="0">
+                        <div class="feature-icon">📚</div>
+                        <h4>历史文档</h4>
+                        <p>了解 XIM 从创建至今的发展历程</p>
+                    </div>
+                    <div class="docs-feature-card" tabindex="0">
+                        <div class="feature-icon">🔧</div>
+                        <h4>技术指南</h4>
+                        <p>详细的技术文档和使用教程</p>
+                    </div>
+                    <div class="docs-feature-card" tabindex="0">
+                        <div class="feature-icon">🎨</div>
+                        <h4>设计规范</h4>
+                        <p>视觉设计标准和品牌指南</p>
+                    </div>
+                    <div class="docs-feature-card" tabindex="0">
+                        <div class="feature-icon">❓</div>
+                        <h4>常见问题</h4>
+                        <p>FAQ 和故障排除指南</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- XIM New - 新闻动态与发展历程 -->
+        <section class="news-section" id="newsSection">
+            <div class="section-header">
+                <h2 class="section-title">XIM New & 发展历程</h2>
+                <p class="section-desc">探索 XIM 的最新动态与成长足迹</p>
+            </div>
+            
+            <div class="news-container">
+                <!-- 最新动态 -->
+                <div class="news-category">
+                    <h3 class="category-title">
+                        <span class="category-icon">📰</span>
+                        最新动态
+                    </h3>
+                    <div class="news-timeline">
+                        <div class="news-item" data-date="2024-12">
+                            <div class="news-date">
+                                <span class="month">2月</span>
+                                <span class="year">2026</span>
+                            </div>
+                            <div class="news-content">
+                                <h4>🎉 XIM 网站全新改版</h4>
+                                <p>你现在所访问的就是XIMWed2.1版本，它采用全新的视觉设计和交互体验，让浏览更加流畅</p>
+                            </div>
+                        </div>
+                        
+                        <div class="news-item" data-date="2025-01">
+                            <div class="news-date">
+                                <span class="month">1月</span>
+                                <span class="year">2025</span>
+                            </div>
+                            <div class="news-content">
+                                <h4>🚀 XIMWed2.0网页版本开放</h4>
+                                <p>XIMWed2.1网页版本开放，Github仓库已更新</p>
+                            </div>
+                        </div>
+                        
+                        <div class="news-item" data-date="2024-10">
+                            <div class="news-date">
+                                <span class="month">1月</span>
+                                <span class="year">2025</span>
+                            </div>
+                            <div class="news-content">
+                                <h4>🎨 XIMNightruin更新</h4>
+                                <p>XIMNightruin更新Github仓库的初始提交</p>
+                            </div>
+                        </div>
+                        
+                        <div class="news-item" data-date="2024-09">
+                            <div class="news-date">
+                                <span class="month">11月</span>
+                                <span class="year">2024</span>
+                            </div>
+                            <div class="news-content">
+                                <h4>📖 XIMWed1.0文档中心上线</h4>
+                                <p>整合所有历史文档，建立完整的文档库</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 发展历程 -->
+                <div class="news-category">
+                    <h3 class="category-title">
+                        <span class="category-icon">🌱</span>
+                        发展历程
+                    </h3>
+                    <div class="news-timeline history-timeline">
+                        <div class="news-item" data-year="2020">
+                            <div class="news-date">
+                                <span class="month">工作室成立</span>
+                                <span class="year">2023</span>
+                            </div>
+                            <div class="news-content">
+                                <h4>🛠️工作室成立</h4>
+                                <p>XIM工作室正式成立</p>
+                            </div>
+                        </div>
+                        
+                        <div class="news-item" data-year="2021">
+                            <div class="news-date">
+                                <span class="month">发布</span>
+                                <span class="year">2025·7·18</span>
+                            </div>
+                            <div class="news-content">
+                                <h4>🎐首个完整项目</h4>
+                                <p>发布MOR整合包2.0.0，它重写了MOR1.x.x，也确定了MOR今后的发展方向</p>
+                            </div>
+                        </div>
+                        
+                        <div class="news-item" data-year="2022">
+                            <div class="news-date">
+                                <span class="month">成长</span>
+                                <span class="year">2025·10·2</span>
+                            </div>
+                            <div class="news-content">
+                                <h4>⚔️加入GitHub</h4>
+                                <p>XIM工作室加入GitHub，开源项目</p>
+                            </div>
+                        </div>
+                        
+                        <div class="news-item" data-year="2023">
+                            <div class="news-date">
+                                <span class="month">完善</span>
+                                <span class="year">2026·1·17</span>
+                            </div>
+                            <div class="news-content">
+                                <h4>🐦‍⬛XIM Nightruin</h4>
+                                <p>XIM Nightruin发布首个长期维护版本-2.0.0，GitHub仓库开始开放Kubejs脚本</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="news-cta">
+                    <a href="xim-new.html" class="news-btn">
+                        <span>查看全部新闻</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 交互式数据计数器区域 -->
+        <section class="stats-section">
+            <div class="section-header">
+                <h2 class="section-title">数据展示</h2>
+                <p class="section-desc">滚动查看动态计数效果</p>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card" data-target="5">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-number">5</div>
+                    <div class="stat-label">成员数量</div>
+                    <div class="stat-suffix">+</div>
+                </div>
+                
+                <div class="stat-card" data-target="4">
+                    <div class="stat-icon">📦</div>
+                    <div class="stat-number">4</div>
+                    <div class="stat-label">项目发布</div>
+                    <div class="stat-suffix">+</div>
+                </div>
+                
+                <div class="stat-card" data-target="">
+                    <div class="stat-icon">⭐</div>
+                    <div class="stat-number">0</div>
+                    <div class="stat-label">满意度</div>
+                    <div class="stat-suffix">%</div>
+                </div>
+                
+                <div class="stat-card" data-target="未知">
+                    <div class="stat-icon">🕐</div>
+                    <div class="stat-number">0</div>
+                    <div class="stat-label">小时支持</div>
+                    <div class="stat-suffix">/7</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- XIM 部门 - 交互式展示 -->
+        <section class="departments-section" id="departmentsSection">
+            <div class="section-header">
+                <h2 class="section-title">XIM 部门</h2>
+                <p class="section-desc">了解 XIM 工作室的各个部门，点击卡片查看详情</p>
+            </div>
+            
+            <div class="departments-showcase">
+                <div class="dept-card" data-dept="art">
+                    <div class="dept-visual">
+                        <div class="dept-icon">🎨</div>
+                        <div class="dept-particles"></div>
+                    </div>
+                    <div class="dept-info">
+                        <h3>XIM Art</h3>
+                        <p>负责创意设计和视觉艺术，包括 UI/UX 设计、插画、动画和品牌设计</p>
+                        <div class="dept-tags">
+                            <span class="tag">设计</span>
+                            <span class="tag">插画</span>
+                            <span class="tag">动画</span>
+                        </div>
+                        <a href="xim-docs.html#xim-art" class="dept-link">
+                            了解更多
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="dept-card" data-dept="testing">
+                    <div class="dept-visual">
+                        <div class="dept-icon">🔍</div>
+                        <div class="dept-particles"></div>
+                    </div>
+                    <div class="dept-info">
+                        <h3>XIM Testing</h3>
+                        <p>专注于测试和质量保证，包括功能测试、性能测试、用户测试和质量监控</p>
+                        <div class="dept-tags">
+                            <span class="tag">测试</span>
+                            <span class="tag">QA</span>
+                            <span class="tag">监控</span>
+                        </div>
+                        <a href="xim-docs.html#xim-testing" class="dept-link">
+                            了解更多
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="dept-card" data-dept="technology">
+                    <div class="dept-visual">
+                        <div class="dept-icon">⚡</div>
+                        <div class="dept-particles"></div>
+                    </div>
+                    <div class="dept-info">
+                        <h3>XIM Technology</h3>
+                        <p>负责项目开发、技术解决方案和系统集成，是 XIM 的技术核心</p>
+                        <div class="dept-tags">
+                            <span class="tag">开发</span>
+                            <span class="tag">架构</span>
+                            <span class="tag">集成</span>
+                        </div>
+                        <a href="xim-docs.html#xim-technology" class="dept-link">
+                            了解更多
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 我们在折腾一些乱七八糟的东西 - 合并交互实验 -->
+        <section class="morphing-grid-section" id="experimentsSection">
+            <div class="section-header">
+                <h2 class="section-title">我们在折腾一些乱七八糟的东西</h2>
+                <p class="section-desc">"不好好写作业，尽折腾写乱七八糟的东西"（苦</p>
+            </div>
+
+            <!-- 交互实验区 -->
+            <div class="experiments-container">
+                <!-- 拖拽体验 -->
+                <div class="experiment-card draggable-experiment">
+                    <div class="experiment-header">
+                        <span class="experiment-icon">🖱️</span>
+                        <h3>拖拽它一下</h3>
+                    </div>
+                    <p class="experiment-desc">拖拽这个方块，它具有物理弹性效果</p>
+                    <div class="single-drag-container" id="singleDragContainer">
+                        <div class="single-drag-box" id="singleDragBox">
+                            <span class="drag-icon">✋</span>
+                            <span class="drag-text">拖拽我！</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 色彩实验室 -->
+                <div class="experiment-card color-experiment">
+                    <div class="experiment-header">
+                        <span class="experiment-icon">🎨</span>
+                        <h3>色彩实验室</h3>
+                    </div>
+                    <p class="experiment-desc">在下方区域移动鼠标改变颜色，点击保存配色</p>
+                    <div class="color-playground-area" id="colorPlaygroundArea">
+                        <div class="color-display" id="colorDisplay">#6366F1</div>
+                        <div class="color-saved-list" id="colorSavedList">
+                            <span class="saved-title">已保存:</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="morphing-grid">
+                <div class="morph-card">
+                    <div class="morph-card-icon">🎮</div>
+                    <h3 class="morph-card-title">Minecraft游戏开发</h3>
+                    <p class="morph-card-desc">脑子里的坏点子就每断过...</p>
+                </div>
+
+                <div class="morph-card">
+                    <div class="morph-card-icon">🛠️</div>
+                    <h3 class="morph-card-title">专注于新兴事物</h3>
+                    <p class="morph-card-desc">谁不喜欢新出来的东西呢</p>
+                </div>
+
+                <div class="morph-card">
+                    <div class="morph-card-icon">⚙️</div>
+                    <h3 class="morph-card-title">项目维护</h3>
+                    <p class="morph-card-desc">谁懂那种千辛万苦回到家里发现还有一堆BUG需要处理的救赎感...</p>
+                </div>
+
+                <div class="morph-card">
+                    <div class="morph-card-icon">⌛</div>
+                    <h3 class="morph-card-title">随意环境</h3>
+                    <p class="morph-card-desc">管他的呢，开完！！</p>
+                </div>
+
+                <div class="morph-card">
+                    <div class="morph-card-icon">📚</div>
+                    <h3 class="morph-card-title">XIM文档</h3>
+                    <p class="morph-card-desc">说白了，就是写了些乱七八糟的东西</p>
+                </div>
+
+                <div class="morph-card">
+                    <div class="morph-card-icon">🚀</div>
+                    <h3 class="morph-card-title">持续更新</h3>
+                    <p class="morph-card-desc">定期维护和更新（确信</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // 创建浮动粒子
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const particleCount = 30;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 5 + 's';
+                container.appendChild(particle);
+
+                // 粒子浮动动画
+                anime({
+                    targets: particle,
+                    translateY: [0, -100],
+                    translateX: () => anime.random(-50, 50),
+                    opacity: [0.3, 0],
+                    scale: [1, 0],
+                    duration: () => anime.random(3000, 6000),
+                    easing: 'easeOutQuad',
+                    loop: true,
+                    delay: () => anime.random(0, 3000)
+                });
+            }
+        }
+
+        // createDrawable 文字绘制动画
+        function initDrawableText() {
+            const titleText = 'XIM Studio';
+            const subtitleElement = document.getElementById('heroSubtitle');
+            const titleStroke = document.getElementById('titleStroke');
+            const typingText = document.querySelector('.typing-text');
+            const subtitleText = subtitleElement.textContent;
+            
+            // 先清空副标题，准备逐词显示
+            subtitleElement.innerHTML = '';
+            
+            // 将副标题分割成词
+            const words = subtitleText.split(/(\s+)/).filter(w => w.trim());
+            
+            // 创建词元素但不显示
+            words.forEach(word => {
+                const span = document.createElement('span');
+                span.className = 'word';
+                span.textContent = word + ' ';
+                subtitleElement.appendChild(span);
+            });
+            
+            // 初始状态：描边隐藏，打字文本为空
+            titleStroke.style.opacity = '0';
+            titleStroke.classList.remove('animated');
+            typingText.textContent = '';
+            
+            // 直接显示完整标题（禁用打字机效果）
+            typingText.textContent = titleText;
+            
+            // 创建时间轴
+            const tl = anime.timeline({
+                easing: 'easeOutExpo'
+            });
+            
+            // 1. 描边绘制动画 - 慢速优雅
+            tl.add({
+                targets: titleStroke,
+                opacity: [0, 1],
+                duration: 2000,  // 2秒描边
+                begin: () => {
+                    titleStroke.classList.add('animated');
+                }
+            }, 0)  // 立即开始
+            // 2. 标题淡入效果（替代打字机）
+            .add({
+                targets: typingText,
+                opacity: [0, 1],
+                scale: [0.9, 1],
+                duration: 1200,  // 1.2秒淡入
+                easing: 'easeOutExpo'
+            }, 500)  // 0.5秒后开始
+            // 3. 墨水扩散效果
+            .add({
+                targets: {},
+                duration: 100,
+                begin: function() {
+                    setTimeout(createInkSplash, 0);
+                }
+            }, 1500)  // 1.5秒后开始
+            // 4. 副标题逐词显示
+            .add({
+                targets: '.hero-subtitle .word',
+                opacity: [0, 1],
+                translateY: [20, 0],
+                duration: 800,  // 每个词0.8秒
+                delay: anime.stagger(100),  // 词间隔0.1秒
+                easing: 'easeOutQuad'
+            }, 2500)  // 2.5秒后开始
+            // 5. 滚动提示
+            .add({
+                targets: '.scroll-hint',
+                opacity: [0, 1],
+                translateY: [20, 0],
+                duration: 800,
+                easing: 'easeOutQuad'
+            }, 4000);  // 4秒后开始
+            
+            // 创建墨水扩散效果
+            function createInkSplash() {
+                const container = document.getElementById('inkContainer');
+                if (!container) return;
+                
+                const positions = [
+                    { x: '20%', y: '30%' },
+                    { x: '50%', y: '50%' },
+                    { x: '80%', y: '40%' },
+                    { x: '35%', y: '70%' },
+                    { x: '65%', y: '60%' }
+                ];
+                
+                positions.forEach((pos, index) => {
+                    setTimeout(() => {
+                        const splash = document.createElement('div');
+                        splash.className = 'ink-splash';
+                        splash.style.cssText = `
+                            position: absolute;
+                            left: ${pos.x};
+                            top: ${pos.y};
+                            width: 100px;
+                            height: 100px;
+                            margin-left: -50px;
+                            margin-top: -50px;
+                        `;
+                        container.appendChild(splash);
+                        
+                        // 触发动画
+                        requestAnimationFrame(() => {
+                            splash.classList.add('active');
+                        });
+                        
+                        // 清理
+                        setTimeout(() => {
+                            if (splash.parentNode) splash.remove();
+                        }, 1000);
+                    }, index * 100);
+                });
+            }
+        }
+
+        // 英雄区域动画（新的实现）
+        function initHeroAnimations() {
+            // 使用 createDrawable 效果
+            initDrawableText();
+        }
+
+        // 3D 轨道卡片系统
+        function initOrbitCards() {
+            const cards = document.querySelectorAll('.project-card-3d');
+            const cardCount = cards.length;
+            let currentIndex = 0;
+            let isAnimating = false;
+
+            function positionCards() {
+                cards.forEach((card, index) => {
+                    const offset = index - currentIndex;
+                    const absOffset = Math.abs(offset);
+                    
+                    // 计算位置
+                    const translateX = offset * 350;
+                    const translateZ = -absOffset * 200;
+                    const rotateY = offset * -15;
+                    const scale = 1 - absOffset * 0.15;
+                    const opacity = 1 - absOffset * 0.3;
+                    const zIndex = cardCount - absOffset;
+
+                    anime({
+                        targets: card,
+                        translateX: translateX,
+                        translateZ: translateZ,
+                        rotateY: rotateY,
+                        scale: Math.max(scale, 0.7),
+                        opacity: Math.max(opacity, 0.3),
+                        zIndex: zIndex,
+                        duration: 800,
+                        easing: 'easeOutExpo'
+                    });
+                });
+            }
+
+            // 初始位置
+            positionCards();
+
+            // 点击切换
+            cards.forEach((card, index) => {
+                card.addEventListener('click', () => {
+                    if (!isAnimating && index !== currentIndex) {
+                        isAnimating = true;
+                        currentIndex = index;
+                        positionCards();
+                        setTimeout(() => isAnimating = false, 800);
+                    }
+                });
+            });
+
+            // 鼠标悬停效果
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    anime({
+                        targets: card.querySelector('.card-inner'),
+                        rotateX: -5,
+                        duration: 400,
+                        easing: 'easeOutQuad'
+                    });
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    anime({
+                        targets: card.querySelector('.card-inner'),
+                        rotateX: 0,
+                        duration: 400,
+                        easing: 'easeOutQuad'
+                    });
+                });
+            });
+
+            // 自动轮播
+            setInterval(() => {
+                if (!isAnimating) {
+                    isAnimating = true;
+                    currentIndex = (currentIndex + 1) % cardCount;
+                    positionCards();
+                    setTimeout(() => isAnimating = false, 800);
+                }
+            }, 5000);
+        }
+
+        // 水平滚动视差 - 无障碍优化
+        function initHorizontalScroll() {
+            const section = document.getElementById('horizontalSection');
+            const track = document.getElementById('horizontalTrack');
+            const cards = document.querySelectorAll('.horizontal-card');
+            const prevBtn = document.querySelector('.carousel-prev');
+            const nextBtn = document.querySelector('.carousel-next');
+            const indicators = document.querySelectorAll('.indicator');
+            
+            let currentIndex = 0;
+            const totalCards = cards.length;
+            let isScrolling = false;
+
+            // 初始隐藏卡片
+            cards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateX(100px)';
+            });
+
+            // 更新当前活动卡片
+            function updateActiveCard(index, shouldScroll = true) {
+                currentIndex = Math.max(0, Math.min(index, totalCards - 1));
+                
+                // 更新指示器
+                indicators.forEach((indicator, i) => {
+                    indicator.classList.toggle('active', i === currentIndex);
+                    indicator.setAttribute('aria-selected', i === currentIndex);
+                });
+                
+                // 更新卡片焦点
+                cards.forEach((card, i) => {
+                    if (i === currentIndex) {
+                        card.setAttribute('tabindex', '0');
+                    } else {
+                        card.setAttribute('tabindex', '-1');
+                    }
+                });
+                
+                // 滚动到对应位置（仅在用户交互时）
+                if (shouldScroll && !isScrolling) {
+                    const sectionRect = section.getBoundingClientRect();
+                    const cardWidth = cards[0].offsetWidth + 64; // gap
+                    const targetScroll = section.offsetTop + (currentIndex / (totalCards - 1)) * (section.offsetHeight - window.innerHeight);
+                    
+                    window.scrollTo({
+                        top: targetScroll,
+                        behavior: 'smooth'
+                    });
+                }
+            }
+
+            // 按钮点击
+            prevBtn.addEventListener('click', () => {
+                updateActiveCard(currentIndex - 1);
+            });
+            
+            nextBtn.addEventListener('click', () => {
+                updateActiveCard(currentIndex + 1);
+            });
+            
+            // 指示器点击
+            indicators.forEach((indicator, index) => {
+                indicator.addEventListener('click', () => {
+                    updateActiveCard(index);
+                });
+            });
+
+            // 键盘导航
+            section.addEventListener('keydown', (e) => {
+                switch(e.key) {
+                    case 'ArrowLeft':
+                        e.preventDefault();
+                        updateActiveCard(currentIndex - 1);
+                        break;
+                    case 'ArrowRight':
+                        e.preventDefault();
+                        updateActiveCard(currentIndex + 1);
+                        break;
+                    case 'Home':
+                        e.preventDefault();
+                        updateActiveCard(0);
+                        break;
+                    case 'End':
+                        e.preventDefault();
+                        updateActiveCard(totalCards - 1);
+                        break;
+                }
+            });
+
+            let lastScrollY = window.scrollY;
+            let ticking = false;
+
+            function updateScroll() {
+                const rect = section.getBoundingClientRect();
+                const sectionTop = rect.top;
+                const sectionHeight = rect.height;
+                const windowHeight = window.innerHeight;
+
+                // 计算滚动进度 (0 到 1)
+                const scrollProgress = Math.max(0, Math.min(1, 
+                    -sectionTop / (sectionHeight - windowHeight)
+                ));
+
+                // 移动轨道
+                const maxTranslate = track.scrollWidth - window.innerWidth;
+                const translateX = -scrollProgress * maxTranslate;
+                
+                track.style.transform = `translateX(${translateX}px)`;
+
+                // 卡片入场动画
+                cards.forEach((card, index) => {
+                    const cardThreshold = index / cards.length;
+                    const cardProgress = (scrollProgress - cardThreshold + 0.2) * 3;
+                    const clampedProgress = Math.max(0, Math.min(1, cardProgress));
+
+                    card.style.opacity = clampedProgress;
+                    card.style.transform = `translateX(${(1 - clampedProgress) * 100}px)`;
+                    
+                    // 更新 aria-hidden
+                    card.setAttribute('aria-hidden', clampedProgress < 0.5);
+                });
+
+                // 更新当前索引
+                const newIndex = Math.round(scrollProgress * (totalCards - 1));
+                if (newIndex !== currentIndex) {
+                    currentIndex = newIndex;
+                    indicators.forEach((indicator, i) => {
+                        indicator.classList.toggle('active', i === currentIndex);
+                        indicator.setAttribute('aria-selected', i === currentIndex);
+                    });
+                }
+
+                ticking = false;
+            }
+
+            window.addEventListener('scroll', () => {
+                lastScrollY = window.scrollY;
+                if (!ticking) {
+                    isScrolling = true;
+                    window.requestAnimationFrame(() => {
+                        updateScroll();
+                        isScrolling = false;
+                    });
+                    ticking = true;
+                }
+            }, { passive: true });
+
+            // 初始调用（不滚动）
+            updateScroll();
+            updateActiveCard(0, false);
+        }
+
+        // 网格卡片动画
+        function initMorphCards() {
+            const cards = document.querySelectorAll('.morph-card');
+
+            // 交错入场动画
+            anime({
+                targets: cards,
+                opacity: [0, 1],
+                translateY: [50, 0],
+                scale: [0.9, 1],
+                duration: 800,
+                easing: 'easeOutExpo',
+                delay: anime.stagger(100, {start: 200})
+            });
+
+            // 滚动触发动画
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        anime({
+                            targets: entry.target,
+                            opacity: [0, 1],
+                            translateY: [30, 0],
+                            duration: 600,
+                            easing: 'easeOutQuad'
+                        });
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            cards.forEach(card => {
+                card.style.opacity = '0';
+                observer.observe(card);
+            });
+        }
+
+        // 鼠标视差效果
+        function initMouseParallax() {
+            const orbitContainer = document.getElementById('orbitContainer');
+            
+            document.addEventListener('mousemove', (e) => {
+                const { clientX, clientY } = e;
+                const { innerWidth, innerHeight } = window;
+                
+                const xPercent = (clientX / innerWidth - 0.5) * 2;
+                const yPercent = (clientY / innerHeight - 0.5) * 2;
+
+                anime({
+                    targets: '#orbitTrack',
+                    rotateY: xPercent * 5,
+                    rotateX: -yPercent * 5,
+                    duration: 500,
+                    easing: 'easeOutQuad'
+                });
+            });
+        }
+
+        // 动画计数器
+        function initCounters() {
+            const counters = document.querySelectorAll('.stat-card');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const card = entry.target;
+                        const target = parseInt(card.dataset.target);
+                        const numberEl = card.querySelector('.stat-number');
+                        const duration = 2000;
+                        const startTime = performance.now();
+                        
+                        function updateCounter(currentTime) {
+                            const elapsed = currentTime - startTime;
+                            const progress = Math.min(elapsed / duration, 1);
+                            
+                            // 使用 easeOutExpo 缓动
+                            const easeProgress = 1 - Math.pow(2, -10 * progress);
+                            const current = Math.floor(easeProgress * target);
+                            
+                            numberEl.textContent = current.toLocaleString();
+                            
+                            if (progress < 1) {
+                                requestAnimationFrame(updateCounter);
+                            } else {
+                                numberEl.textContent = target.toLocaleString();
+                            }
+                        }
+                        
+                        requestAnimationFrame(updateCounter);
+                        observer.unobserve(card);
+                    }
+                });
+            }, { threshold: 0.5 });
+            
+            counters.forEach(counter => observer.observe(counter));
+        }
+
+        // 单元素拖拽系统（带物理效果）
+        function initDraggableCards() {
+            const box = document.getElementById('singleDragBox');
+            if (!box) return;
+            
+            let isDragging = false;
+            let startX, startY;
+            let currentX = 0, currentY = 0;
+            let velocityX = 0, velocityY = 0;
+            let lastX, lastY;
+            let lastTime;
+            let animationId;
+            
+            function startDrag(e) {
+                isDragging = true;
+                box.style.cursor = 'grabbing';
+                
+                const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+                const clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+                
+                startX = clientX - currentX;
+                startY = clientY - currentY;
+                lastX = clientX;
+                lastY = clientY;
+                lastTime = performance.now();
+                
+                if (animationId) {
+                    cancelAnimationFrame(animationId);
+                }
+                
+                e.preventDefault();
+            }
+            
+            function drag(e) {
+                if (!isDragging) return;
+                
+                const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+                const clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+                
+                currentX = clientX - startX;
+                currentY = clientY - startY;
+                
+                const now = performance.now();
+                const dt = now - lastTime;
+                if (dt > 0) {
+                    velocityX = (clientX - lastX) / dt * 16;
+                    velocityY = (clientY - lastY) / dt * 16;
+                }
+                
+                lastX = clientX;
+                lastY = clientY;
+                lastTime = now;
+                
+                box.style.transform = `translate(${currentX}px, ${currentY}px)`;
+                
+                e.preventDefault();
+            }
+            
+            function endDrag() {
+                if (!isDragging) return;
+                isDragging = false;
+                box.style.cursor = 'grab';
+                
+                function springBack() {
+                    const springStrength = 0.08;
+                    const friction = 0.85;
+                    
+                    const forceX = -currentX * springStrength;
+                    const forceY = -currentY * springStrength;
+                    
+                    velocityX += forceX;
+                    velocityY += forceY;
+                    velocityX *= friction;
+                    velocityY *= friction;
+                    
+                    currentX += velocityX;
+                    currentY += velocityY;
+                    
+                    box.style.transform = `translate(${currentX}px, ${currentY}px)`;
+                    
+                    if (Math.abs(currentX) > 0.5 || Math.abs(currentY) > 0.5 || 
+                        Math.abs(velocityX) > 0.1 || Math.abs(velocityY) > 0.1) {
+                        animationId = requestAnimationFrame(springBack);
+                    } else {
+                        box.style.transform = '';
+                        currentX = 0;
+                        currentY = 0;
+                    }
+                }
+                
+                springBack();
+            }
+            
+            box.addEventListener('mousedown', startDrag);
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('mouseup', endDrag);
+            
+            box.addEventListener('touchstart', startDrag, { passive: false });
+            document.addEventListener('touchmove', drag, { passive: false });
+            document.addEventListener('touchend', endDrag);
+        }
+
+        // 交互式时间轴（已合并到 XIM New，此函数保留但不执行）
+        function initTimeline() {
+            // 时间轴功能已合并到 XIM New 部分
+            // 此函数保留以避免调用错误，但不执行任何操作
+            console.log('时间轴功能已合并到 XIM New 部分');
+        }
+
+        // 色彩实验室 - 简化修复版
+        function initColorPlayground() {
+            console.log('初始化色彩实验室...');
+            
+            const area = document.getElementById('colorPlaygroundArea');
+            const display = document.getElementById('colorDisplay');
+            const savedList = document.getElementById('colorSavedList');
+            
+            console.log('元素检查:', { area: !!area, display: !!display, savedList: !!savedList });
+            
+            if (!area || !display || !savedList) {
+                console.error('色彩实验室元素未找到');
+                return;
+            }
+            
+            let savedColorsList = [];
+            
+            // HSL 转 HEX
+            function hslToHex(h, s, l) {
+                l /= 100;
+                const a = s * Math.min(l, 1 - l) / 100;
+                const f = n => {
+                    const k = (n + h / 30) % 12;
+                    const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+                    return Math.round(255 * color).toString(16).padStart(2, '0');
+                };
+                return `#${f(0)}${f(8)}${f(4)}`.toUpperCase();
+            }
+            
+            // 更新颜色
+            function updateColor(e) {
+                console.log('updateColor 被调用');
+                
+                const rect = area.getBoundingClientRect();
+                let clientX, clientY;
+                
+                if (e.type.includes('touch')) {
+                    if (e.touches && e.touches.length > 0) {
+                        clientX = e.touches[0].clientX;
+                        clientY = e.touches[0].clientY;
+                    } else {
+                        return;
+                    }
+                } else {
+                    clientX = e.clientX;
+                    clientY = e.clientY;
+                }
+                
+                const x = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+                const y = Math.max(0, Math.min(1, (clientY - rect.top) / rect.height));
+                
+                const hue = Math.round(x * 360);
+                const saturation = Math.round(50 + y * 50);
+                
+                const color1 = `hsl(${hue}, ${saturation}%, 50%)`;
+                const color2 = `hsl(${(hue + 30) % 360}, ${saturation}%, 50%)`;
+                const hex = hslToHex(hue, saturation, 50);
+                
+                area.style.background = `linear-gradient(135deg, ${color1} 0%, ${color2} 100%)`;
+                display.textContent = hex;
+                
+                console.log('颜色更新:', hex, '位置:', x, y);
+            }
+            
+            // 保存颜色
+            function saveColor(e) {
+                console.log('saveColor 被调用');
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const color = display.textContent;
+                console.log('保存颜色:', color);
+                
+                if (savedColorsList.length >= 5) {
+                    savedColorsList.shift();
+                    const firstDot = savedList.querySelector('.saved-color-dot');
+                    if (firstDot) firstDot.remove();
+                }
+                
+                savedColorsList.push(color);
+                
+                const colorDot = document.createElement('div');
+                colorDot.className = 'saved-color-dot';
+                colorDot.style.backgroundColor = color;
+                colorDot.title = `点击恢复: ${color}`;
+                
+                colorDot.addEventListener('click', (evt) => {
+                    evt.stopPropagation();
+                    area.style.background = color;
+                    display.textContent = color;
+                });
+                
+                savedList.appendChild(colorDot);
+                
+                if (typeof anime !== 'undefined') {
+                    anime({
+                        targets: colorDot,
+                        scale: [0, 1],
+                        duration: 300,
+                        easing: 'easeOutBack'
+                    });
+                }
+            }
+            
+            // 绑定事件 - 使用捕获阶段确保事件被触发
+            area.addEventListener('mousemove', updateColor, false);
+            area.addEventListener('mouseenter', updateColor, false);
+            
+            area.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+                updateColor(e);
+            }, { passive: false });
+            
+            area.addEventListener('touchstart', (e) => {
+                updateColor(e);
+            }, { passive: true });
+            
+            area.addEventListener('click', saveColor, false);
+            
+            // 初始设置一个颜色
+            area.style.background = 'linear-gradient(135deg, #6366f1 0%, #ec4899 100%)';
+            
+            console.log('色彩实验室初始化完成');
+        }
+
+        // XIM 部门动画与交互
+        function initDepartmentsAnimations() {
+            const deptCards = document.querySelectorAll('.dept-card');
+            
+            // 入场动画
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry, index) => {
+                    if (entry.isIntersecting) {
+                        anime({
+                            targets: entry.target,
+                            opacity: [0, 1],
+                            translateY: [50, 0],
+                            scale: [0.9, 1],
+                            duration: 800,
+                            delay: index * 150,
+                            easing: 'easeOutExpo'
+                        });
+                        
+                        // 创建粒子效果
+                        createDeptParticles(entry.target);
+                        
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.2 });
+            
+            deptCards.forEach(card => {
+                card.style.opacity = '0';
+                observer.observe(card);
+                
+                // 悬停效果
+                card.addEventListener('mouseenter', () => {
+                    // 图标动画
+                    anime({
+                        targets: card.querySelector('.dept-icon'),
+                        scale: 1.2,
+                        rotate: '-10deg',
+                        duration: 400,
+                        easing: 'easeOutBack'
+                    });
+                    
+                    // 粒子浮动
+                    const particles = card.querySelectorAll('.dept-particle');
+                    particles.forEach((p, i) => {
+                        anime({
+                            targets: p,
+                            translateY: -20 - Math.random() * 30,
+                            translateX: (Math.random() - 0.5) * 40,
+                            opacity: [0.6, 0],
+                            duration: 1000 + Math.random() * 500,
+                            delay: i * 50,
+                            easing: 'easeOutQuad'
+                        });
+                    });
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    anime({
+                        targets: card.querySelector('.dept-icon'),
+                        scale: 1,
+                        rotate: '0deg',
+                        duration: 400,
+                        easing: 'easeOutQuad'
+                    });
+                });
+                
+                // 点击效果
+                card.addEventListener('click', (e) => {
+                    // 防止点击链接时触发
+                    if (e.target.closest('.dept-link')) return;
+                    
+                    anime({
+                        targets: card,
+                        scale: [1, 0.95, 1],
+                        duration: 300,
+                        easing: 'easeOutQuad'
+                    });
+                    
+                    // 创建涟漪效果
+                    createRipple(e, card);
+                });
+            });
+            
+            // 创建部门粒子
+            function createDeptParticles(card) {
+                const container = card.querySelector('.dept-particles');
+                if (!container) return;
+                
+                for (let i = 0; i < 8; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'dept-particle';
+                    particle.style.left = Math.random() * 100 + '%';
+                    particle.style.top = Math.random() * 100 + '%';
+                    particle.style.opacity = '0';
+                    container.appendChild(particle);
+                }
+            }
+            
+            // 创建涟漪效果
+            function createRipple(e, card) {
+                const rect = card.getBoundingClientRect();
+                const ripple = document.createElement('div');
+                ripple.style.cssText = `
+                    position: absolute;
+                    border-radius: 50%;
+                    background: rgba(99, 102, 241, 0.3);
+                    transform: scale(0);
+                    pointer-events: none;
+                    width: 100px;
+                    height: 100px;
+                    left: ${e.clientX - rect.left - 50}px;
+                    top: ${e.clientY - rect.top - 50}px;
+                `;
+                card.appendChild(ripple);
+                
+                anime({
+                    targets: ripple,
+                    scale: [0, 4],
+                    opacity: [0.5, 0],
+                    duration: 600,
+                    easing: 'easeOutQuad',
+                    complete: () => ripple.remove()
+                });
+            }
+        }
+
+        // 文档中心动画
+        function initDocsAnimations() {
+            const docsMainCard = document.getElementById('docsMainCard');
+            const docsFeatures = document.querySelectorAll('.docs-feature-card');
+            const statNums = document.querySelectorAll('.docs-stat .stat-num');
+
+            // 主卡片入场动画
+            const cardObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        anime({
+                            targets: docsMainCard,
+                            opacity: [0, 1],
+                            translateY: [50, 0],
+                            scale: [0.9, 1],
+                            duration: 1000,
+                            easing: 'easeOutExpo'
+                        });
+
+                        // 统计数字动画
+                        statNums.forEach((num, index) => {
+                            const target = parseInt(num.dataset.count);
+                            anime({
+                                targets: num,
+                                innerHTML: [0, target],
+                                round: 1,
+                                duration: 2000,
+                                delay: index * 200,
+                                easing: 'easeOutExpo'
+                            });
+                        });
+
+                        cardObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.3 });
+
+            cardObserver.observe(docsMainCard);
+
+            // 特性卡片交错入场
+            const featureObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        anime({
+                            targets: docsFeatures,
+                            opacity: [0, 1],
+                            translateX: [30, 0],
+                            duration: 600,
+                            delay: anime.stagger(100),
+                            easing: 'easeOutQuad'
+                        });
+                        featureObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.2 });
+
+            const docsFeaturesContainer = document.querySelector('.docs-features');
+            if (docsFeaturesContainer) {
+                featureObserver.observe(docsFeaturesContainer);
+            }
+
+            // 特性卡片悬停效果
+            docsFeatures.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    anime({
+                        targets: card.querySelector('.feature-icon'),
+                        scale: 1.2,
+                        rotate: '10deg',
+                        duration: 300,
+                        easing: 'easeOutBack'
+                    });
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    anime({
+                        targets: card.querySelector('.feature-icon'),
+                        scale: 1,
+                        rotate: '0deg',
+                        duration: 300,
+                        easing: 'easeOutQuad'
+                    });
+                });
+            });
+        }
+
+        // XIM New 新闻动画
+        function initNewsAnimations() {
+            const newsItems = document.querySelectorAll('.news-item');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry, index) => {
+                    if (entry.isIntersecting) {
+                        anime({
+                            targets: entry.target,
+                            opacity: [0, 1],
+                            translateX: [-30, 0],
+                            duration: 600,
+                            delay: index * 150,
+                            easing: 'easeOutQuad'
+                        });
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.2 });
+
+            newsItems.forEach(item => {
+                item.style.opacity = '0';
+                observer.observe(item);
+            });
+
+            // 新闻项悬停效果
+            newsItems.forEach(item => {
+                item.addEventListener('mouseenter', () => {
+                    anime({
+                        targets: item.querySelector('.news-content'),
+                        scale: 1.02,
+                        duration: 300,
+                        easing: 'easeOutQuad'
+                    });
+                });
+
+                item.addEventListener('mouseleave', () => {
+                    anime({
+                        targets: item.querySelector('.news-content'),
+                        scale: 1,
+                        duration: 300,
+                        easing: 'easeOutQuad'
+                    });
+                });
+            });
+
+            // 查看全部新闻按钮动画
+            const newsBtn = document.querySelector('.news-btn');
+            if (newsBtn) {
+                const btnObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            anime({
+                                targets: newsBtn,
+                                opacity: [0, 1],
+                                translateY: [20, 0],
+                                scale: [0.9, 1],
+                                duration: 600,
+                                easing: 'easeOutBack'
+                            });
+                            btnObserver.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.5 });
+
+                btnObserver.observe(newsBtn);
+            }
+        }
+
+        // 初始化所有动画
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            initHeroAnimations();
+            initOrbitCards();
+            initDepartmentsAnimations();
+            initDocsAnimations();
+            initNewsAnimations();
+            initHorizontalScroll();
+            initMorphCards();
+            initMouseParallax();
+            initCounters();
+            initDraggableCards();
+            initTimeline();
+            initColorPlayground();
+
+            console.log('✨ 创意布局 Demo 初始化完成');
+        });
+    </script>
+</body>
+</html>

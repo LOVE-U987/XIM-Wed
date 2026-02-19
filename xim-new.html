@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XIM New - XIM工作室</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Anime.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="js/main.js" type="module" defer></script>
+</head>
+<body class="layout1">
+    <!-- 导航栏 -->
+    <nav id="navbar">
+        <div class="container">
+            <div class="logo">
+                <img src="资源/XIM图标.jpg" alt="XIM工作室">
+                <span>XIM工作室</span>
+            </div>
+            <div class="nav-links">
+                <a href="index.html#home">首页</a>
+                <a href="index.html#about">关于我们</a>
+                <a href="index.html#projects">项目</a>
+                <a href="index.html#docs">XIM文档</a>
+                <a href="xim-new.html" class="active">XIM New</a>
+                <a href="index.html#departments">XIM部门</a>
+            </div>
+            <div class="layout-switcher">
+                <button class="layout-btn active" data-layout="layout1" title="分层卡片式布局">
+                    <i class="fas fa-layer-group"></i>
+                </button>
+                <button class="layout-btn" data-layout="layout2" title="不对称动态布局">
+                    <i class="fas fa-th-large"></i>
+                </button>
+                <button class="layout-btn" data-layout="layout3" title="沉浸式全屏布局">
+                    <i class="fas fa-expand"></i>
+                </button>
+            </div>
+            <div class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <div class="mobile-nav-content">
+                <a href="index.html#home" class="mobile-nav-link">首页</a>
+                <a href="index.html#about" class="mobile-nav-link">关于我们</a>
+                <a href="index.html#projects" class="mobile-nav-link">项目</a>
+                <a href="index.html#docs" class="mobile-nav-link">XIM文档</a>
+                <a href="xim-new.html" class="mobile-nav-link active">XIM New</a>
+                <a href="index.html#departments" class="mobile-nav-link">XIM部门</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 页面标题 -->
+    <section id="news-header">
+        <div class="container">
+            <h1>XIM New</h1>
+            <p class="section-subtitle">最新动态与新闻资讯</p>
+        </div>
+    </section>
+
+    <!-- 新闻内容区域 -->
+    <section id="news-content">
+        <div class="container">
+            <!-- 最新整合包更新 -->
+            <div style="background-color: var(--bg-primary); border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); border: 1px solid var(--border-color); transition: all 0.3s ease; margin-bottom: 30px;">
+                <div style="background-image: url('资源/【哲风壁纸】云-动漫女孩-天空.png'); background-size: cover; background-position: center; height: 180px; position: relative;">
+                    <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.5);"></div>
+                    <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 20px; background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);">
+                        <h3 style="color: white; font-size: 1.6rem; margin: 0;">XIM整合包最新更新</h3>
+                        <p style="color: rgba(255, 255, 255, 0.9); font-size: 1rem; margin: 8px 0 0;">探索全新功能和改进</p>
+                    </div>
+                </div>
+                <div style="padding: 25px;">
+                    <p style="color: var(--text-secondary); font-size: 1rem; line-height: 1.6; margin-bottom: 20px;">XIM整合包迎来重大更新，包含全新功能、性能优化和视觉改进。技术部和美工部共同合作，为您带来更好的游戏体验。</p>
+                    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                        <a href="xim-modpack-updates.html" class="btn" style="background-color: var(--accent-color); color: white; padding: 10px 25px; border-radius: 50px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s ease; text-decoration: none; font-size: 0.9rem;">
+                            查看详细更新
+                        </a>
+                        <a href="https://modrinth.com/modpack/xim/version/1.16.3" class="btn" style="background-color: transparent; color: var(--accent-color); border: 2px solid var(--accent-color); padding: 10px 25px; border-radius: 50px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s ease; text-decoration: none; font-size: 0.9rem;">
+                            立即下载
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2023 XIM工作室. 保留所有权利.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

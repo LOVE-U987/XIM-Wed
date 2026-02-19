@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>重定向中...</title>
+    <!-- 301永久重定向 -->
+    <meta http-equiv="refresh" content="0; url={{redirect_url}}">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="robots" content="noindex, nofollow">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #1a1a1a;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+        .container {
+            max-width: 600px;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #4a9eff;
+        }
+        p {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            opacity: 0.8;
+        }
+        .redirect-url {
+            font-family: monospace;
+            background-color: #2d2d2d;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 20px 0;
+            word-break: break-all;
+        }
+        a {
+            color: #4a9eff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .loading {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(74, 158, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #4a9eff;
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 20px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="loading"></div>
+        <h1>页面正在重定向...</h1>
+        <p>您即将被重定向到XIM文档中的对应项目页面如果您没有自动跳转，请点击下方链接：</p>
+        <div class="redirect-url">{{redirect_url}}</div>
+        <p><a href="{{redirect_url}}">点击此处手动跳转</a></p>
+    </div>
+    
+    <script>
+        // JavaScript重定向作为备选方案，确保在所有浏览器中都能正常工作
+        window.onload = function() {
+            window.location.replace("{{redirect_url}}");
+        };
+    </script>
+</body>
+</html>
