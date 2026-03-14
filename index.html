@@ -246,6 +246,98 @@
             60% { transform: translateY(-5px); }
         }
 
+        /* XIM纪念卡入口按钮 - 3D立体风格 */
+        .memorial-entrance {
+            position: absolute;
+            bottom: 8rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            perspective: 1000px;
+        }
+
+        .memorial-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(236, 72, 153, 0.2) 100%);
+            border: 2px solid rgba(99, 102, 241, 0.5);
+            border-radius: 50px;
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            backdrop-filter: blur(10px);
+            transform-style: preserve-3d;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            box-shadow: 
+                0 10px 30px rgba(99, 102, 241, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .memorial-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.4) 0%, rgba(236, 72, 153, 0.4) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .memorial-btn:hover {
+            transform: translateZ(20px) rotateX(-5deg) scale(1.05);
+            border-color: rgba(99, 102, 241, 0.8);
+            box-shadow:
+                0 20px 40px rgba(99, 102, 241, 0.4),
+                0 0 60px rgba(99, 102, 241, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .memorial-btn:hover::before {
+            opacity: 1;
+        }
+
+        .memorial-btn-icon {
+            width: 24px;
+            height: 24px;
+            transition: transform 0.3s ease;
+        }
+
+        .memorial-btn:hover .memorial-btn-icon {
+            transform: rotateY(360deg);
+        }
+
+        .memorial-btn-text {
+            position: relative;
+            z-index: 1;
+        }
+
+        .memorial-btn-glow {
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--primary));
+            background-size: 200% 200%;
+            border-radius: 50px;
+            opacity: 0;
+            z-index: -1;
+            filter: blur(10px);
+            animation: glowRotate 3s linear infinite;
+            transition: opacity 0.3s ease;
+        }
+
+        .memorial-btn:hover .memorial-btn-glow {
+            opacity: 0.5;
+        }
+
+        @keyframes glowRotate {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
         /* 项目展示区域 */
         .projects-showcase {
             position: relative;
@@ -265,6 +357,39 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            display: inline-block;
+            position: relative;
+        }
+
+        /* 章节标题3D立体文字效果 */
+        .section-title::before {
+            content: attr(data-text);
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.3) 0%, rgba(236, 72, 153, 0.3) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            transform: translateZ(-10px) translateX(3px) translateY(3px);
+            filter: blur(2px);
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .section-title.visible::before {
+            opacity: 1;
+        }
+
+        .section-title.visible {
+            animation: titleFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes titleFloat {
+            0%, 100% { transform: translateZ(0px) rotateX(0deg); }
+            50% { transform: translateZ(20px) rotateX(2deg); }
         }
 
         .section-desc {
@@ -414,6 +539,37 @@
             transform: translateX(0);
         }
 
+        /* 3D卡片鼠标跟随倾斜效果 */
+        .project-card-3d {
+            transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .project-card-3d .card-inner {
+            transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.3s ease;
+        }
+
+        .project-card-3d:hover .card-inner {
+            box-shadow:
+                0 25px 50px -12px rgba(0, 0, 0, 0.5),
+                0 0 40px rgba(99, 102, 241, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        /* 卡片3D厚度效果 */
+        .card-thickness {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.3) 0%, rgba(236, 72, 153, 0.3) 100%);
+            border-radius: 24px;
+            transform: translateZ(-10px);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .project-card-3d:hover .card-thickness {
+            opacity: 1;
+        }
+
         /* 水平滚动区域 - 无障碍优化 */
         .horizontal-scroll-section {
             position: relative;
@@ -452,7 +608,10 @@
         .carousel-control:hover {
             background: var(--primary);
             border-color: var(--primary);
-            transform: translateY(-50%) scale(1.1);
+            transform: translateY(-50%) scale(1.15) translateZ(30px);
+            box-shadow:
+                0 15px 35px rgba(99, 102, 241, 0.4),
+                0 0 30px rgba(99, 102, 241, 0.2);
         }
 
         .carousel-control:focus-visible {
@@ -461,7 +620,25 @@
         }
 
         .carousel-control:active {
-            transform: translateY(-50%) scale(0.95);
+            transform: translateY(-50%) scale(0.95) translateZ(10px);
+            box-shadow:
+                0 5px 15px rgba(99, 102, 241, 0.3),
+                inset 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 轮播按钮3D立体效果 */
+        .carousel-control {
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .carousel-control svg {
+            transform: translateZ(10px);
+            transition: transform 0.3s ease;
+        }
+
+        .carousel-control:hover svg {
+            transform: translateZ(20px) scale(1.1);
         }
 
         .carousel-prev {
@@ -537,6 +714,45 @@
             border-radius: 8px;
         }
 
+        /* 水平卡片3D效果 */
+        .horizontal-card {
+            transform-style: preserve-3d;
+            perspective: 1500px;
+        }
+
+        .horizontal-card-image {
+            transform: translateZ(30px);
+            transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.5s ease;
+            box-shadow:
+                0 20px 40px rgba(0, 0, 0, 0.3),
+                0 0 0 1px rgba(99, 102, 241, 0.1);
+        }
+
+        .horizontal-card:hover .horizontal-card-image {
+            transform: translateZ(50px) rotateY(-5deg);
+            box-shadow:
+                0 30px 60px rgba(0, 0, 0, 0.4),
+                0 0 40px rgba(99, 102, 241, 0.2);
+        }
+
+        .horizontal-card-content {
+            transform: translateZ(20px);
+            transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .horizontal-card:hover .horizontal-card-content {
+            transform: translateZ(40px);
+        }
+
+        .horizontal-card-number {
+            transform: translateZ(10px);
+            transition: transform 0.5s ease;
+        }
+
+        .horizontal-card:hover .horizontal-card-number {
+            transform: translateZ(30px) scale(1.1);
+        }
+
         .horizontal-card-image {
             position: relative;
             height: 100%;
@@ -597,8 +813,17 @@
 
         .horizontal-card-btn:hover {
             background: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+            transform: translateY(-4px) translateZ(10px);
+            box-shadow:
+                0 15px 35px rgba(99, 102, 241, 0.4),
+                0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .horizontal-card-btn:active {
+            transform: translateY(-1px) translateZ(5px) scale(0.98);
+            box-shadow:
+                0 5px 15px rgba(99, 102, 241, 0.3),
+                inset 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         /* XIM 部门区域 */
@@ -662,6 +887,37 @@
 
         .dept-card:hover .dept-icon {
             transform: scale(1.2) rotate(-10deg);
+        }
+
+        /* 部门卡片3D效果 */
+        .dept-card {
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .dept-card:hover {
+            transform: translateY(-10px) scale(1.02) rotateX(5deg);
+            box-shadow:
+                0 30px 60px rgba(0, 0, 0, 0.3),
+                0 0 40px rgba(99, 102, 241, 0.15);
+        }
+
+        .dept-card .dept-visual {
+            transform: translateZ(20px);
+            transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .dept-card:hover .dept-visual {
+            transform: translateZ(30px);
+        }
+
+        .dept-card .dept-info {
+            transform: translateZ(10px);
+            transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .dept-card:hover .dept-info {
+            transform: translateZ(20px);
         }
 
         .dept-particles {
@@ -848,6 +1104,43 @@
             pointer-events: auto;
             touch-action: none;
             user-select: none;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            transition: transform 0.3s ease;
+        }
+
+        .color-playground-area:hover {
+            transform: rotateX(5deg) rotateY(-5deg) translateZ(20px);
+            box-shadow: 0 30px 60px rgba(99, 102, 241, 0.3);
+        }
+
+        /* 3D色彩立方体效果 */
+        .color-cube {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            transform-style: preserve-3d;
+            animation: cubeRotate 8s linear infinite;
+        }
+
+        .color-cube-face {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+        }
+
+        .color-cube-face:nth-child(1) { transform: rotateY(0deg) translateZ(30px); background: rgba(255, 255, 255, 0.2); }
+        .color-cube-face:nth-child(2) { transform: rotateY(90deg) translateZ(30px); background: rgba(255, 255, 255, 0.15); }
+        .color-cube-face:nth-child(3) { transform: rotateY(180deg) translateZ(30px); background: rgba(255, 255, 255, 0.1); }
+        .color-cube-face:nth-child(4) { transform: rotateY(-90deg) translateZ(30px); background: rgba(255, 255, 255, 0.15); }
+        .color-cube-face:nth-child(5) { transform: rotateX(90deg) translateZ(30px); background: rgba(255, 255, 255, 0.2); }
+        .color-cube-face:nth-child(6) { transform: rotateX(-90deg) translateZ(30px); background: rgba(255, 255, 255, 0.1); }
+
+        @keyframes cubeRotate {
+            0% { transform: rotateX(0deg) rotateY(0deg); }
+            100% { transform: rotateX(360deg) rotateY(360deg); }
         }
 
         .color-display {
@@ -889,12 +1182,17 @@
             border-radius: 50%;
             cursor: pointer;
             border: 2px solid rgba(255, 255, 255, 0.3);
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            transform-style: preserve-3d;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
 
         .saved-color-dot:hover {
-            transform: scale(1.2);
+            transform: scale(1.3) translateZ(20px) rotateY(180deg);
             border-color: #fff;
+            box-shadow:
+                0 10px 30px rgba(0, 0, 0, 0.3),
+                0 0 20px rgba(255, 255, 255, 0.3);
         }
 
         .morphing-grid {
@@ -923,6 +1221,8 @@
             overflow: hidden;
             transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
             cursor: pointer;
+            transform-style: preserve-3d;
+            perspective: 1000px;
         }
 
         .morph-card::before {
@@ -932,6 +1232,7 @@
             background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, transparent 50%, rgba(236, 72, 153, 0.1) 100%);
             opacity: 0;
             transition: opacity 0.3s;
+            transform: translateZ(-20px);
         }
 
         .morph-card:hover::before {
@@ -939,9 +1240,24 @@
         }
 
         .morph-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            border-color: rgba(99, 102, 241, 0.3);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+            transform: translateY(-15px) translateZ(40px) rotateX(5deg);
+            border-color: rgba(99, 102, 241, 0.5);
+            box-shadow:
+                0 40px 80px rgba(0, 0, 0, 0.4),
+                0 0 50px rgba(99, 102, 241, 0.2);
+        }
+
+        /* Morph卡片波浪动画 */
+        @keyframes morphWave {
+            0%, 100% { transform: translateZ(0px) rotateX(0deg); }
+            25% { transform: translateZ(10px) rotateX(2deg); }
+            50% { transform: translateZ(20px) rotateX(0deg); }
+            75% { transform: translateZ(10px) rotateX(-2deg); }
+        }
+
+        .morph-card.visible {
+            animation: morphWave 4s ease-in-out infinite;
+            animation-delay: calc(var(--card-index, 0) * 0.2s);
         }
 
         .morph-card-icon {
@@ -954,11 +1270,14 @@
             justify-content: center;
             font-size: 1.5rem;
             margin-bottom: 1.5rem;
-            transition: transform 0.3s;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            transform: translateZ(30px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
         }
 
         .morph-card:hover .morph-card-icon {
-            transform: scale(1.1) rotate(-5deg);
+            transform: translateZ(60px) scale(1.2) rotateY(360deg);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.5);
         }
 
         .morph-card-title {
@@ -1177,7 +1496,9 @@
             margin-bottom: 4rem;
             cursor: pointer;
             opacity: 0.5;
-            transition: all 0.5s ease;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            transform-style: preserve-3d;
+            perspective: 1000px;
         }
 
         .timeline-item:nth-child(odd) {
@@ -1187,6 +1508,47 @@
 
         .timeline-item.active {
             opacity: 1;
+            transform: translateZ(30px);
+        }
+
+        .timeline-item:hover {
+            opacity: 1;
+            transform: translateZ(50px) scale(1.02);
+        }
+
+        .timeline-item:nth-child(odd):hover {
+            transform: translateZ(50px) scale(1.02) rotateY(-3deg);
+        }
+
+        .timeline-item:nth-child(even):hover {
+            transform: translateZ(50px) scale(1.02) rotateY(3deg);
+        }
+
+        /* 时间线3D内容效果 */
+        .timeline-content {
+            transform: translateZ(20px);
+            transition: all 0.4s ease;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .timeline-item:hover .timeline-content {
+            transform: translateZ(40px);
+            border-color: rgba(99, 102, 241, 0.5);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .timeline-dot {
+            transform: translateZ(30px);
+            transition: all 0.4s ease;
+        }
+
+        .timeline-item:hover .timeline-dot {
+            transform: translateZ(60px) scale(1.3);
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.8);
         }
 
         .timeline-item.active .timeline-dot {
@@ -1458,6 +1820,8 @@
             transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
             position: relative;
             overflow: hidden;
+            transform-style: preserve-3d;
+            perspective: 1000px;
         }
 
         .docs-feature-card::before {
@@ -1467,6 +1831,7 @@
             background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, transparent 50%);
             opacity: 0;
             transition: opacity 0.3s;
+            transform: translateZ(-10px);
         }
 
         .docs-feature-card:hover::before,
@@ -1476,9 +1841,11 @@
 
         .docs-feature-card:hover,
         .docs-feature-card:focus {
-            transform: translateY(-5px) scale(1.02);
-            border-color: rgba(99, 102, 241, 0.3);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            transform: translateY(-8px) rotateX(5deg) rotateY(-3deg) translateZ(20px);
+            border-color: rgba(99, 102, 241, 0.5);
+            box-shadow:
+                0 25px 50px rgba(0, 0, 0, 0.3),
+                0 0 30px rgba(99, 102, 241, 0.2);
         }
 
         .docs-feature-card:focus-visible {
@@ -1489,6 +1856,13 @@
         .docs-feature-card .feature-icon {
             font-size: 2rem;
             margin-bottom: 0.75rem;
+            transform: translateZ(30px);
+            transition: transform 0.4s ease;
+            display: inline-block;
+        }
+
+        .docs-feature-card:hover .feature-icon {
+            transform: translateZ(50px) scale(1.2) rotateY(360deg);
         }
 
         .docs-feature-card h4 {
@@ -1558,7 +1932,9 @@
             position: relative;
             padding: 1.5rem 0 1.5rem 2rem;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            transform-style: preserve-3d;
+            perspective: 1000px;
         }
 
         .news-item::before {
@@ -1576,12 +1952,30 @@
         }
 
         .news-item:hover::before {
-            transform: translateX(-5px) scale(1.3);
-            box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+            transform: translateX(-5px) scale(1.5);
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.8);
         }
 
         .news-item:hover {
-            transform: translateX(10px);
+            transform: translateX(15px) translateZ(30px) rotateY(-5deg);
+        }
+
+        .news-item .news-date {
+            transform: translateZ(20px);
+            transition: transform 0.4s ease;
+        }
+
+        .news-item:hover .news-date {
+            transform: translateZ(40px) scale(1.1);
+        }
+
+        .news-item h4 {
+            transform: translateZ(10px);
+            transition: transform 0.4s ease;
+        }
+
+        .news-item:hover h4 {
+            transform: translateZ(30px);
         }
 
         .news-date {
@@ -1759,6 +2153,18 @@
                 </div>
                 <p class="hero-subtitle" id="heroSubtitle">一群来自各地的杂鱼，感谢它们的帮助</p>
             </div>
+            
+            <!-- XIM纪念卡入口 -->
+            <div class="memorial-entrance">
+                <a href="xim-memorial.html" class="memorial-btn" title="进入XIM纪念卡页面">
+                    <div class="memorial-btn-glow"></div>
+                    <svg class="memorial-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    </svg>
+                    <span class="memorial-btn-text">XIM 纪念卡</span>
+                </a>
+            </div>
+            
             <div class="scroll-hint">
                 <span>向下滚动探索</span>
                 <svg class="scroll-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1901,7 +2307,7 @@
                             <span class="stat-label">年历史</span>
                         </div>
                     </div>
-                    <a href="xim-docs.html" class="docs-btn">
+                    <a href="xim-protocol.html" class="docs-btn">
                         <span>访问文档</span>
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -1921,14 +2327,14 @@
                         <p>详细的技术文档和使用教程</p>
                     </div>
                     <div class="docs-feature-card" tabindex="0">
-                        <div class="feature-icon">🎨</div>
-                        <h4>设计规范</h4>
-                        <p>视觉设计标准和品牌指南</p>
+                        <div class="feature-icon">🐦‍⬛</div>
+                        <h4>行为规范</h4>
+                        <p>XIM成员基本守则</p>
                     </div>
                     <div class="docs-feature-card" tabindex="0">
-                        <div class="feature-icon">❓</div>
-                        <h4>常见问题</h4>
-                        <p>FAQ 和故障排除指南</p>
+                        <div class="feature-icon">⚔️</div>
+                        <h4>XIM协议</h4>
+                        <p>XIM的通用协议，定义了XIM与外界的交互规则</p>
                     </div>
                 </div>
             </div>
@@ -2118,7 +2524,7 @@
                             <span class="tag">插画</span>
                             <span class="tag">动画</span>
                         </div>
-                        <a href="xim-docs.html#xim-art" class="dept-link">
+                        <a href="xim-departments.html#xim-art" class="dept-link">
                             了解更多
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -2140,7 +2546,7 @@
                             <span class="tag">QA</span>
                             <span class="tag">监控</span>
                         </div>
-                        <a href="xim-docs.html#xim-testing" class="dept-link">
+                        <a href="xim-departments.html#xim-testing" class="dept-link">
                             了解更多
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -2162,7 +2568,7 @@
                             <span class="tag">架构</span>
                             <span class="tag">集成</span>
                         </div>
-                        <a href="xim-docs.html#xim-technology" class="dept-link">
+                        <a href="xim-departments.html#xim-technology" class="dept-link">
                             了解更多
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -2235,7 +2641,7 @@
                 <div class="morph-card">
                     <div class="morph-card-icon">⌛</div>
                     <h3 class="morph-card-title">随意环境</h3>
-                    <p class="morph-card-desc">管他的呢，开完！！</p>
+                    <p class="morph-card-desc">管他的呢，开玩！！</p>
                 </div>
 
                 <div class="morph-card">
@@ -2402,10 +2808,34 @@
             }
         }
 
+        // XIM纪念卡按钮3D入场动画
+        function initMemorialButtonAnimation() {
+            const memorialBtn = document.querySelector('.memorial-entrance');
+            if (!memorialBtn) return;
+
+            // 初始状态
+            memorialBtn.style.opacity = '0';
+            memorialBtn.style.transform = 'translateX(-50%) translateY(50px) rotateX(45deg)';
+
+            // 延迟显示，等待标题动画完成
+            setTimeout(() => {
+                anime({
+                    targets: memorialBtn,
+                    opacity: [0, 1],
+                    translateY: [50, 0],
+                    rotateX: [45, 0],
+                    duration: 1200,
+                    easing: 'easeOutElastic(1, .6)'
+                });
+            }, 2500);
+        }
+
         // 英雄区域动画（新的实现）
         function initHeroAnimations() {
             // 使用 createDrawable 效果
             initDrawableText();
+            // 初始化纪念卡按钮动画
+            initMemorialButtonAnimation();
         }
 
         // 3D 轨道卡片系统
@@ -2681,11 +3111,11 @@
         // 鼠标视差效果
         function initMouseParallax() {
             const orbitContainer = document.getElementById('orbitContainer');
-            
+
             document.addEventListener('mousemove', (e) => {
                 const { clientX, clientY } = e;
                 const { innerWidth, innerHeight } = window;
-                
+
                 const xPercent = (clientX / innerWidth - 0.5) * 2;
                 const yPercent = (clientY / innerHeight - 0.5) * 2;
 
@@ -2695,6 +3125,71 @@
                     rotateX: -yPercent * 5,
                     duration: 500,
                     easing: 'easeOutQuad'
+                });
+            });
+        }
+
+        // 3D滚动视差效果
+        function initScrollParallax() {
+            const heroSection = document.querySelector('.hero-section');
+            const heroContent = document.querySelector('.hero-content');
+            const memorialEntrance = document.querySelector('.memorial-entrance');
+
+            window.addEventListener('scroll', () => {
+                const scrollY = window.scrollY;
+                const heroHeight = heroSection?.offsetHeight || 0;
+                const scrollPercent = Math.min(scrollY / heroHeight, 1);
+
+                // Hero区域3D淡出效果
+                if (heroContent && scrollY < heroHeight) {
+                    const translateZ = -scrollPercent * 200;
+                    const opacity = 1 - scrollPercent;
+                    const rotateX = scrollPercent * 10;
+
+                    heroContent.style.transform = `perspective(1000px) translateZ(${translateZ}px) rotateX(${rotateX}deg)`;
+                    heroContent.style.opacity = opacity;
+                }
+
+                // 纪念卡按钮视差
+                if (memorialEntrance && scrollY < heroHeight) {
+                    const translateY = scrollPercent * 100;
+                    memorialEntrance.style.transform = `translateX(-50%) translateY(${translateY}px)`;
+                    memorialEntrance.style.opacity = 1 - scrollPercent;
+                }
+            }, { passive: true });
+        }
+
+        // 3D卡片鼠标跟随倾斜效果
+        function initCardTiltEffect() {
+            const cards = document.querySelectorAll('.project-card-3d, .dept-card, .horizontal-card');
+
+            cards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+
+                    const rotateX = (y - centerY) / centerY * -10;
+                    const rotateY = (x - centerX) / centerX * 10;
+
+                    const inner = card.querySelector('.card-inner, .dept-visual, .horizontal-card-image');
+                    if (inner) {
+                        inner.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(20px)`;
+                    } else {
+                        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(20px)`;
+                    }
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    const inner = card.querySelector('.card-inner, .dept-visual, .horizontal-card-image');
+                    if (inner) {
+                        inner.style.transform = '';
+                    } else {
+                        card.style.transform = '';
+                    }
                 });
             });
         }
@@ -3263,6 +3758,8 @@
             initHorizontalScroll();
             initMorphCards();
             initMouseParallax();
+            initScrollParallax();
+            initCardTiltEffect();
             initCounters();
             initDraggableCards();
             initTimeline();

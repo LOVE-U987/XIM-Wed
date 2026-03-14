@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XIM历史 - XIM工作室</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/docs-new.css">
+    <link rel="stylesheet" href="vendor/font-awesome/all.min.css">
+</head>
+<body class="docs-page">
+    <!-- 顶部工具栏 -->
+    <header class="docs-header">
+        <div class="header-left">
+            <button class="sidebar-toggle" id="sidebarToggle" title="切换侧边栏">
+                <i class="fas fa-bars"></i>
+            </button>
+            <a href="index.html" class="logo">
+                <img src="资源/XIM图标.jpg" alt="XIM">
+                <span>XIM历史</span>
+            </a>
+        </div>
+        
+        <div class="header-center">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="globalSearch" placeholder="搜索文档...">
+                <kbd>Ctrl K</kbd>
+            </div>
+        </div>
+        
+        <div class="header-right">
+            <div class="font-size-control">
+                <button class="icon-btn" id="fontDecrease" title="缩小字体">
+                    <i class="fas fa-font" style="font-size: 0.8em;"></i>
+                </button>
+                <span class="font-size-display">100%</span>
+                <button class="icon-btn" id="fontIncrease" title="放大字体">
+                    <i class="fas fa-font" style="font-size: 1.2em;"></i>
+                </button>
+            </div>
+            
+            <div class="layout-control">
+                <button class="icon-btn" id="layoutToggle" title="切换布局">
+                    <i class="fas fa-columns"></i>
+                </button>
+            </div>
+            
+            <button class="icon-btn" id="themeToggle" title="切换主题">
+                <i class="fas fa-moon"></i>
+            </button>
+            
+            <a href="index.html" class="btn btn-outline btn-sm">
+                <i class="fas fa-home"></i>
+                <span>主页</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- 主布局容器 -->
+    <div class="docs-layout" id="docsLayout">
+        <!-- 左侧边栏 - 目录导航 -->
+        <aside class="docs-sidebar" id="docsSidebar">
+            <div class="sidebar-resize-handle" id="sidebarResizeHandle"></div>
+            
+            <div class="sidebar-header">
+                <h3>文档目录</h3>
+                <button class="icon-btn collapse-all" id="collapseAll" title="全部折叠">
+                    <i class="fas fa-compress-alt"></i>
+                </button>
+            </div>
+            
+            <!-- 快速导航 -->
+            <div class="quick-nav">
+                <a href="xim-protocol.html" class="quick-link">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>代码协议</span>
+                </a>
+                <a href="xim-projects.html" class="quick-link">
+                    <i class="fas fa-cogs"></i>
+                    <span>项目页</span>
+                </a>
+                <a href="xim-departments.html" class="quick-link">
+                    <i class="fas fa-users"></i>
+                    <span>部门介绍</span>
+                </a>
+                <a href="xim-history.html" class="quick-link active">
+                    <i class="fas fa-history"></i>
+                    <span>创建历史</span>
+                </a>
+            </div>
+            
+            <!-- 详细目录 -->
+            <nav class="docs-nav" id="docsNav">
+                <ul class="nav-tree">
+                    <li class="nav-item has-children expanded">
+                        <a href="#xim-history" class="nav-link">
+                            <i class="fas fa-chevron-right toggle-icon"></i>
+                            <span>1. XIM 创建历史</span>
+                        </a>
+                        <ul class="nav-children">
+                            <li><a href="#xim-origins" class="nav-link">1.1 我们是谁</a></li>
+                            <li><a href="#xim-name-origin" class="nav-link">1.2 名称由来</a></li>
+                        </ul>
+                    </li>
+                    
+                    <li class="nav-item has-children">
+                        <a href="#xim-additional-info" class="nav-link">
+                            <i class="fas fa-chevron-right toggle-icon"></i>
+                            <span>2. 补充信息</span>
+                        </a>
+                        <ul class="nav-children">
+                            <li><a href="#xim-privacy" class="nav-link">2.1 隐私声明</a></li>
+                            <li><a href="#xim-rules" class="nav-link">2.2 成员守则</a></li>
+                            <li><a href="#xim-tech-stack" class="nav-link">2.3 技术栈</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            
+            <!-- 侧边栏底部信息 -->
+            <div class="sidebar-footer">
+                <div class="version-info">
+                    <span>文档版本 v2.0</span>
+                    <span>最后更新 2025-11-30</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 中间内容区 -->
+        <main class="docs-content" id="docsContent">
+            <!-- 面包屑导航 -->
+            <nav class="breadcrumb" id="breadcrumb">
+                <a href="index.html">首页</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="xim-history.html">XIM历史</a>
+            </nav>
+            
+            <!-- 页面标题 -->
+            <div class="page-header">
+                <h1>XIM 创建历史</h1>
+                <p class="page-description">甜甜圈工会的灵魂继承者 - 我们的故事与历程</p>
+                <div class="page-meta">
+                    <span class="meta-item">
+                        <i class="fas fa-calendar"></i>
+                        最后更新: 2025-11-30
+                    </span>
+                    <span class="meta-item">
+                        <i class="fas fa-code-branch"></i>
+                        版本: v2.0
+                    </span>
+                    <span class="meta-item">
+                        <i class="fas fa-clock"></i>
+                        阅读时间: 约 5 分钟
+                    </span>
+                </div>
+            </div>
+            
+            <!-- 文档内容 -->
+            <div class="content-body">
+                <!-- XIM 创建历史 -->
+                <section id="xim-history" class="doc-section">
+                    <div class="section-header">
+                        <span class="section-number">01</span>
+                        <h2>XIM 创建历史</h2>
+                    </div>
+                    <div class="section-content">
+                        <div class="history-timeline" id="xim-origins">
+                            <div class="timeline-header">
+                                <h3>我们是谁</h3>
+                                <p class="timeline-subtitle">从"甜甜圈工会"到XIM工作室</p>
+                            </div>
+                            
+                            <div class="timeline-story">
+                                <p class="lead">这事得从"甜甜圈工会"讲起——几年前我们在别人的 MC 服务器上攒的工会，服务器一关，群也就散了。但有几个刺头觉得不过瘾，拉着会长原地重组，起了个名叫 XIM。</p>
+                                
+                                <div class="story-section">
+                                    <h4><i class="fas fa-doughnut"></i> 甜甜圈工会的起源</h4>
+                                    <p>在很久以前的某个Minecraft服务器上，一群志同道合的玩家聚集在一起，组建了一个名为"甜甜圈工会"的组织。那时的我们，只是想在游戏中找到一个归属，一起探索、建造、冒险。</p>
+                                </div>
+
+                                <div class="story-section">
+                                    <h4><i class="fas fa-users-cog"></i> 重组与新生</h4>
+                                    <p>服务器关闭后，原本的工会群也随之沉寂。但有几个人不甘心就这样结束，他们拉着会长，决定重新组建一个团队。这一次，他们想要做得更专业、更有组织——于是，XIM工作室诞生了。</p>
+                                </div>
+
+                                <div class="story-section">
+                                    <h4><i class="fas fa-rocket"></i> 现在的我们</h4>
+                                    <p>如今的XIM工作室已经从一个小小的游戏工会，发展成为一个专注于Minecraft整合包开发的技术团队。我们有自己的项目、有自己的部门、有自己的目标。</p>
+                                </div>
+                                
+                                <div class="team-overview">
+                                    <h4>团队构成</h4>
+                                    <div class="team-stats-grid">
+                                        <div class="team-stat">
+                                            <span class="stat-number">5</span>
+                                            <span class="stat-desc">总人数</span>
+                                        </div>
+                                        <div class="team-stat">
+                                            <span class="stat-number">3</span>
+                                            <span class="stat-desc">部门</span>
+                                        </div>
+                                        <div class="team-stat">
+                                            <span class="stat-number">2</span>
+                                            <span class="stat-desc">17岁</span>
+                                        </div>
+                                        <div class="team-stat">
+                                            <span class="stat-number">1</span>
+                                            <span class="stat-desc">吉祥物</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="highlight-box">
+                                    <i class="fas fa-lightbulb"></i>
+                                    <p>我们有会长的 PPT，有吉祥物的表情包，还有六个对模组游戏死性不改的脑瓜。</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="history-section" id="xim-name-origin">
+                            <h3>为什么我们叫 XIM？</h3>
+                            <div class="section-content">
+                                <p>这三个字母成立时就没啥高深含义。当时会长还在用 X 开头的游戏 ID，开发整合包总得有个名字。他思前想后三四天，一拍脑门："就叫'X的整合包'吧！"</p>
+                                <p>但这名字对内对外都不太像话，于是会长把它扔给翻译，鬼知道怎么翻的，英文缩写就成了 XIM。总之，我们就这么"名正言顺"地用上了。</p>
+                                
+                                <div class="name-evolution">
+                                    <div class="evolution-step">
+                                        <span class="step-number">1</span>
+                                        <div class="step-content">
+                                            <h4>X的整合包</h4>
+                                            <p>最初的临时名称，源于会长X开头的游戏ID</p>
+                                        </div>
+                                    </div>
+                                    <div class="evolution-arrow">
+                                        <i class="fas fa-arrow-right"></i>
+                                    </div>
+                                    <div class="evolution-step">
+                                        <span class="step-number">2</span>
+                                        <div class="step-content">
+                                            <h4>翻译过程</h4>
+                                            <p>神秘的翻译环节...</p>
+                                        </div>
+                                    </div>
+                                    <div class="evolution-arrow">
+                                        <i class="fas fa-arrow-right"></i>
+                                    </div>
+                                    <div class="evolution-step">
+                                        <span class="step-number">3</span>
+                                        <div class="step-content">
+                                            <h4>XIM</h4>
+                                            <p>最终的正式名称</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 补充信息 -->
+                <section id="xim-additional-info" class="doc-section">
+                    <div class="section-header">
+                        <span class="section-number">02</span>
+                        <h2>补充信息</h2>
+                    </div>
+                    <div class="section-content">
+                        <div class="info-tabs">
+                            <div class="tab-buttons">
+                                <button class="tab-btn active" data-tab="privacy">隐私声明</button>
+                                <button class="tab-btn" data-tab="rules">成员守则</button>
+                                <button class="tab-btn" data-tab="tech">技术栈</button>
+                            </div>
+                            
+                            <div class="tab-content">
+                                <div class="tab-panel active" id="privacy">
+                                    <h4 id="xim-privacy">成员隐私收集声明</h4>
+                                    <p>我们尊重每个成员的个人信息。公开的信息都经过本人同意，信息所有人有权随时要求我们撤回。已离开的成员也可以自由决定是否保留其信息。</p>
+                                    
+                                    <div class="privacy-points">
+                                        <div class="privacy-item">
+                                            <i class="fas fa-check-circle text-green"></i>
+                                            <span>信息公开需经本人同意</span>
+                                        </div>
+                                        <div class="privacy-item">
+                                            <i class="fas fa-check-circle text-green"></i>
+                                            <span>成员有权要求撤回信息</span>
+                                        </div>
+                                        <div class="privacy-item">
+                                            <i class="fas fa-check-circle text-green"></i>
+                                            <span>离职成员可自主决定信息保留</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="tab-panel" id="rules">
+                                    <h4 id="xim-rules">成员基本守则</h4>
+                                    <ol class="rules-list">
+                                        <li>
+                                            <strong>请假制度：</strong>
+                                            <p>内部测试或其他活动无法参加时，向所在部部长或任一在线成员口头说明原因即可。</p>
+                                        </li>
+                                        <li>
+                                            <strong>文案修改机制：</strong>
+                                            <p>修改或新增 XIM 现有文案、项目，需获得成员同意。意见不统一时，投票决定。</p>
+                                        </li>
+                                    </ol>
+                                </div>
+                                
+                                <div class="tab-panel" id="tech">
+                                    <h4 id="xim-tech-stack">项目技术栈与成员</h4>
+                                    <div class="project-list">
+                                        <div class="project-item-compact">
+                                            <span class="project-name">MOR</span>
+                                            <span class="project-tech">Java</span>
+                                            <span class="project-members">陌路Molu、Hzl</span>
+                                        </div>
+                                        <div class="project-item-compact">
+                                            <span class="project-name">MOR Setting</span>
+                                            <span class="project-tech">MC资源包</span>
+                                            <span class="project-members">陌路Molu</span>
+                                        </div>
+                                        <div class="project-item-compact">
+                                            <span class="project-name">MOR Error</span>
+                                            <span class="project-tech">Java/JavaScript</span>
+                                            <span class="project-members">陌路Molu</span>
+                                        </div>
+                                        <div class="project-item-compact">
+                                            <span class="project-name">XIM Wallpaper</span>
+                                            <span class="project-tech">HTML/JavaScript</span>
+                                            <span class="project-members">陌路Molu、米、熠曲封卑</span>
+                                        </div>
+                                        <div class="project-item-compact">
+                                            <span class="project-name">[XIM Nightruin] XIM·夜墟</span>
+                                            <span class="project-tech">Java/JavaScript</span>
+                                            <span class="project-members">陌路Molu、米、HZL</span>
+                                        </div>
+                                        <div class="project-item-compact">
+                                            <span class="project-name">XIM Tool</span>
+                                            <span class="project-tech">Python</span>
+                                            <span class="project-members">陌路Molu</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            
+            <!-- 页面底部导航 -->
+            <div class="page-nav">
+                <a href="xim-departments.html" class="page-nav-prev">
+                    <i class="fas fa-arrow-left"></i>
+                    <div>
+                        <span>上一页</span>
+                        <strong>部门介绍</strong>
+                    </div>
+                </a>
+                <a href="index.html" class="page-nav-next">
+                    <div>
+                        <span>返回</span>
+                        <strong>主页</strong>
+                    </div>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </main>
+
+        <!-- 右侧目录大纲 - 仅在大屏幕显示 -->
+        <aside class="docs-outline" id="docsOutline">
+            <h4>本页目录</h4>
+            <nav class="outline-nav" id="outlineNav">
+                <!-- 动态生成 -->
+            </nav>
+        </aside>
+    </div>
+
+    <!-- 遮罩层 -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- 返回顶部按钮 -->
+    <button class="back-to-top" id="backToTop" title="返回顶部">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- 阅读进度条 -->
+    <div class="reading-progress" id="readingProgress"></div>
+
+    <!-- 脚本 -->
+    <script src="js/docs-new.js"></script>
+</body>
+</html>

@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XIM协议 - XIM工作室</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/docs-new.css">
+    <link rel="stylesheet" href="vendor/font-awesome/all.min.css">
+</head>
+<body class="docs-page">
+    <!-- 顶部工具栏 -->
+    <header class="docs-header">
+        <div class="header-left">
+            <button class="sidebar-toggle" id="sidebarToggle" title="切换侧边栏">
+                <i class="fas fa-bars"></i>
+            </button>
+            <a href="index.html" class="logo">
+                <img src="资源/XIM图标.jpg" alt="XIM">
+                <span>XIM协议</span>
+            </a>
+        </div>
+        
+        <div class="header-center">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="globalSearch" placeholder="搜索文档...">
+                <kbd>Ctrl K</kbd>
+            </div>
+        </div>
+        
+        <div class="header-right">
+            <div class="font-size-control">
+                <button class="icon-btn" id="fontDecrease" title="缩小字体">
+                    <i class="fas fa-font" style="font-size: 0.8em;"></i>
+                </button>
+                <span class="font-size-display">100%</span>
+                <button class="icon-btn" id="fontIncrease" title="放大字体">
+                    <i class="fas fa-font" style="font-size: 1.2em;"></i>
+                </button>
+            </div>
+            
+            <div class="layout-control">
+                <button class="icon-btn" id="layoutToggle" title="切换布局">
+                    <i class="fas fa-columns"></i>
+                </button>
+            </div>
+            
+            <button class="icon-btn" id="themeToggle" title="切换主题">
+                <i class="fas fa-moon"></i>
+            </button>
+            
+            <a href="index.html" class="btn btn-outline btn-sm">
+                <i class="fas fa-home"></i>
+                <span>主页</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- 主布局容器 -->
+    <div class="docs-layout" id="docsLayout">
+        <!-- 左侧边栏 - 目录导航 -->
+        <aside class="docs-sidebar" id="docsSidebar">
+            <div class="sidebar-resize-handle" id="sidebarResizeHandle"></div>
+            
+            <div class="sidebar-header">
+                <h3>文档目录</h3>
+                <button class="icon-btn collapse-all" id="collapseAll" title="全部折叠">
+                    <i class="fas fa-compress-alt"></i>
+                </button>
+            </div>
+            
+            <!-- 快速导航 -->
+            <div class="quick-nav">
+                <a href="xim-protocol.html" class="quick-link active">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>代码协议</span>
+                </a>
+                <a href="xim-projects.html" class="quick-link">
+                    <i class="fas fa-cogs"></i>
+                    <span>项目页</span>
+                </a>
+                <a href="xim-departments.html" class="quick-link">
+                    <i class="fas fa-users"></i>
+                    <span>部门介绍</span>
+                </a>
+                <a href="xim-history.html" class="quick-link">
+                    <i class="fas fa-history"></i>
+                    <span>创建历史</span>
+                </a>
+            </div>
+            
+            <!-- 详细目录 -->
+            <nav class="docs-nav" id="docsNav">
+                <ul class="nav-tree">
+                    <li class="nav-item has-children expanded">
+                        <a href="#xim-code-protocol" class="nav-link">
+                            <i class="fas fa-chevron-right toggle-icon"></i>
+                            <span>1. XIM Studio 代码协议</span>
+                        </a>
+                        <ul class="nav-children">
+                            <li><a href="#overview" class="nav-link">1.1 协议目的</a></li>
+                            <li class="has-children">
+                                <a href="#core-concepts" class="nav-link">
+                                    <i class="fas fa-chevron-right toggle-icon"></i>
+                                    <span>1.2 代码类型与权限</span>
+                                </a>
+                                <ul class="nav-children">
+                                    <li><a href="#concept-1" class="nav-link">访问码</a></li>
+                                    <li><a href="#concept-2" class="nav-link">信任码</a></li>
+                                    <li><a href="#concept-3" class="nav-link">工作码</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#code-format" class="nav-link">1.3 代码格式规范</a></li>
+                            <li><a href="#data-structures" class="nav-link">1.4 使用周期与失效</a></li>
+                            <li><a href="#api" class="nav-link">1.5 获取与申请流程</a></li>
+                            <li><a href="#usage" class="nav-link">1.6 分享与合规条款</a></li>
+                            <li><a href="#best-practices" class="nav-link">1.7 联系渠道</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            
+            <!-- 侧边栏底部信息 -->
+            <div class="sidebar-footer">
+                <div class="version-info">
+                    <span>文档版本 v2.0</span>
+                    <span>最后更新 2025-11-30</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 中间内容区 -->
+        <main class="docs-content" id="docsContent">
+            <!-- 面包屑导航 -->
+            <nav class="breadcrumb" id="breadcrumb">
+                <a href="index.html">首页</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="xim-protocol.html">XIM协议</a>
+            </nav>
+            
+            <!-- 页面标题 -->
+            <div class="page-header">
+                <h1>XIM Studio 代码协议</h1>
+                <p class="page-description">甜甜圈工会的灵魂继承者 - 完整的代码协议与权限说明</p>
+                <div class="page-meta">
+                    <span class="meta-item">
+                        <i class="fas fa-calendar"></i>
+                        最后更新: 2025-11-30
+                    </span>
+                    <span class="meta-item">
+                        <i class="fas fa-code-branch"></i>
+                        版本: v2.0
+                    </span>
+                    <span class="meta-item">
+                        <i class="fas fa-clock"></i>
+                        阅读时间: 约 5 分钟
+                    </span>
+                </div>
+            </div>
+            
+            <!-- 文档内容 -->
+            <div class="content-body">
+                <!-- XIM Studio 代码协议 -->
+                <section id="xim-code-protocol" class="doc-section">
+                    <div class="section-header">
+                        <span class="section-number">01</span>
+                        <h2>XIM Studio 代码协议</h2>
+                    </div>
+                    <div class="section-content">
+                        <p class="lead">XIM Studio 代码（XIM Studio-code）用于在本工作室生态内区分「信任用户」与「普通成员」身份，并据此授予对应资源的访问权限。</p>
+                        
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle"></i>
+                            <div>
+                                <strong>协议说明</strong>
+                                <p>鉴于工作室已公开多数代码仓库，惟处于开发或待验证阶段之项目尚不成熟，故部分资源仅向持有 XIM Studio 代码之内部人员开放。</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 协议目的 -->
+                <section id="overview" class="doc-section">
+                    <h3>1.1 协议目的</h3>
+                    <div class="section-content">
+                        <p>XIM Studio 代码（XIM Studio-code）用于在本工作室生态内区分「信任用户」与「普通成员」身份，并据此授予对应资源的访问权限。</p>
+                        <p>鉴于工作室已公开多数代码仓库，惟处于开发或待验证阶段之项目尚不成熟，故部分资源仅向持有 XIM Studio 代码之内部人员开放。</p>
+                    </div>
+                </section>
+
+                <!-- 代码类型与权限矩阵 -->
+                <section id="core-concepts" class="doc-section">
+                    <h3>1.2 代码类型与权限矩阵</h3>
+                    <div class="section-content">
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>代码类型</th>
+                                        <th>适用人群</th>
+                                        <th>权限范围</th>
+                                        <th>有效期</th>
+                                        <th>备注</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="badge badge-blue">访问码</span></td>
+                                        <td>外部测试者</td>
+                                        <td>开发预览页、公开文件、已开放项目</td>
+                                        <td><span class="badge badge-green">永久</span></td>
+                                        <td>—</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="badge badge-yellow">信任码</span></td>
+                                        <td>信任用户</td>
+                                        <td>内部文件、非公开分支、灰度功能</td>
+                                        <td><span class="badge badge-orange">短期</span></td>
+                                        <td>须绑定访问码</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="badge badge-red">工作码</span></td>
+                                        <td>核心开发组</td>
+                                        <td>全部内部资源、生产环境、CI/CD</td>
+                                        <td><span class="badge badge-green">永久</span></td>
+                                        <td>禁止外泄</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="cards-grid">
+                            <div class="info-card">
+                                <div class="card-icon blue">
+                                    <i class="fas fa-key"></i>
+                                </div>
+                                <h4>访问码</h4>
+                                <p><strong>格式：</strong>小写英文 + 四位数字</p>
+                                <p><strong>示例：</strong><code>teacher1021</code></p>
+                                <p><strong>权限：</strong>开发预览页、公开文件</p>
+                            </div>
+                            
+                            <div class="info-card">
+                                <div class="card-icon yellow">
+                                    <i class="fas fa-shield-alt"></i>
+                                </div>
+                                <h4>信任码</h4>
+                                <p><strong>格式：</strong>大写字母 + 四至五位数字</p>
+                                <p><strong>示例：</strong><code>CGW-1077</code></p>
+                                <p><strong>权限：</strong>内部文件、灰度功能</p>
+                            </div>
+                            
+                            <div class="info-card">
+                                <div class="card-icon red">
+                                    <i class="fas fa-lock"></i>
+                                </div>
+                                <h4>工作码</h4>
+                                <p><strong>格式：</strong>同信任码格式</p>
+                                <p><strong>级别：</strong><code>internal</code></p>
+                                <p><strong>权限：</strong>全部内部资源</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 代码格式规范 -->
+                <section id="code-format" class="doc-section">
+                    <h3>1.3 代码格式规范</h3>
+                    <div class="section-content">
+                        <ul class="feature-list">
+                            <li>
+                                <i class="fas fa-check-circle text-blue"></i>
+                                <span><strong>访问码</strong>：小写英文单词 + 四位数字，示例 <code>teacher1021</code></span>
+                            </li>
+                            <li>
+                                <i class="fas fa-check-circle text-yellow"></i>
+                                <span><strong>信任码</strong>：大写字母 + 四至五位数字，示例 <code>CGW-1077</code></span>
+                            </li>
+                            <li>
+                                <i class="fas fa-check-circle text-red"></i>
+                                <span><strong>工作码</strong>：格式同信任码，惟系统内部标记为 <code>internal</code> 级别</span>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- 使用周期与失效规则 -->
+                <section id="data-structures" class="doc-section">
+                    <h3>1.4 使用周期与失效规则</h3>
+                    <div class="section-content">
+                        <ol class="numbered-list">
+                            <li>访问码对应之小范围测试项目结束后，项目级限制将自动解除，原代码仍保留查看权限</li>
+                            <li>信任码与工作码于分发时，将明确告知「有效期」及「可访问仓库列表」</li>
+                            <li>任何代码一经触发「恶意分享」检测（包括但不限于仓库日志异常、下载 IP 异常等），将被立即吊销，恕不另行通知</li>
+                        </ol>
+                    </div>
+                </section>
+
+                <!-- 获取与申请流程 -->
+                <section id="api" class="doc-section">
+                    <h3>1.5 获取与申请流程</h3>
+                    <div class="section-content">
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>申请对象</th>
+                                        <th>必要条件</th>
+                                        <th>处理时效</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>访问码</td>
+                                        <td>说明用途即可</td>
+                                        <td>1–2 工作日</td>
+                                    </tr>
+                                    <tr>
+                                        <td>信任码</td>
+                                        <td>① 已持有访问码 ② 说明具体用途</td>
+                                        <td>2–3 工作日</td>
+                                    </tr>
+                                    <tr>
+                                        <td>工作码</td>
+                                        <td>① 内部 HR 备案 ② 组长实名担保</td>
+                                        <td>3–5 工作日</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <div>
+                                <strong>申请须知</strong>
+                                <p>若 4 个工作日未获回复，可再次提交申请或直接致信 <strong>Studio Lead</strong>：Love_U2025@outlook.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 分享与合规条款 -->
+                <section id="usage" class="doc-section">
+                    <h3>1.6 分享与合规条款</h3>
+                    <div class="section-content">
+                        <div class="cards-grid">
+                            <div class="info-card border-blue">
+                                <h4><i class="fas fa-share-alt text-blue"></i> 访问码</h4>
+                                <p>允许公开分享，但禁止用于刷单、爬取等非测试目的</p>
+                            </div>
+                            <div class="info-card border-yellow">
+                                <h4><i class="fas fa-user-shield text-yellow"></i> 信任码</h4>
+                                <p>仅限申请人及其直属团队使用，不得二次分发</p>
+                            </div>
+                            <div class="info-card border-red">
+                                <h4><i class="fas fa-lock text-red"></i> 工作码</h4>
+                                <p>绝对禁止外泄；一经发现，XIM Studio 有权立即停用并追究相应责任</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 联系渠道 -->
+                <section id="best-practices" class="doc-section">
+                    <h3>1.7 联系渠道</h3>
+                    <div class="section-content">
+                        <div class="contact-grid">
+                            <a href="mailto:studio@shaole.me" class="contact-card">
+                                <i class="fas fa-envelope"></i>
+                                <div>
+                                    <h4>邮件（推荐）</h4>
+                                    <p>studio@shaole.me</p>
+                                </div>
+                            </a>
+                            <div class="contact-card">
+                                <i class="fas fa-bolt"></i>
+                                <div>
+                                    <h4>紧急通道</h4>
+                                    <p>组长或项目架构师（仅对内部有效）</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            
+            <!-- 页面底部导航 -->
+            <div class="page-nav">
+                <a href="index.html" class="page-nav-prev">
+                    <i class="fas fa-arrow-left"></i>
+                    <div>
+                        <span>上一页</span>
+                        <strong>返回主页</strong>
+                    </div>
+                </a>
+                <a href="xim-projects.html" class="page-nav-next">
+                    <div>
+                        <span>下一页</span>
+                        <strong>项目页</strong>
+                    </div>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </main>
+
+        <!-- 右侧目录大纲 - 仅在大屏幕显示 -->
+        <aside class="docs-outline" id="docsOutline">
+            <h4>本页目录</h4>
+            <nav class="outline-nav" id="outlineNav">
+                <!-- 动态生成 -->
+            </nav>
+        </aside>
+    </div>
+
+    <!-- 遮罩层 -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- 返回顶部按钮 -->
+    <button class="back-to-top" id="backToTop" title="返回顶部">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- 阅读进度条 -->
+    <div class="reading-progress" id="readingProgress"></div>
+
+    <!-- 脚本 -->
+    <script src="js/docs-new.js"></script>
+</body>
+</html>

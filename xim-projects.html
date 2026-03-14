@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XIM项目 - XIM工作室</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/docs-new.css">
+    <link rel="stylesheet" href="vendor/font-awesome/all.min.css">
+</head>
+<body class="docs-page">
+    <!-- 顶部工具栏 -->
+    <header class="docs-header">
+        <div class="header-left">
+            <button class="sidebar-toggle" id="sidebarToggle" title="切换侧边栏">
+                <i class="fas fa-bars"></i>
+            </button>
+            <a href="index.html" class="logo">
+                <img src="资源/XIM图标.jpg" alt="XIM">
+                <span>XIM项目</span>
+            </a>
+        </div>
+        
+        <div class="header-center">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="globalSearch" placeholder="搜索文档...">
+                <kbd>Ctrl K</kbd>
+            </div>
+        </div>
+        
+        <div class="header-right">
+            <div class="font-size-control">
+                <button class="icon-btn" id="fontDecrease" title="缩小字体">
+                    <i class="fas fa-font" style="font-size: 0.8em;"></i>
+                </button>
+                <span class="font-size-display">100%</span>
+                <button class="icon-btn" id="fontIncrease" title="放大字体">
+                    <i class="fas fa-font" style="font-size: 1.2em;"></i>
+                </button>
+            </div>
+            
+            <div class="layout-control">
+                <button class="icon-btn" id="layoutToggle" title="切换布局">
+                    <i class="fas fa-columns"></i>
+                </button>
+            </div>
+            
+            <button class="icon-btn" id="themeToggle" title="切换主题">
+                <i class="fas fa-moon"></i>
+            </button>
+            
+            <a href="index.html" class="btn btn-outline btn-sm">
+                <i class="fas fa-home"></i>
+                <span>主页</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- 主布局容器 -->
+    <div class="docs-layout" id="docsLayout">
+        <!-- 左侧边栏 - 目录导航 -->
+        <aside class="docs-sidebar" id="docsSidebar">
+            <div class="sidebar-resize-handle" id="sidebarResizeHandle"></div>
+            
+            <div class="sidebar-header">
+                <h3>文档目录</h3>
+                <button class="icon-btn collapse-all" id="collapseAll" title="全部折叠">
+                    <i class="fas fa-compress-alt"></i>
+                </button>
+            </div>
+            
+            <!-- 快速导航 -->
+            <div class="quick-nav">
+                <a href="xim-protocol.html" class="quick-link">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>代码协议</span>
+                </a>
+                <a href="xim-projects.html" class="quick-link active">
+                    <i class="fas fa-cogs"></i>
+                    <span>项目页</span>
+                </a>
+                <a href="xim-departments.html" class="quick-link">
+                    <i class="fas fa-users"></i>
+                    <span>部门介绍</span>
+                </a>
+                <a href="xim-history.html" class="quick-link">
+                    <i class="fas fa-history"></i>
+                    <span>创建历史</span>
+                </a>
+            </div>
+            
+            <!-- 详细目录 -->
+            <nav class="docs-nav" id="docsNav">
+                <ul class="nav-tree">
+                    <li class="nav-item has-children expanded">
+                        <a href="#mor-overhaul" class="nav-link">
+                            <i class="fas fa-chevron-right toggle-icon"></i>
+                            <span>1. [MOR]大修和重组</span>
+                        </a>
+                        <ul class="nav-children">
+                            <li><a href="#mor-background" class="nav-link">1.1 项目背景</a></li>
+                            <li><a href="#mor-objectives" class="nav-link">1.2 项目目标</a></li>
+                            <li><a href="#mor-features" class="nav-link">1.3 功能特点</a></li>
+                            <li><a href="#mor-team" class="nav-link">1.4 团队成员</a></li>
+                            <li><a href="#mor-tech-stack" class="nav-link">1.5 技术栈</a></li>
+                            <li><a href="#mor-achievements" class="nav-link">1.6 成果展示</a></li>
+                        </ul>
+                    </li>
+                    
+                    <li class="nav-item has-children">
+                        <a href="#xim-nightruin" class="nav-link">
+                            <i class="fas fa-chevron-right toggle-icon"></i>
+                            <span>2. [XIM Nightruin] XIM·夜墟</span>
+                        </a>
+                        <ul class="nav-children">
+                            <li><a href="#nightruin-background" class="nav-link">2.1 项目背景</a></li>
+                            <li><a href="#nightruin-features" class="nav-link">2.2 功能特点</a></li>
+                            <li><a href="#nightruin-team" class="nav-link">2.3 团队成员</a></li>
+                            <li><a href="#nightruin-achievements" class="nav-link">2.4 成果展示</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            
+            <!-- 侧边栏底部信息 -->
+            <div class="sidebar-footer">
+                <div class="version-info">
+                    <span>文档版本 v2.0</span>
+                    <span>最后更新 2025-11-30</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 中间内容区 -->
+        <main class="docs-content" id="docsContent">
+            <!-- 面包屑导航 -->
+            <nav class="breadcrumb" id="breadcrumb">
+                <a href="index.html">首页</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="xim-projects.html">XIM项目</a>
+            </nav>
+            
+            <!-- 页面标题 -->
+            <div class="page-header">
+                <h1>XIM 项目展示</h1>
+                <p class="page-description">甜甜圈工会的灵魂继承者 - 我们的项目与成果</p>
+                <div class="page-meta">
+                    <span class="meta-item">
+                        <i class="fas fa-calendar"></i>
+                        最后更新: 2025-11-30
+                    </span>
+                    <span class="meta-item">
+                        <i class="fas fa-code-branch"></i>
+                        版本: v2.0
+                    </span>
+                    <span class="meta-item">
+                        <i class="fas fa-clock"></i>
+                        阅读时间: 约 10 分钟
+                    </span>
+                </div>
+            </div>
+            
+            <!-- 文档内容 -->
+            <div class="content-body">
+                <!-- 项目文档：MOR大修和重组 -->
+                <section id="mor-overhaul" class="doc-section project-section">
+                    <div class="section-header">
+                        <span class="section-number">01</span>
+                        <h2>[MOR] Major Overhaul and Reorganization</h2>
+                    </div>
+                    <div class="section-content">
+                        <div class="project-hero">
+                            <div class="project-stats">
+                                <div class="stat-item">
+                                    <span class="stat-value">4/5</span>
+                                    <span class="stat-label">视觉完成度</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-value">7/10</span>
+                                    <span class="stat-label">整体评分</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-value">30+</span>
+                                    <span class="stat-label">功能键</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle"></i>
+                            <div>
+                                <strong>项目简介</strong>
+                                <p>这是一"坨"给偏技术玩家准备的高画质客户端整合包。官网已上线：<a href="https://modrinth.com/modpack/mor" target="_blank">modrinth.com/modpack/mor</a></p>
+                            </div>
+                        </div>
+
+                        <h3 id="mor-background">1.1 项目背景</h3>
+                        <p>MOR（Major Overhaul and Reorganization）是一个专注于集成客户端优化、美学和可用性的整合项目。AI 测评给了 7/10，毒舌点在于："把它当高画质启动器而非即开即玩包，就不会踩坑"。</p>
+
+                        <h3 id="mor-objectives">1.2 项目目标</h3>
+                        <p>打造一个视觉效果出色的高画质客户端整合包，为偏技术玩家提供个性化的游戏体验。</p>
+
+                        <h3 id="mor-features">1.3 功能特点</h3>
+                        <div class="feature-grid">
+                            <div class="feature-item">
+                                <i class="fas fa-eye text-purple"></i>
+                                <h4>高画质视觉效果</h4>
+                                <p>视觉完成度 4/5，截图即壁纸，为玩家提供沉浸式的游戏视觉体验</p>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-tachometer-alt text-blue"></i>
+                                <h4>性能表现</h4>
+                                <p>不是极端 FPS 向，是特效向。1060+8G 以下别来，核显直接 30 FPS 献祭</p>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-keyboard text-green"></i>
+                                <h4>丰富的功能键</h4>
+                                <p>30+ 功能键，提供丰富的操作选项，满足技术玩家的个性化需求</p>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-language text-yellow"></i>
+                                <h4>中文支持</h4>
+                                <p>提供中文汉化资源包（MOR-Setting），但必须版本完全对应</p>
+                            </div>
+                        </div>
+
+                        <h3 id="mor-team">1.4 团队成员</h3>
+                        <div class="team-grid">
+                            <div class="team-member">
+                                <div class="member-avatar">
+                                    <img src="资源/成员头像/陌路Molu.jpg" alt="陌路Molu">
+                                </div>
+                                <div class="member-info">
+                                    <h4>陌路Molu</h4>
+                                    <p>项目负责人</p>
+                                    <span class="member-role">负责MOR主整合包的开发，专注于客户端优化与美化核心功能</span>
+                                </div>
+                            </div>
+                            <div class="team-member">
+                                <div class="member-avatar">
+                                    <img src="资源/成员头像/Hzl.jpg" alt="Hzl">
+                                </div>
+                                <div class="member-info">
+                                    <h4>Hzl</h4>
+                                    <p>核心开发</p>
+                                    <span class="member-role">参与MOR主整合包的开发工作</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3 id="mor-tech-stack">1.5 技术栈</h3>
+                        <div class="tech-stack">
+                            <span class="tech-tag"><i class="fab fa-java"></i> Java</span>
+                            <span class="tech-tag"><i class="fas fa-cube"></i> Minecraft Fabric</span>
+                            <span class="tech-tag">1.20.1+</span>
+                            <span class="tech-tag"><i class="fas fa-tools"></i> Gradle</span>
+                            <span class="tech-tag"><i class="fab fa-git-alt"></i> Git</span>
+                            <span class="tech-tag">ShaderPack</span>
+                        </div>
+
+                        <h3 id="mor-achievements">1.6 成果展示</h3>
+                        <ul class="achievement-list">
+                            <li><a href="https://modrinth.com/modpack/mor" target="_blank" class="achievement-link"><i class="fas fa-check-circle text-green"></i> 已在Modrinth平台正式上线 <i class="fas fa-external-link-alt" style="font-size: 0.8em; margin-left: 8px;"></i></a></li>
+                            <li><a href="https://bbsmc.net/modpack/mor" target="_blank" class="achievement-link"><i class="fas fa-check-circle text-green"></i> 在BBSMC平台提供了镜像下载 <i class="fas fa-external-link-alt" style="font-size: 0.8em; margin-left: 8px;"></i></a></li>
+                            <li><a href="https://modrinth.com/resourcepack/mor-setting" target="_blank" class="achievement-link"><i class="fas fa-check-circle text-green"></i> MOR Setting 汉化资源包 <i class="fas fa-external-link-alt" style="font-size: 0.8em; margin-left: 8px;"></i></a></li>
+                            <li><a href="https://bbsmc.net/modpack/mor/issues" target="_blank" class="achievement-link"><i class="fas fa-check-circle text-green"></i> MOR Error 问题反馈 <i class="fas fa-external-link-alt" style="font-size: 0.8em; margin-left: 8px;"></i></a></li>
+                            <li><i class="fas fa-check-circle text-green"></i> 提供了完整的中文汉化方案</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- 项目文档：XIM Nightruin -->
+                <section id="xim-nightruin" class="doc-section project-section">
+                    <div class="section-header">
+                        <span class="section-number">02</span>
+                        <h2>[XIM Nightruin] XIM·夜墟</h2>
+                    </div>
+                    <div class="section-content">
+                        <div class="project-hero">
+                            <div class="project-stats">
+                                <div class="stat-item">
+                                    <span class="stat-value">开发中</span>
+                                    <span class="stat-label">项目状态</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-value">Java</span>
+                                    <span class="stat-label">主要语言</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-value">3人</span>
+                                    <span class="stat-label">开发团队</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle"></i>
+                            <div>
+                                <strong>项目简介</strong>
+                                <p>XIM·夜墟是XIM工作室开发的整合包项目。项目页面：<a href="https://bbsmc.net/modpack/xim-nightruin" target="_blank">bbsmc.net/modpack/xim-nightruin</a></p>
+                            </div>
+                        </div>
+
+                        <h3 id="nightruin-background">2.1 项目背景</h3>
+                        <p>XIM·夜墟是XIM工作室继MOR项目之后推出的又一整合包力作，专注于为玩家提供独特的游戏体验。</p>
+
+                        <h3 id="nightruin-features">2.2 功能特点</h3>
+                        <div class="feature-grid">
+                            <div class="feature-item">
+                                <i class="fas fa-moon text-purple"></i>
+                                <h4>独特主题</h4>
+                                <p>以"夜墟"为主题，打造沉浸式的游戏氛围</p>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-code text-blue"></i>
+                                <h4>技术实现</h4>
+                                <p>基于Java和JavaScript技术栈开发</p>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-users text-green"></i>
+                                <h4>团队协作</h4>
+                                <p>由3人核心团队共同开发完成</p>
+                            </div>
+                        </div>
+
+                        <h3 id="nightruin-team">2.3 团队成员</h3>
+                        <div class="team-grid">
+                            <div class="team-member">
+                                <div class="member-avatar">
+                                    <img src="资源/成员头像/陌路Molu.jpg" alt="陌路Molu">
+                                </div>
+                                <div class="member-info">
+                                    <h4>陌路Molu</h4>
+                                    <p>项目负责人</p>
+                                    <span class="member-role">负责项目整体架构与开发</span>
+                                </div>
+                            </div>
+                            <div class="team-member">
+                                <div class="member-avatar">
+                                    <img src="资源/成员头像/米.jpg" alt="米">
+                                </div>
+                                <div class="member-info">
+                                    <h4>米</h4>
+                                    <p>核心开发</p>
+                                    <span class="member-role">参与项目开发工作</span>
+                                </div>
+                            </div>
+                            <div class="team-member">
+                                <div class="member-avatar">
+                                    <img src="资源/成员头像/Hzl.jpg" alt="HZL">
+                                </div>
+                                <div class="member-info">
+                                    <h4>HZL</h4>
+                                    <p>核心开发</p>
+                                    <span class="member-role">参与项目开发工作</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3 id="nightruin-achievements">2.4 成果展示</h3>
+                        <ul class="achievement-list">
+                            <li><a href="https://bbsmc.net/modpack/xim-nightruin" target="_blank" class="achievement-link"><i class="fas fa-check-circle text-green"></i> 已在BBSMC平台上线 <i class="fas fa-external-link-alt" style="font-size: 0.8em; margin-left: 8px;"></i></a></li>
+                            <li><i class="fas fa-check-circle text-green"></i> 持续更新与维护中</li>
+                        </ul>
+                    </div>
+                </section>
+            </div>
+            
+            <!-- 页面底部导航 -->
+            <div class="page-nav">
+                <a href="xim-protocol.html" class="page-nav-prev">
+                    <i class="fas fa-arrow-left"></i>
+                    <div>
+                        <span>上一页</span>
+                        <strong>XIM协议</strong>
+                    </div>
+                </a>
+                <a href="xim-departments.html" class="page-nav-next">
+                    <div>
+                        <span>下一页</span>
+                        <strong>部门介绍</strong>
+                    </div>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </main>
+
+        <!-- 右侧目录大纲 - 仅在大屏幕显示 -->
+        <aside class="docs-outline" id="docsOutline">
+            <h4>本页目录</h4>
+            <nav class="outline-nav" id="outlineNav">
+                <!-- 动态生成 -->
+            </nav>
+        </aside>
+    </div>
+
+    <!-- 遮罩层 -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- 返回顶部按钮 -->
+    <button class="back-to-top" id="backToTop" title="返回顶部">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- 阅读进度条 -->
+    <div class="reading-progress" id="readingProgress"></div>
+
+    <!-- 脚本 -->
+    <script src="js/docs-new.js"></script>
+</body>
+</html>
